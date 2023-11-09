@@ -128,13 +128,13 @@
     <script>
         $('.total_amount,.advance_amount').change(function(e) {
             e.preventDefault();
-            var totalAmt = $(this).val();
+            var totalAmt = $('.total_amount').val();
             var advanceAmt = $('.advance_amount').val();
 
             $('.balance_amount').val(totalAmt - advanceAmt);
 
         });
 
-        $('.total_amount').change();
+        $('.total_amount,.advance_amount').change();
     </script>
 @endsection

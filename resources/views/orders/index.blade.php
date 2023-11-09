@@ -52,6 +52,7 @@
                                 <th>Advance Amount</th>
                                 <th>Balance Amount</th>
                                 <th width="100">Status</th>
+                                <th width="100">Date</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
@@ -68,6 +69,7 @@
                                         <td>{{ $order->advance_amount }}</td>
                                         <td>{{ $order->balance_amount }}</td>
                                         <td>{{ $order->status }}</td>
+                                        <td>{{ date('d-m-Y h:i a', strtotime($order->created_at)) }}</td>
                                         <td>
                                             <a href="{{ route('orders.edit', $order->id) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"

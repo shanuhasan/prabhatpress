@@ -63,9 +63,18 @@
                         </a>
                         <div class="dropdown-divider"></div>
 
-                        <a href="{{ route('logout') }}" class="dropdown-item text-danger">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <x-responsive-nav-link :href="route('logout')"
+                                onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Log Out') }}
+                            </x-responsive-nav-link>
+                        </form>
+                        {{-- <a href="{{ route('logout') }}" class="dropdown-item text-danger">
                             <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                        </a>
+                        </a> --}}
                     </div>
                 </li>
             </ul>

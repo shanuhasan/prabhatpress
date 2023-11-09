@@ -11,7 +11,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $orders = Order::latest();
+        $orders = Order::orderBy('id', 'ASC');
 
         if(!empty($request->get('keyword')))
         {

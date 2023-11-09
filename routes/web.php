@@ -19,6 +19,13 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+Route::get('/clear-cache', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+ 
+    return "Cache cleared successfully";
+ });
+
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
