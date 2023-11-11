@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,8 @@ Route::get('/clear-cache', function () {
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/order/create',[OrderController::class,'create'])->name('orders.create');
     Route::post('/order/store',[OrderController::class,'store'])->name('orders.store');

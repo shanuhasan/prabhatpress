@@ -26,13 +26,13 @@
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner">
-                            <h3>100</h3>
+                            <h3>{{ $totalOrder }}</h3>
                             <p>Total Orders</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer text-dark">More info <i
+                        <a href="{{ route('orders.index') }}" class="small-box-footer text-dark">More info <i
                                 class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -40,8 +40,8 @@
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner">
-                            <h3>#</h3>
-                            <p>Total Products</p>
+                            <h3>₹{{ $totalOrderAmount }}</h3>
+                            <p>Total Order Amount</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -54,14 +54,53 @@
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner">
-                            <h3>100</h3>
-                            <p>Total Customers</p>
+                            <h3>₹{{ $totalReceivedAmount }}</h3>
+                            <p>Total Received Amount</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
                         <a href="#" class="small-box-footer text-dark">More info <i
                                 class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner">
+                            <h3>₹{{ $totalOrderAmountCurrentMonth }}</h3>
+                            <p>Total Order Amount This Month</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner">
+                            <h3>₹{{ $totalOrderAmountLastMonth }}</h3>
+                            <p>Total Order Amount Last Month ({{ $lastMonth }})</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner">
+                            <h3>₹{{ $totalOrderAmountLastThirtyDays }}</h3>
+                            <p>Total Order Amount Last 30 Days</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
                     </div>
                 </div>
 
