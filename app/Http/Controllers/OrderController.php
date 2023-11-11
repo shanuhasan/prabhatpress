@@ -19,6 +19,7 @@ class OrderController extends Controller
             $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
             $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
             $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
+            $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
         }
 
         $orders = $orders->paginate(20);
