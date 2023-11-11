@@ -170,6 +170,10 @@
                                                 </tr>
                                                 <?php $total += $item->amount; ?>
                                             @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="2">No Advance</td>
+                                            </tr>
                                         @endif
                                         <tr>
                                             <th>Total Amount</th>
