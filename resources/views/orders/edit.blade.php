@@ -161,8 +161,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (!empty($orderDetail))
-                                            <?php $total = 0; ?>
+                                        <?php $total = 0; ?>
+                                        @if ($orderDetail->isNotEmpty())
                                             @foreach ($orderDetail as $item)
                                                 <tr>
                                                     <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
@@ -172,7 +172,7 @@
                                             @endforeach
                                         @else
                                             <tr>
-                                                <td colspan="2">No Advance</td>
+                                                <td colspan="2" align="center">No Advance</td>
                                             </tr>
                                         @endif
                                         <tr>
