@@ -46,13 +46,16 @@
                         <thead>
                             <tr>
                                 <th width="60">S No.</th>
-                                <th>Customer Name</th>
+                                <th>Order No.</th>
+                                <th>Date</th>
+                                <th>Name</th>
+                                <th>Phone</th>
                                 <th>Particular</th>
+                                <th>Qty</th>
                                 <th>Total Amount</th>
-                                <th>Advance Amount</th>
+                                {{-- <th>Advance</th> --}}
                                 <th>Balance Amount</th>
                                 <th width="100">Status</th>
-                                <th width="100">Date</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
@@ -61,15 +64,30 @@
                             @if ($orders->isNotEmpty())
                                 <?php $i = 1; ?>
                                 @foreach ($orders as $order)
+                                    <?php
+                                    $advAmt = 0;
+                                    $orderDetail = \App\Models\OrderItem::where('order_id', $order->id)->get();
+                                    if (!empty($orderDetail)) {
+                                        foreach ($orderDetail as $k => $vl) {
+                                            $advAmt += $vl->amount;
+                                        }
+                                    }
+                                    // echo '<pre>';
+                                    // print_r($orderDetail);
+                                    // die();
+                                    ?>
                                     <tr>
                                         <td>{{ $i++ }}</td>
+                                        <td>{{ $order->order_no }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
                                         <td>{{ $order->customer_name }}</td>
+                                        <td>{{ $order->phone }}</td>
                                         <td>{{ $order->particular }}</td>
-                                        <td>{{ $order->total_amount }}</td>
-                                        <td>{{ $order->advance_amount }}</td>
-                                        <td>{{ $order->balance_amount }}</td>
+                                        <td>{{ $order->qty }}</td>
+                                        <td>₹{{ $order->total_amount }}</td>
+                                        {{-- <td>₹{{ $advAmt }}</td> --}}
+                                        <td>₹{{ $order->total_amount - $advAmt }}</td>
                                         <td>{{ $order->status }}</td>
-                                        <td>{{ date('d-m-Y h:i a', strtotime($order->created_at)) }}</td>
                                         <td>
                                             <a href="{{ route('orders.edit', $order->id) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -16,6 +17,8 @@ class OrderController extends Controller
         if(!empty($request->get('keyword')))
         {
             $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
+            $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
+            $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
         }
 
         $orders = $orders->paginate(20);
@@ -32,23 +35,31 @@ class OrderController extends Controller
     public function store(Request $request){
         
         $validator = Validator::make($request->all(),[
+            'order_no'=>'required',
             'customer_name'=>'required',
+            'phone'=>'required',
             'particular'=>'required',
             'total_amount'=>'required',
             'status'=>'required',
         ]);
 
         if($validator->passes()){
-
             $model = new Order();
+            $model->order_no = $request->order_no;
             $model->customer_name = $request->customer_name;
             $model->phone = $request->phone;
+            $model->address = $request->address;
             $model->particular = $request->particular;
+            $model->qty = $request->qty;
             $model->total_amount = $request->total_amount;
-            $model->advance_amount = $request->advance_amount;
-            $model->balance_amount = $request->balance_amount;
             $model->status = $request->status;
-            $model->save();
+            if($model->save())
+            {
+                $orderDetail = new OrderItem();
+                $orderDetail->order_id = $model->id;
+                $orderDetail->amount = $request->advance_amount;
+                $orderDetail->save();
+            }
 
             return redirect()->route('orders.index')->with('success','Order has been created successfully.');
 
@@ -65,7 +76,12 @@ class OrderController extends Controller
             return redirect()->route('orders.index');
         }
 
-        return view('orders.edit',compact('order'));
+        $orderDetail = OrderItem::where('order_id',$order->id)->get();
+
+        $data['order'] = $order;
+        $data['orderDetail'] = $orderDetail;
+
+        return view('orders.edit',$data);
         
     }
     public function update($id, Request $request){
@@ -88,12 +104,22 @@ class OrderController extends Controller
 
             $model->customer_name = $request->customer_name;
             $model->phone = $request->phone;
+            $model->address = $request->address;
             $model->particular = $request->particular;
+            $model->qty = $request->qty;
             $model->total_amount = $request->total_amount;
-            $model->advance_amount = $request->advance_amount;
-            $model->balance_amount = $request->balance_amount;
             $model->status = $request->status;
-            $model->save();
+            if($model->save())
+            {
+                if(!empty($request->advance_amount) && $request->advance_amount > 0)
+                {
+                    $orderDetail = new OrderItem();
+                    $orderDetail->order_id = $model->id;
+                    $orderDetail->amount = $request->advance_amount;
+                    $orderDetail->save();
+                }
+                
+            }
 
             return redirect()->route('orders.index')->with('success','Order updated successfully.');
 
