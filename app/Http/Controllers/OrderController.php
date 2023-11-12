@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -90,11 +91,13 @@ class OrderController extends Controller
             $model->qty = $request->qty;
             $model->total_amount = $request->total_amount;
             $model->status = $request->status;
+            $model->created_by = Auth::user()->id;
             if($model->save())
             {
                 $orderDetail = new OrderItem();
                 $orderDetail->order_id = $model->id;
                 $orderDetail->amount = $request->advance_amount;
+                $orderDetail->updated_by = Auth::user()->id;
                 $orderDetail->save();
             }
 
@@ -146,6 +149,7 @@ class OrderController extends Controller
             $model->qty = $request->qty;
             $model->total_amount = $request->total_amount;
             $model->status = $request->status;
+            $model->updated_by = Auth::user()->id;
             if($model->save())
             {
                 if(!empty($request->advance_amount) && $request->advance_amount > 0)
@@ -153,9 +157,9 @@ class OrderController extends Controller
                     $orderDetail = new OrderItem();
                     $orderDetail->order_id = $model->id;
                     $orderDetail->amount = $request->advance_amount;
+                    $orderDetail->updated_by = Auth::user()->id;
                     $orderDetail->save();
                 }
-                
             }
 
             return redirect()->route('orders.index')->with('success','Order updated successfully.');

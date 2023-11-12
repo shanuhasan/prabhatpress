@@ -158,6 +158,7 @@
                                         <tr>
                                             <th>Date</th>
                                             <th>Received Amount</th>
+                                            <th>Received By</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -167,6 +168,7 @@
                                                 <tr>
                                                     <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
                                                     <td>₹{{ $item->amount }}</td>
+                                                    <td>{{ getUserName($item->updated_by) }}</td>
                                                 </tr>
                                                 <?php $total += $item->amount; ?>
                                             @endforeach
@@ -178,10 +180,12 @@
                                         <tr>
                                             <th>Received Amount</th>
                                             <th>₹{{ $total }}</th>
+                                            <th></th>
                                         </tr>
                                         <tr>
                                             <th>Balance Amount</th>
                                             <th>₹{{ $order->total_amount - $total }}</th>
+                                            <th></th>
                                         </tr>
 
                                     </tbody>

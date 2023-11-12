@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
@@ -42,6 +43,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/{id}/edit',[OrderController::class,'edit'])->name('orders.edit');
     Route::post('/order/{id}',[OrderController::class,'update'])->name('orders.update');
     // Route::delete('/order/{id}',[OrderController::class,'destroy'])->name('orders.delete');
+
+    // users 
+    Route::get('/user',[UserController::class,'index'])->name('user.index');
+    Route::get('/user/create',[UserController::class,'create'])->name('user.create');
+    Route::post('/user/store',[UserController::class,'store'])->name('user.store');
+    Route::get('/user/{id}/edit',[UserController::class,'edit'])->name('user.edit');
+    Route::post('/user/{id}',[UserController::class,'update'])->name('user.update');
+    Route::get('/user/{id}',[UserController::class,'destroy'])->name('user.delete');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
