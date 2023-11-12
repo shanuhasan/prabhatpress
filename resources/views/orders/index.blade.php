@@ -86,8 +86,12 @@
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->total_amount }}</td>
                                         {{-- <td>₹{{ $advAmt }}</td> --}}
-                                        <td>₹{{ $order->total_amount - $advAmt }}</td>
-                                        <td>{{ $order->status }}</td>
+                                        <td
+                                            style="{{ $order->status == 'Complete' && $order->total_amount - $advAmt > 0 ? 'background:red;color:#fff;font-weight:bold;' : '' }}">
+                                            ₹{{ $order->total_amount - $advAmt }}</td>
+                                        <td
+                                            style="{{ $order->status == 'Pending' ? 'background:red;color:#fff;' : 'background:green;color:#fff;' }}">
+                                            {{ $order->status }}</td>
                                         <td>
                                             <a href="{{ route('orders.edit', $order->id) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"

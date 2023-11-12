@@ -176,7 +176,7 @@
                                             </tr>
                                         @endif
                                         <tr>
-                                            <th>Total Amount</th>
+                                            <th>Received Amount</th>
                                             <th>₹{{ $total }}</th>
                                         </tr>
                                         <tr>
