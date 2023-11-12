@@ -66,10 +66,10 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <x-responsive-nav-link :href="route('logout')"
+                            <x-responsive-nav-link :href="route('logout')" class="dropdown-item"
                                 onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                <i class="fas fa-sign-out-alt mr-2"></i>{{ __('Log Out') }}
                             </x-responsive-nav-link>
                         </form>
                         {{-- <a href="{{ route('logout') }}" class="dropdown-item text-danger">

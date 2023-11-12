@@ -13,3 +13,15 @@ function getUserName($id)
     }
     return $user->name;
 }
+
+function getUsers()
+{
+    $user =  User::where('status',1)->get();
+    
+    if(empty($user))
+    {
+        return [];
+    }
+    
+    return $user;
+}

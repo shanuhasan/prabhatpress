@@ -13,6 +13,14 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
         with font-awesome or any other icon font library -->
+
+                <li class="nav-item">
+                    <a href="javascript:void(0);" class="nav-link"
+                        style="background: green;color:#fff;font-weight:bold;font-size:24px;text-align:center">
+                        <p>{{ Auth::user()->name }}</p>
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     <a href="{{ route('dashboard.index') }}" class="nav-link @yield('dashboard')">
                         <i class="nav-icon  fas fa-home"></i>
@@ -32,6 +40,18 @@
                         <i class="nav-icon  fas fa-users"></i>
                         <p>Users</p>
                     </a>
+                </li>
+
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+
+                        <x-responsive-nav-link :href="route('logout')" class="nav-link"
+                            onclick="event.preventDefault();
+                                            this.closest('form').submit();">
+                            <i class="nav-icon fas fa-sign-out-alt"></i>{{ __('Log Out') }}
+                        </x-responsive-nav-link>
+                    </form>
                 </li>
             </ul>
         </nav>

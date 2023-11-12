@@ -73,11 +73,12 @@ class OrderController extends Controller
     public function store(Request $request){
         
         $validator = Validator::make($request->all(),[
-            'order_no'=>'required',
+            'order_no'=>'required|unique:orders',
             'customer_name'=>'required',
-            'phone'=>'required',
+            'phone'=>'required|min:10',
             'particular'=>'required',
             'total_amount'=>'required',
+            'payment_method'=>'required',
             'status'=>'required',
         ]);
 
@@ -94,11 +95,19 @@ class OrderController extends Controller
             $model->created_by = Auth::user()->id;
             if($model->save())
             {
-                $orderDetail = new OrderItem();
-                $orderDetail->order_id = $model->id;
-                $orderDetail->amount = $request->advance_amount;
-                $orderDetail->updated_by = Auth::user()->id;
-                $orderDetail->save();
+                if(!empty($request->advance_amount) && $request->advance_amount > 0)
+                {
+                    $orderDetail = new OrderItem();
+                    $orderDetail->order_id = $model->id;
+                    $orderDetail->amount = $request->advance_amount;
+                    $orderDetail->payment_method = $request->payment_method;
+                    if($request->payment_method == 'Online')
+                    {
+                        $orderDetail->in_account = $request->in_account;
+                    }
+                    $orderDetail->updated_by = Auth::user()->id;
+                    $orderDetail->save();
+                }
             }
 
             return redirect()->route('orders.index')->with('success','Order has been created successfully.');
@@ -134,10 +143,11 @@ class OrderController extends Controller
 
         $validator = Validator::make($request->all(),[
             'customer_name'=>'required',
+            'phone'=>'required|min:10',
             'particular'=>'required',
             'total_amount'=>'required',
+            'payment_method'=>'required',
             'status'=>'required',
-            // 'slug'=>'required|unique:brands,slug,'.$model->id.',id',
         ]);
 
         if($validator->passes()){
@@ -157,6 +167,11 @@ class OrderController extends Controller
                     $orderDetail = new OrderItem();
                     $orderDetail->order_id = $model->id;
                     $orderDetail->amount = $request->advance_amount;
+                    $orderDetail->payment_method = $request->payment_method;
+                    if($request->payment_method == 'Online')
+                    {
+                        $orderDetail->in_account = $request->in_account;
+                    }
                     $orderDetail->updated_by = Auth::user()->id;
                     $orderDetail->save();
                 }

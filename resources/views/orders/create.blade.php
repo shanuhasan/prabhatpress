@@ -115,10 +115,40 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="payment_method">Payment Method*</label>
+                                    <select name="payment_method"
+                                        class="form-control @error('payment_method') is-invalid	@enderror"
+                                        id="payment_method">
+                                        <option value="Cash">Cash</option>
+                                        <option value="Online">Online</option>
+                                    </select>
+                                    @error('payment_method')
+                                        <p class="invalid-feedback">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 divHide inAccount">
+                                <div class="mb-3">
+                                    <label for="in_account">Account*</label>
+                                    <select name="in_account"
+                                        class="form-control @error('in_account') is-invalid	@enderror">
+                                        @foreach (getUsers() as $user)
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('in_account')
+                                        <p class="invalid-feedback">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="status">Status*</label>
-                                    <select name="status" class="form-control @error('particular') is-invalid	@enderror">
+                                    <select name="status" class="form-control @error('status') is-invalid	@enderror">
                                         <option value="Pending">Pending</option>
                                         <option value="Complete">Complete</option>
                                     </select>
@@ -142,18 +172,32 @@
 @endsection
 
 @section('script')
-    {{-- <script>
-        $('.total_amount,.advance_amount').change(function(e) {
-            e.preventDefault();
-            var totalAmt = $('.total_amount').val();
-            var advanceAmt = $('.advance_amount').val();
+    <script>
+        // $('.total_amount,.advance_amount').change(function(e) {
+        //     e.preventDefault();
+        //     var totalAmt = $('.total_amount').val();
+        //     var advanceAmt = $('.advance_amount').val();
 
-            var amount = totalAmt - advanceAmt;
+        //     var amount = totalAmt - advanceAmt;
 
-            $('.balance_amount').val(amount);
+        //     $('.balance_amount').val(amount);
+
+        // });
+
+        // $('.total_amount,.advance_amount').change();
+
+        $('#payment_method').change(function(e) {
+
+            $('.inAccount').addClass('divHide');
+            var method = $(this).val();
+
+            if (method == 'Online') {
+                console.log(method);
+                $('.inAccount').removeClass('divHide');
+            }
 
         });
 
-        $('.total_amount,.advance_amount').change();
-    </script> --}}
+        $('#payment_method').change();
+    </script>
 @endsection

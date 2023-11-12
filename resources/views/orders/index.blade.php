@@ -45,7 +45,7 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th width="60">S No.</th>
+                                <th>#</th>
                                 <th>Order No.</th>
                                 <th>Date</th>
                                 <th>Name</th>
