@@ -53,7 +53,6 @@
                                 <th>Particular</th>
                                 <th>Qty</th>
                                 <th>Total Amount</th>
-                                {{-- <th>Advance</th> --}}
                                 <th>Balance Amount</th>
                                 <th>Order By</th>
                                 <th width="100">Status</th>
@@ -73,9 +72,6 @@
                                             $advAmt += $vl->amount;
                                         }
                                     }
-                                    // echo '<pre>';
-                                    // print_r($orderDetail);
-                                    // die();
                                     ?>
                                     <tr>
                                         <td>{{ $i++ }}</td>
@@ -87,7 +83,6 @@
                                         </td>
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->total_amount }}</td>
-                                        {{-- <td>₹{{ $advAmt }}</td> --}}
                                         <td
                                             style="{{ $order->status == 'Complete' && $order->total_amount - $advAmt > 0 ? 'background:red;color:#fff;font-weight:bold;' : '' }}">
                                             ₹{{ $order->total_amount - $advAmt }}</td>
