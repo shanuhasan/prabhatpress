@@ -38,6 +38,15 @@ class DashboardController extends Controller
                                             ->whereDate('created_at','<=',$currentDate)
                                             ->sum('total_amount');
 
+        //current
+        $totalOrderPending = Order::where('status','Pending')->count();
+        $totalOrderComplete = Order::where('status','Complete')->count();
+        
+        $todayOrderAmount = Order::whereDate('created_at','=',$currentDate)
+                                    ->sum('total_amount');
+        $todayReceivedAmount = OrderItem::whereDate('created_at','=',$currentDate)
+                                        ->sum('amount');
+
         return view('dashboard',[
             'totalOrder'=>$totalOrder,
             'totalOrderAmount'=>$totalOrderAmount,
@@ -46,7 +55,10 @@ class DashboardController extends Controller
             'totalOrderAmountLastMonth'=>$totalOrderAmountLastMonth,
             'totalOrderAmountLastThirtyDays'=>$totalOrderAmountLastThirtyDays,
             'lastMonth'=>$lastMonth,
-            // 'totalRevenueLastThirtyDays'=>$totalRevenueLastThirtyDays,
+            'totalOrderPending'=>$totalOrderPending,
+            'totalOrderComplete'=>$totalOrderComplete,
+            'todayOrderAmount'=>$todayOrderAmount,
+            'todayReceivedAmount'=>$todayReceivedAmount,
         ]);
     }
 }

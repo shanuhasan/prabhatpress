@@ -28,6 +28,42 @@ class OrderController extends Controller
         return view('orders.index',$data);
     }
 
+    public function pending(Request $request)
+    {
+        $orders = Order::where('status','Pending')->orderBy('id', 'ASC'); 
+
+        if(!empty($request->get('keyword')))
+        {
+            $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
+            $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
+            $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
+            $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
+        }
+
+        $orders = $orders->paginate(20);
+
+        $data['orders'] = $orders;
+        return view('orders.pending',$data);
+    }
+
+    public function complete(Request $request)
+    {
+        $orders = Order::where('status','Complete')->orderBy('id', 'ASC'); 
+
+        if(!empty($request->get('keyword')))
+        {
+            $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
+            $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
+            $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
+            $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
+        }
+
+        $orders = $orders->paginate(20);
+
+        $data['orders'] = $orders;
+        return view('orders.complete',$data);
+    }
+
     public function create()
     {
         return view('orders.create');

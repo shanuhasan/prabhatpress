@@ -40,6 +40,60 @@
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner">
+                            <h3>{{ $totalOrderPending }}</h3>
+                            <p>Pending Orders</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="{{ route('orders.pending') }}" class="small-box-footer text-dark">More info <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner">
+                            <h3>{{ $totalOrderComplete }}</h3>
+                            <p>Complete Orders</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="{{ route('orders.complete') }}" class="small-box-footer text-dark">More info <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner">
+                            <h3>₹{{ $todayOrderAmount }}</h3>
+                            <p>Today Order Amount</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner">
+                            <h3>₹{{ $todayReceivedAmount }}</h3>
+                            <p>Today Received Amount</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+
+                {{-- <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner">
                             <h3>₹{{ $totalOrderAmount }}</h3>
                             <p>Total Order Amount</p>
                         </div>
@@ -102,7 +156,7 @@
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
         </div>
