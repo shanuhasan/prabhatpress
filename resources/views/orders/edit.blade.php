@@ -118,7 +118,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="payment_method">Payment Method*</label>
                                     <select name="payment_method"
@@ -133,7 +133,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6 divHide inAccount">
+                            <div class="col-md-4 divHide inAccount">
                                 <div class="mb-3">
                                     <label for="in_account">Account*</label>
                                     <select name="in_account"
@@ -148,7 +148,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="status">Status*</label>
                                     <select name="status" class="form-control @error('particular') is-invalid	@enderror">
