@@ -25,9 +25,9 @@
             <div class="row">
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
-                        <div class="inner">
+                        <div class="inner" style="background: orange;color:#fff;text-align:center">
                             <h3>{{ $totalOrder }}</h3>
-                            <b>Total Orders</b>
+                            <h4>Total Orders</h4>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
@@ -39,9 +39,9 @@
 
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
-                        <div class="inner">
+                        <div class="inner" style="background: red;color:#fff;text-align:center">
                             <h3>{{ $totalOrderPending }}</h3>
-                            <b>Pending Orders</b>
+                            <h4>Pending Orders</h4>
                         </div>
                         <a href="{{ route('orders.pending') }}" class="small-box-footer text-dark">More info <i
                                 class="fas fa-arrow-circle-right"></i></a>
@@ -50,9 +50,9 @@
 
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
-                        <div class="inner">
+                        <div class="inner" style="background: green;color:#fff;text-align:center">
                             <h3>{{ $totalOrderComplete }}</h3>
-                            <b>Complete Orders</b>
+                            <h4>Complete Orders</h4>
                         </div>
                         <a href="{{ route('orders.complete') }}" class="small-box-footer text-dark">More info <i
                                 class="fas fa-arrow-circle-right"></i></a>
@@ -61,9 +61,9 @@
 
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
-                        <div class="inner">
+                        <div class="inner" style="text-align:center">
                             <h3>₹{{ $todayOrderAmount }}</h3>
-                            <b>Today Order Amount</b>
+                            <h4>Today Order Amount</h4>
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
@@ -71,9 +71,9 @@
 
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
-                        <div class="inner">
+                        <div class="inner" style="text-align:center">
                             <h3>₹{{ $todayReceivedAmount }}</h3>
-                            <b>Today Received Amount</b>
+                            <h4>Today Amount</h4>
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
@@ -83,9 +83,9 @@
                     @foreach ($todayOnlineAmount as $item)
                         <div class="col-lg-4 col-6">
                             <div class="small-box card">
-                                <div class="inner">
+                                <div class="inner" style="text-align:center">
                                     <h3>₹{{ !empty($item->amount) ? $item->amount : 0 }}</h3>
-                                    <b>Today Received Online Amount ({{ getUserName($item->in_account) }})</b>
+                                    <h4>Today Online Amount ({{ getUserName($item->in_account) }})</h4>
                                 </div>
                                 <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                             </div>
