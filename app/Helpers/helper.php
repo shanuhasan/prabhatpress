@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Customer;
 
 
 function getUserName($id)
@@ -24,4 +25,37 @@ function getUsers()
     }
     
     return $user;
+}
+
+function getCustomerName($id)
+{
+    $customer =  Customer::find($id);
+    
+    if(empty($customer))
+    {
+        return '';
+    }
+    return $customer->name;
+}
+
+function getCustomerPhone($id)
+{
+    $customer =  Customer::find($id);
+    
+    if(empty($customer))
+    {
+        return '';
+    }
+    return $customer->phone;
+}
+
+function getCustomerDetail($id)
+{
+    $customer =  Customer::find($id);
+    
+    if(empty($customer))
+    {
+        return '';
+    }
+    return $customer;
 }

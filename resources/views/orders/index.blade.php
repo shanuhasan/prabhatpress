@@ -77,8 +77,10 @@
                                         <td>{{ $i++ }}</td>
                                         <td><a href="{{ route('orders.edit', $order->id) }}">{{ $order->order_no }}</a></td>
                                         <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
-                                        <td>{{ $order->customer_name }}</td>
-                                        <td>{{ $order->phone }}</td>
+                                        <td>{{ !empty($order->customer_id) ? getCustomerName($order->customer_id) : $order->customer_name }}
+                                        </td>
+                                        <td>{{ !empty($order->customer_id) ? getCustomerPhone($order->customer_id) : $order->phone }}
+                                        </td>
                                         <td><a href="{{ route('orders.edit', $order->id) }}">{{ $order->particular }}</a>
                                         </td>
                                         <td>{{ $order->qty }}</td>

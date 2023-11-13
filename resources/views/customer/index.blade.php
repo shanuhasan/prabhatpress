@@ -49,6 +49,7 @@
                                 <th>Name</th>
                                 <th>Company</th>
                                 <th>Phone</th>
+                                <th></th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
@@ -63,9 +64,11 @@
                                         <td>{{ $customer->company }}</td>
                                         <td>{{ $customer->phone }}</td>
                                         <td>
-                                            {{-- <a href="{{ route('customer.order', $customer->id) }}">
+                                            <a href="{{ route('customer.order', $customer->id) }}">
                                                 Orders
-                                            </a> --}}
+                                            </a>
+                                        </td>
+                                        <td>
                                             <a href="{{ route('customer.edit', $customer->id) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"

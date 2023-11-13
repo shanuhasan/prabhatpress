@@ -64,6 +64,12 @@ Route::middleware('auth')->group(function () {
 
     //customer orders
     Route::get('/customer/orders/{id}',[CustomerController::class,'orders'])->name('customer.order');
+    Route::get('/customer/order/{id}/create',[CustomerController::class,'orderCreate'])->name('customer.orders.create');
+    Route::post('/customer/order/store',[CustomerController::class,'orderStore'])->name('customer.orders.store');
+    Route::get('/customer/order/{customerId}/{orderId}/edit',[CustomerController::class,'orderEdit'])->name('customer.orders.edit');
+    Route::post('/customer/order/{id}',[CustomerController::class,'orderUpdate'])->name('customer.orders.update');
+
+    Route::post('/customer-order-payment',[CustomerController::class,'orderPayment'])->name('customer.orders.payment');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
