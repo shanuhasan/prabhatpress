@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 
 /*
@@ -51,6 +52,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/{id}/edit',[UserController::class,'edit'])->name('user.edit');
     Route::post('/user/{id}',[UserController::class,'update'])->name('user.update');
     Route::get('/user/{id}',[UserController::class,'destroy'])->name('user.delete');
+
+
+    // customers 
+    Route::get('/customer',[CustomerController::class,'index'])->name('customer.index');
+    Route::get('/customer/create',[CustomerController::class,'create'])->name('customer.create');
+    Route::post('/customer/store',[CustomerController::class,'store'])->name('customer.store');
+    Route::get('/customer/{id}/edit',[CustomerController::class,'edit'])->name('customer.edit');
+    Route::post('/customer/{id}',[CustomerController::class,'update'])->name('customer.update');
+    Route::get('/customer/{id}',[CustomerController::class,'destroy'])->name('customer.delete');
+
+    //customer orders
+    Route::get('/customer/orders/{id}',[CustomerController::class,'orders'])->name('customer.order');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');

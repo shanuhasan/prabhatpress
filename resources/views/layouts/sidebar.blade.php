@@ -29,6 +29,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ route('user.index') }}" class="nav-link @yield('users')">
+                        <i class="nav-icon  fas fa-users"></i>
+                        <p>Users</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('orders.index') }}" class="nav-link @yield('orders')">
                         <i class="nav-icon  fab fa-first-order"></i>
                         <p>Orders</p>
@@ -36,9 +43,9 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('user.index') }}" class="nav-link @yield('users')">
+                    <a href="{{ route('customer.index') }}" class="nav-link @yield('customers')">
                         <i class="nav-icon  fas fa-users"></i>
-                        <p>Users</p>
+                        <p>Customers</p>
                     </a>
                 </li>
 
