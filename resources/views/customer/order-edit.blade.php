@@ -75,7 +75,19 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="delivery_at">Delivery At</label>
+                                    <input type="text" name="delivery_at" id="delivery_at"
+                                        class="form-control js-datepicker" placeholder="Delivery At"
+                                        value="{{ !empty($order->delivery_at) ? date('d-m-Y', strtotime($order->delivery_at)) : '' }}">
+                                    @error('delivery_at')
+                                        <p class="invalid-feedback">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="total_amount">Advance Amount</label>
                                     <input type="number" name="advance_amount"
@@ -115,7 +127,7 @@
                                         <p class="invalid-feedback">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-4">
                                 <div class="mb-3">
@@ -145,7 +157,7 @@
     </section>
     <!-- /.content -->
 
-    <section class="content-header">
+    {{-- <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
@@ -208,11 +220,11 @@
         <!-- /.card -->
     </section>
 
-    <br>
+    <br> --}}
 
 
 @endsection
-@section('script')
+{{-- @section('script')
     <script>
         $('#payment_method').change(function(e) {
             $('.inAccount').addClass('divHide');
@@ -225,4 +237,4 @@
 
         $('#payment_method').change();
     </script>
-@endsection
+@endsection --}}

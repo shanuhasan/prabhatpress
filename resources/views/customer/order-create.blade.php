@@ -78,6 +78,17 @@ $customerDetail = getCustomerDetail($customerId);
 
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label for="delivery_at">Delivery At</label>
+                                    <input type="text" name="delivery_at" id="delivery_at"
+                                        class="form-control js-datepicker" placeholder="Delivery At">
+                                    @error('delivery_at')
+                                        <p class="invalid-feedback">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- <div class="col-md-6">
+                                <div class="mb-3">
                                     <label for="total_amount">Advance Amount</label>
                                     <input type="number" name="advance_amount"
                                         class="form-control advance_amount @error('advance_amount') is-invalid	@enderror"
@@ -116,7 +127,7 @@ $customerDetail = getCustomerDetail($customerId);
                                         <p class="invalid-feedback">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-4">
                                 <div class="mb-3">
@@ -144,7 +155,7 @@ $customerDetail = getCustomerDetail($customerId);
     <!-- /.content -->
 @endsection
 
-@section('script')
+{{-- @section('script')
     <script>
         $('#payment_method').change(function(e) {
             $('.inAccount').addClass('divHide');
@@ -157,4 +168,4 @@ $customerDetail = getCustomerDetail($customerId);
 
         $('#payment_method').change();
     </script>
-@endsection
+@endsection --}}

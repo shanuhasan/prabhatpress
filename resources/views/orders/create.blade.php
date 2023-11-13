@@ -117,6 +117,17 @@
 
                             <div class="col-md-4">
                                 <div class="mb-3">
+                                    <label for="delivery_at">Delivery At</label>
+                                    <input type="text" name="delivery_at" id="delivery_at"
+                                        class="form-control js-datepicker" placeholder="Delivery At">
+                                    @error('delivery_at')
+                                        <p class="invalid-feedback">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="mb-3">
                                     <label for="payment_method">Payment Method*</label>
                                     <select name="payment_method"
                                         class="form-control @error('payment_method') is-invalid	@enderror"

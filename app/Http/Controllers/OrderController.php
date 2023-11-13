@@ -92,6 +92,7 @@ class OrderController extends Controller
             $model->qty = $request->qty;
             $model->total_amount = $request->total_amount;
             $model->status = $request->status;
+            $model->delivery_at = $request->delivery_at;
             $model->created_by = Auth::user()->id;
             if($model->save())
             {
@@ -133,6 +134,7 @@ class OrderController extends Controller
         return view('orders.edit',$data);
         
     }
+
     public function update($id, Request $request){
 
         $model = Order::find($id);
@@ -159,6 +161,7 @@ class OrderController extends Controller
             $model->qty = $request->qty;
             $model->total_amount = $request->total_amount;
             $model->status = $request->status;
+            $model->delivery_at = $request->delivery_at;
             $model->updated_by = Auth::user()->id;
             if($model->save())
             {
@@ -182,5 +185,39 @@ class OrderController extends Controller
         }else{
             return Redirect::back()->withErrors($validator);
         }
+    }
+
+    public function delete($id, Request $request)
+    {
+        $model = Order::find($id);
+        $orderItem = OrderItem::where('order_id',$id)->get();
+
+
+        if(empty($model))
+        {
+            $request->session()->flash('error','Order not found.');
+            return response()->json([
+                'status'=>true,
+                'message'=>'Order not found.'
+            ]);
+        }
+
+        if(!empty($orderItem))
+        {
+            foreach($orderItem as $item)
+            {
+                $detailModel = OrderItem::find($item->id);
+                $detailModel->delete();
+            }
+        }
+
+        $model->delete();
+
+        $request->session()->flash('success','Order deleted successfully.');
+
+        return response()->json([
+            'status'=>true,
+            'message'=>'Order deleted successfully.'
+        ]);
     }
 }

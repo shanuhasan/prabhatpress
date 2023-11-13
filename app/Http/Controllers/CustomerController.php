@@ -166,7 +166,6 @@ class CustomerController extends Controller
             'customer_id'=>'required',
             'particular'=>'required',
             'total_amount'=>'required',
-            'payment_method'=>'required',
             'status'=>'required',
         ]);
 
@@ -178,23 +177,25 @@ class CustomerController extends Controller
             $model->qty = $request->qty;
             $model->total_amount = $request->total_amount;
             $model->status = $request->status;
+            $model->delivery_at = $request->delivery_at;
             $model->created_by = Auth::user()->id;
-            if($model->save())
-            {
-                if(!empty($request->advance_amount) && $request->advance_amount > 0)
-                {
-                    $orderDetail = new OrderItem();
-                    $orderDetail->order_id = $model->id;
-                    $orderDetail->amount = $request->advance_amount;
-                    $orderDetail->payment_method = $request->payment_method;
-                    if($request->payment_method == 'Online')
-                    {
-                        $orderDetail->in_account = $request->in_account;
-                    }
-                    $orderDetail->updated_by = Auth::user()->id;
-                    $orderDetail->save();
-                }
-            }
+            $model->save();
+            // if($model->save())
+            // {
+            //     if(!empty($request->advance_amount) && $request->advance_amount > 0)
+            //     {
+            //         $orderDetail = new OrderItem();
+            //         $orderDetail->order_id = $model->id;
+            //         $orderDetail->amount = $request->advance_amount;
+            //         $orderDetail->payment_method = $request->payment_method;
+            //         if($request->payment_method == 'Online')
+            //         {
+            //             $orderDetail->in_account = $request->in_account;
+            //         }
+            //         $orderDetail->updated_by = Auth::user()->id;
+            //         $orderDetail->save();
+            //     }
+            // }
 
             return redirect()->route('customer.order',$request->customer_id)->with('success','Order has been created successfully.');
 
@@ -234,7 +235,6 @@ class CustomerController extends Controller
         $validator = Validator::make($request->all(),[
             'particular'=>'required',
             'total_amount'=>'required',
-            'payment_method'=>'required',
             'status'=>'required',
         ]);
 
@@ -244,23 +244,25 @@ class CustomerController extends Controller
             $model->qty = $request->qty;
             $model->total_amount = $request->total_amount;
             $model->status = $request->status;
+            $model->delivery_at = $request->delivery_at;
             $model->updated_by = Auth::user()->id;
-            if($model->save())
-            {
-                if(!empty($request->advance_amount) && $request->advance_amount > 0)
-                {
-                    $orderDetail = new OrderItem();
-                    $orderDetail->order_id = $model->id;
-                    $orderDetail->amount = $request->advance_amount;
-                    $orderDetail->payment_method = $request->payment_method;
-                    if($request->payment_method == 'Online')
-                    {
-                        $orderDetail->in_account = $request->in_account;
-                    }
-                    $orderDetail->updated_by = Auth::user()->id;
-                    $orderDetail->save();
-                }
-            }
+            $model->save();
+            // if($model->save())
+            // {
+            //     if(!empty($request->advance_amount) && $request->advance_amount > 0)
+            //     {
+            //         $orderDetail = new OrderItem();
+            //         $orderDetail->order_id = $model->id;
+            //         $orderDetail->amount = $request->advance_amount;
+            //         $orderDetail->payment_method = $request->payment_method;
+            //         if($request->payment_method == 'Online')
+            //         {
+            //             $orderDetail->in_account = $request->in_account;
+            //         }
+            //         $orderDetail->updated_by = Auth::user()->id;
+            //         $orderDetail->save();
+            //     }
+            // }
 
             return redirect()->route('customer.order',$model->customer_id)->with('success','Order updated successfully.');
 
@@ -296,5 +298,28 @@ class CustomerController extends Controller
             return Redirect::back()->withErrors($validator);
         }
         
+    }
+
+    public function orderDelete($id, Request $request)
+    {
+        $model = Order::find($id);
+
+        if(empty($model))
+        {
+            $request->session()->flash('error','Order not found.');
+            return response()->json([
+                'status'=>true,
+                'message'=>'Order not found.'
+            ]);
+        }
+
+        $model->delete();
+
+        $request->session()->flash('success','Order deleted successfully.');
+
+        return response()->json([
+            'status'=>true,
+            'message'=>'Order deleted successfully.'
+        ]);
     }
 }

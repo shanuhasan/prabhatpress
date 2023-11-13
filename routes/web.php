@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/order/store',[OrderController::class,'store'])->name('orders.store');
     Route::get('/order/{id}/edit',[OrderController::class,'edit'])->name('orders.edit');
     Route::post('/order/{id}',[OrderController::class,'update'])->name('orders.update');
-    // Route::delete('/order/{id}',[OrderController::class,'destroy'])->name('orders.delete');
+    Route::delete('/order/{id}',[OrderController::class,'delete'])->name('orders.delete');
 
     // users 
     Route::get('/user',[UserController::class,'index'])->name('user.index');
@@ -68,7 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/customer/order/store',[CustomerController::class,'orderStore'])->name('customer.orders.store');
     Route::get('/customer/order/{customerId}/{orderId}/edit',[CustomerController::class,'orderEdit'])->name('customer.orders.edit');
     Route::post('/customer/order/{id}',[CustomerController::class,'orderUpdate'])->name('customer.orders.update');
-
+    Route::delete('/delete-customer-order/{id}',[CustomerController::class,'orderDelete'])->name('customer.orders.delete');
     Route::post('/customer-order-payment',[CustomerController::class,'orderPayment'])->name('customer.orders.payment');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -92,7 +92,7 @@
                                                     </path>
                                                 </svg>
                                             </a>
-                                            <a href="{{ route('user.delete', $user->id) }}"
+                                            <a href="javascript:void()" onclick="deleteOrder({{ $user->id }})"
                                                 class="text-danger w-4 h-4 mr-1">
                                                 <svg wire:loading.remove.delay="" wire:target=""
                                                     class="filament-link-icon w-4 h-4 mr-1"
@@ -123,4 +123,30 @@
         <!-- /.card -->
     </section>
     <!-- /.content -->
+@endsection
+
+@section('script')
+    <script>
+        function deleteOrder(id) {
+            var url = "{{ route('user.delete', 'ID') }}";
+            var newUrl = url.replace('ID', id);
+
+            if (confirm('Are you sure want to delete')) {
+                $.ajax({
+                    url: newUrl,
+                    type: 'get',
+                    data: {},
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response['status']) {
+                            window.location.href = "{{ route('user.index') }}";
+                        }
+                    }
+                });
+            }
+        }
+    </script>
 @endsection

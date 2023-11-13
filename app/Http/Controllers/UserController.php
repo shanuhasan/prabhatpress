@@ -108,14 +108,23 @@ class UserController extends Controller
         $model = User::find($id);
         if(empty($model))
         {
-            return redirect()->back()->with('error','User not found.');
+            $request->session()->flash('error','User not found.');
+            return response()->json([
+                'status'=>true,
+                'message'=>'User not found.'
+            ]);
         }
 
         $model->status = 0;
         $model->save();
         // $model->delete();
 
-        return redirect()->back()->with('success','User deleted successfully.');
+        $request->session()->flash('success','User deleted successfully.');
+
+        return response()->json([
+            'status'=>true,
+            'message'=>'User deleted successfully.'
+        ]);
 
     }
 }
