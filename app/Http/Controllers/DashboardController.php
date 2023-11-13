@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use App\Models\CustomerPayment;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -45,16 +46,37 @@ class DashboardController extends Controller
         
         $todayOrderAmount = Order::whereDate('created_at','=',$currentDate)
                                     ->sum('total_amount');
+        
         $todayReceivedAmount = OrderItem::whereDate('created_at','=',$currentDate)
+                                        ->sum('amount');
+        $todayCustomerReceivedAmount = CustomerPayment::whereDate('created_at','=',$currentDate)
                                         ->sum('amount');
 
         $todayOnlineAmount = OrderItem::select('in_account', DB::raw('SUM(amount) as amount'))
                                         ->where('payment_method','Online')
                                         ->whereDate('created_at','=',$currentDate)
                                         ->groupBy('in_account')
-                                        ->get();
+                                        ->get()->toArray();
 
-        // echo "<pre>";print_r($todayOnlineAmount);die;
+        // customer payments
+        $todayCustomerOnlineAmount = CustomerPayment::select('in_account', DB::raw('SUM(amount) as amount'))
+                                        ->where('payment_method','Online')
+                                        ->whereDate('created_at','=',$currentDate)
+                                        ->groupBy('in_account')
+                                        ->get()->toArray();
+
+        $totalOnlineArr = array_merge($todayOnlineAmount,$todayCustomerOnlineAmount);
+
+        $finalTotalOnlineArr = array_reduce($totalOnlineArr, function($result, $item){ 
+            if(!isset($result[$item['in_account']])){ 
+                $result[$item['in_account']] = ['in_account'=>$item['in_account'],'amount'=>$item['amount']]; 
+            } else { 
+                $result[$item['in_account']]['amount'] += $item['amount']; 
+            } 
+            return $result; 
+        });
+
+        // echo "<pre>";print_r($finalTotalOnlineArr);die;
 
         return view('dashboard',[
             'totalOrder'=>$totalOrder,
@@ -67,8 +89,9 @@ class DashboardController extends Controller
             'totalOrderPending'=>$totalOrderPending,
             'totalOrderComplete'=>$totalOrderComplete,
             'todayOrderAmount'=>$todayOrderAmount,
-            'todayReceivedAmount'=>$todayReceivedAmount,
-            'todayOnlineAmount'=>$todayOnlineAmount,
+            'todayReceivedAmount'=>$todayReceivedAmount + $todayCustomerReceivedAmount,
+            // 'todayOnlineAmount'=>$todayOnlineAmount,
+            'todayOnlineAmount'=>$finalTotalOnlineArr,
         ]);
     }
 }

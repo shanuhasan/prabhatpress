@@ -79,13 +79,13 @@
                     </div>
                 </div>
 
-                @if ($todayOnlineAmount->isNotEmpty())
+                @if (!empty($todayOnlineAmount))
                     @foreach ($todayOnlineAmount as $item)
                         <div class="col-lg-4 col-6">
                             <div class="small-box card">
                                 <div class="inner" style="text-align:center">
-                                    <h3>₹{{ !empty($item->amount) ? $item->amount : 0 }}</h3>
-                                    <h4>Today Online Amount ({{ getUserName($item->in_account) }})</h4>
+                                    <h3>₹{{ $item['amount'] }}</h3>
+                                    <h4>Today Online Amount ({{ getUserName($item['in_account']) }})</h4>
                                 </div>
                                 <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                             </div>
