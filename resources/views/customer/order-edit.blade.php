@@ -66,7 +66,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="total_amount">Total Amount*</label>
-                                    <input type="number" readonly name="total_amount"
+                                    <input type="number" name="total_amount"
                                         class="form-control total_amount @error('total_amount') is-invalid	@enderror"
                                         placeholder="Total Amount" value="{{ $order->total_amount }}">
                                     @error('total_amount')

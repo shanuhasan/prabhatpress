@@ -180,7 +180,7 @@ class OrderController extends Controller
                 }
             }
 
-            return redirect()->route('orders.index')->with('success','Order updated successfully.');
+            return redirect()->route('orders.edit',$id)->with('success','Order updated successfully.');
 
         }else{
             return Redirect::back()->withErrors($validator);
@@ -218,6 +218,29 @@ class OrderController extends Controller
         return response()->json([
             'status'=>true,
             'message'=>'Order deleted successfully.'
+        ]);
+    }
+
+    public function deleteItem($id, Request $request)
+    {
+        $model = OrderItem::find($id);
+
+        if(empty($model))
+        {
+            $request->session()->flash('error','Order Item not found.');
+            return response()->json([
+                'status'=>true,
+                'message'=>'Order Item not found.'
+            ]);
+        }
+
+        $model->delete();
+
+        $request->session()->flash('success','Order Item deleted successfully.');
+
+        return response()->json([
+            'status'=>true,
+            'message'=>'Order Item deleted successfully.'
         ]);
     }
 }

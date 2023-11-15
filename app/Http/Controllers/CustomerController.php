@@ -322,4 +322,27 @@ class CustomerController extends Controller
             'message'=>'Order deleted successfully.'
         ]);
     }
+
+    public function orderItemDelete($id, Request $request)
+    {
+        $model = CustomerPayment::find($id);
+
+        if(empty($model))
+        {
+            $request->session()->flash('error','Order Payment not found.');
+            return response()->json([
+                'status'=>true,
+                'message'=>'Order Payment not found.'
+            ]);
+        }
+
+        $model->delete();
+
+        $request->session()->flash('success','Order Payment deleted successfully.');
+
+        return response()->json([
+            'status'=>true,
+            'message'=>'Order Payment deleted successfully.'
+        ]);
+    }
 }

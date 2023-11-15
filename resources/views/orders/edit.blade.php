@@ -21,6 +21,7 @@
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
+            @include('message')
             <form action="{{ route('orders.update', $order->id) }}" method="post">
                 @csrf
                 <div class="card">
@@ -97,7 +98,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="total_amount">Total Amount*</label>
-                                    <input type="number" readonly name="total_amount"
+                                    <input type="number" name="total_amount"
                                         class="form-control total_amount @error('total_amount') is-invalid	@enderror"
                                         placeholder="Total Amount" value="{{ $order->total_amount }}">
                                     @error('total_amount')
@@ -212,6 +213,7 @@
                                 <th>Payment Method</th>
                                 <th>Account</th>
                                 <th>Received By</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -224,22 +226,36 @@
                                         <td>{{ $item->payment_method }}</td>
                                         <td>{{ getUserName($item->in_account) }}</td>
                                         <td>{{ getUserName($item->updated_by) }}</td>
+                                        <td>
+                                            <a href="javascript:void()"
+                                                onclick="deleteOrderItem({{ $item->id }},{{ $order->id }})"
+                                                class="text-danger w-4 h-4 mr-1">
+                                                <svg wire:loading.remove.delay="" wire:target=""
+                                                    class="filament-link-icon w-4 h-4 mr-1"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                    fill="currentColor" aria-hidden="true">
+                                                    <path ath fill-rule="evenodd"
+                                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </a>
+                                        </td>
                                     </tr>
                                     <?php $total += $item->amount; ?>
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="2" align="center">No Advance</td>
+                                    <td colspan="5" align="center">No Advance</td>
                                 </tr>
                             @endif
                             <tr>
                                 <th>Total Received Amount</th>
-                                <th colspan="4">₹{{ $total }}</th>
+                                <th colspan="5">₹{{ $total }}</th>
 
                             </tr>
                             <tr>
                                 <th>Balance Amount</th>
-                                <th colspan="4">₹{{ $order->total_amount - $total }}</th>
+                                <th colspan="5">₹{{ $order->total_amount - $total }}</th>
 
                             </tr>
 
@@ -257,16 +273,30 @@
 @endsection
 @section('script')
     <script>
-        // $('.total_amount,.advance_amount').change(function(e) {
-        //     e.preventDefault();
-        //     var totalAmt = $('.total_amount').val();
-        //     var advanceAmt = $('.advance_amount').val();
+        function deleteOrderItem(id, orderId) {
+            var url = "{{ route('orders.item.delete', 'ID') }}";
+            var newUrl = url.replace('ID', id);
 
-        //     $('.balance_amount').val(totalAmt - advanceAmt);
+            var urlO = "{{ route('orders.edit', 'OID') }}";
+            var newUrlO = urlO.replace('OID', orderId);
 
-        // });
-
-        // $('.total_amount,.advance_amount').change();
+            if (confirm('Are you sure want to delete')) {
+                $.ajax({
+                    url: newUrl,
+                    type: 'delete',
+                    data: {},
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response['status']) {
+                            window.location.href = newUrlO;
+                        }
+                    }
+                });
+            }
+        }
 
         $('#payment_method').change(function(e) {
 
