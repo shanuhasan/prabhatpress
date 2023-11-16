@@ -62,6 +62,20 @@
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
+                            <h3>{{ $todayOrder }}</h3>
+                            <h4>Today Orders</h4>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="{{ route('orders.index') }}" class="small-box-footer text-dark">More info <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="text-align:center">
                             <h3>₹{{ $todayOrderAmount }}</h3>
                             <h4>Today Order Amount</h4>
                         </div>
