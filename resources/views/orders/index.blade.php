@@ -75,7 +75,7 @@
                                     }
                                     
                                     // date diff in days
-                                    $days = numberOfDays(date('Y-m-d'), date('Y-m-d', strtotime($order->delivery_at)));
+                                    $days = numberOfDays(date('Y-m-d'), date($order->delivery_at));
                                     
                                     // echo $days;
                                     // die();

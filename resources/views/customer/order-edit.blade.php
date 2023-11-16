@@ -80,7 +80,7 @@
                                     <label for="delivery_at">Delivery At</label>
                                     <input type="text" name="delivery_at" id="delivery_at"
                                         class="form-control js-datepicker" placeholder="Delivery At"
-                                        value="{{ !empty($order->delivery_at) ? date('d-m-Y', strtotime($order->delivery_at)) : '' }}">
+                                        value="{{ $order->delivery_at }}">
                                     @error('delivery_at')
                                         <p class="invalid-feedback">{{ $message }}</p>
                                     @enderror

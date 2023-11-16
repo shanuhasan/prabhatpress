@@ -48,6 +48,7 @@
                                 <th width="60">S No.</th>
                                 <th>Order No.</th>
                                 <th>Date</th>
+                                <th>Delivery At</th>
                                 <th>Name</th>
                                 <th>Phone</th>
                                 <th>Particular</th>
@@ -72,6 +73,7 @@
                                             $advAmt += $vl->amount;
                                         }
                                     }
+                                    $days = numberOfDays(date('Y-m-d'), date($order->delivery_at));
                                     // echo '<pre>';
                                     // print_r($orderDetail);
                                     // die();
@@ -80,6 +82,9 @@
                                         <td>{{ $i++ }}</td>
                                         <td><a href="{{ route('orders.edit', $order->id) }}">{{ $order->order_no }}</a></td>
                                         <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
+                                        <td class="{{ $order->status != 'Complete' && $days <= +2 ? 'blink-text' : '' }}">
+                                            {{ !empty($order->delivery_at) ? date('d-m-Y', strtotime($order->delivery_at)) : '' }}
+                                        </td>
                                         <td>{{ $order->customer_name }}</td>
                                         <td>{{ $order->phone }}</td>
                                         <td><a href="{{ route('orders.edit', $order->id) }}">{{ $order->particular }}</a>
