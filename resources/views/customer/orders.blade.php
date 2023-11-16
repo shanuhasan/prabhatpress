@@ -89,7 +89,7 @@ $customerDetail = getCustomerDetail($customerId);
                                         </td>
                                         <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
                                         <td
-                                            class="{{ !empty($order->delivery_at) && $order->status != 'Complete' && $days <= +2 ? 'blink-text' : '' }}">
+                                            class="{{ !empty($order->delivery_at) && $order->status == 'Pending' && $days <= +2 ? 'blink-text' : '' }}">
                                             {{ !empty($order->delivery_at) ? date('d-m-Y', strtotime($order->delivery_at)) : '' }}
                                         </td>
                                         <td><a
@@ -101,8 +101,7 @@ $customerDetail = getCustomerDetail($customerId);
                                             style="{{ $order->status == 'Complete' && $order->total_amount - $advAmt > 0 ? 'background:red;color:#fff;font-weight:bold;' : '' }}">
                                             ₹{{ $order->total_amount - $advAmt }}</td> --}}
                                         <td>{{ getUserName($order->created_by) }}</td>
-                                        <td
-                                            style="{{ $order->status == 'Pending' ? 'background:red;color:#fff;' : 'background:green;color:#fff;' }}">
+                                        <td style="{{ statusColor($order->status) }}">
                                             {{ $order->status }}</td>
                                         <td>
                                             <a

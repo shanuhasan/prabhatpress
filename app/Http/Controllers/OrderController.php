@@ -49,7 +49,7 @@ class OrderController extends Controller
 
     public function complete(Request $request)
     {
-        $orders = Order::where('status','Complete')->orderBy('id', 'ASC'); 
+        $orders = Order::where('status','Delivered')->orderBy('id', 'ASC'); 
 
         if(!empty($request->get('keyword')))
         {

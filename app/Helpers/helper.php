@@ -68,4 +68,18 @@ function numberOfDays($date1,$date2)
     return $diff->format("%R%a");
 }
 
+function statusColor($status)
+{
+    if($status == 'Pending')
+    {
+        $style = 'background:red;color:#fff;';
+    }else if($status == 'Delivered')
+    {
+        $style = 'background:green;color:#fff;';
+    }else{
+        $style = 'background:orange;color:#fff;';
+    }
+    return $style;
+}
+
 

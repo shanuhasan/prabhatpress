@@ -51,8 +51,8 @@
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner" style="background: green;color:#fff;text-align:center">
-                            <h3>{{ $totalOrderComplete }}</h3>
-                            <h4>Complete Orders</h4>
+                            <h3>{{ $totalOrderDelivered }}</h3>
+                            <h4>Delivered Orders</h4>
                         </div>
                         <a href="{{ route('orders.complete') }}" class="small-box-footer text-dark">More info <i
                                 class="fas fa-arrow-circle-right"></i></a>

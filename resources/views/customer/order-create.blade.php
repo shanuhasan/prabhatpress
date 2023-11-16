@@ -134,7 +134,8 @@ $customerDetail = getCustomerDetail($customerId);
                                     <label for="status">Status*</label>
                                     <select name="status" class="form-control @error('status') is-invalid	@enderror">
                                         <option value="Pending">Pending</option>
-                                        <option value="Complete">Complete</option>
+                                        <option value="Order Complete">Order Complete</option>
+                                        <option value="Delivered">Delivered</option>
                                     </select>
                                     @error('status')
                                         <p class="invalid-feedback">{{ $message }}</p>

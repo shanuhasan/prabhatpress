@@ -136,8 +136,10 @@
                                         <option {{ $order->status == 'Pending' ? 'selected' : '' }} value="Pending">
                                             Pending
                                         </option>
-                                        <option {{ $order->status == 'Complete' ? 'selected' : '' }} value="Complete">
-                                            Complete</option>
+                                        <option {{ $order->status == 'Order Complete' ? 'selected' : '' }}
+                                            value="Order Complete">Order Complete</option>
+                                        <option {{ $order->status == 'Delivered' ? 'selected' : '' }} value="Delivered">
+                                            Delivered</option>
                                     </select>
                                     @error('status')
                                         <p class="invalid-feedback">{{ $message }}</p>
