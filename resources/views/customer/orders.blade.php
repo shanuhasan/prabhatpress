@@ -77,7 +77,10 @@ $customerDetail = getCustomerDetail($customerId);
                                             $advAmt += $vl->amount;
                                         }
                                     }
-                                    $days = numberOfDays(date('Y-m-d'), date($order->delivery_at));
+                                    $days = '';
+                                    if (!empty($order->delivery_at)) {
+                                        $days = numberOfDays(date('Y-m-d'), date($order->delivery_at));
+                                    }
                                     ?>
                                     <tr>
                                         <td>{{ $i++ }}</td>
@@ -85,7 +88,8 @@ $customerDetail = getCustomerDetail($customerId);
                                                 href="{{ route('customer.orders.edit', ['customerId' => $customerId, 'orderId' => $order->id]) }}">{{ $order->order_no }}</a>
                                         </td>
                                         <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
-                                        <td class="{{ $order->status != 'Complete' && $days <= +2 ? 'blink-text' : '' }}">
+                                        <td
+                                            class="{{ !empty($order->delivery_at) && $order->status != 'Complete' && $days <= +2 ? 'blink-text' : '' }}">
                                             {{ !empty($order->delivery_at) ? date('d-m-Y', strtotime($order->delivery_at)) : '' }}
                                         </td>
                                         <td><a

@@ -75,7 +75,10 @@
                                     }
                                     
                                     // date diff in days
-                                    $days = numberOfDays(date('Y-m-d'), date($order->delivery_at));
+                                    $days = '';
+                                    if (!empty($order->delivery_at)) {
+                                        $days = numberOfDays(date('Y-m-d'), date($order->delivery_at));
+                                    }
                                     
                                     // echo $days;
                                     // die();
@@ -85,7 +88,8 @@
                                         <td>{{ $i++ }}</td>
                                         <td><a href="{{ route('orders.edit', $order->id) }}">{{ $order->order_no }}</a></td>
                                         <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
-                                        <td class="{{ $order->status != 'Complete' && $days <= +2 ? 'blink-text' : '' }}">
+                                        <td
+                                            class="{{ !empty($order->delivery_at) && $order->status != 'Complete' && $days <= +2 ? 'blink-text' : '' }}">
                                             {{ !empty($order->delivery_at) ? date('d-m-Y', strtotime($order->delivery_at)) : '' }}
                                         </td>
                                         <td>{{ !empty($order->customer_id) ? getCustomerName($order->customer_id) : $order->customer_name }}
