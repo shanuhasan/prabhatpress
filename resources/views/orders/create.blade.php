@@ -164,7 +164,7 @@ use App\Models\Order;
                                     <label for="status">Status*</label>
                                     <select name="status" class="form-control @error('status') is-invalid	@enderror">
                                         <option value="Pending">Pending</option>
-                                        <option value="Order Complete">Order Complete</option>
+                                        <option value="Completed">Completed</option>
                                         <option value="Delivered">Delivered</option>
                                     </select>
                                     @error('status')

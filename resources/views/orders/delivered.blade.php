@@ -7,7 +7,7 @@
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Complete Orders</h1>
+                    <h1>Delivered Orders</h1>
                 </div>
                 <div class="col-sm-6 text-right">
                     <a href="{{ route('orders.create') }}" class="btn btn-primary">New Order</a>

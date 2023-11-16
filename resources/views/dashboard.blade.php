@@ -23,9 +23,9 @@
         <!-- Default box -->
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-4 col-6">
+                <div class="col-lg-3 col-6">
                     <div class="small-box card">
-                        <div class="inner" style="background: orange;color:#fff;text-align:center">
+                        <div class="inner" style="background: blue;color:#fff;text-align:center">
                             <h3>{{ $totalOrder }}</h3>
                             <h4>Total Orders</h4>
                         </div>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-6">
+                <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner" style="background: red;color:#fff;text-align:center">
                             <h3>{{ $totalOrderPending }}</h3>
@@ -48,13 +48,27 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-6">
+                <div class="col-lg-3 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="background: orange;color:#fff;text-align:center">
+                            <h3>{{ $totalOrderComplete }}</h3>
+                            <h4>Complete Orders</h4>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="{{ route('orders.complete') }}" class="small-box-footer text-dark">More info <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner" style="background: green;color:#fff;text-align:center">
                             <h3>{{ $totalOrderDelivered }}</h3>
                             <h4>Delivered Orders</h4>
                         </div>
-                        <a href="{{ route('orders.complete') }}" class="small-box-footer text-dark">More info <i
+                        <a href="{{ route('orders.delivered') }}" class="small-box-footer text-dark">More info <i
                                 class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
