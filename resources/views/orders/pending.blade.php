@@ -78,11 +78,11 @@
                                     ?>
                                     <tr>
                                         <td>{{ $i++ }}</td>
-                                        <td>{{ $order->order_no }}</td>
+                                        <td><a href="{{ route('orders.edit', $order->id) }}">{{ $order->order_no }}</a></td>
                                         <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
                                         <td>{{ $order->customer_name }}</td>
                                         <td>{{ $order->phone }}</td>
-                                        <td>{{ $order->particular }}</td>
+                                        <td><a href="{{ route('orders.edit', $order->id) }}">{{ $order->particular }}</a>
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->total_amount }}</td>
                                         {{-- <td>₹{{ $advAmt }}</td> --}}
