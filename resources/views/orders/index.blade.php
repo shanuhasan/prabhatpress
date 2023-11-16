@@ -73,12 +73,20 @@
                                             $advAmt += $vl->amount;
                                         }
                                     }
+                                    
+                                    // date diff in days
+                                    $days = numberOfDays(date('Y-m-d'), date('Y-m-d', strtotime($order->delivery_at)));
+                                    
+                                    // echo $days;
+                                    // die();
+                                    
                                     ?>
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td><a href="{{ route('orders.edit', $order->id) }}">{{ $order->order_no }}</a></td>
                                         <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
-                                        <td>{{ !empty($order->delivery_at) ? date('d-m-Y', strtotime($order->delivery_at)) : '' }}
+                                        <td class="{{ $order->status != 'Complete' && $days <= +2 ? 'blink-text' : '' }}">
+                                            {{ !empty($order->delivery_at) ? date('d-m-Y', strtotime($order->delivery_at)) : '' }}
                                         </td>
                                         <td>{{ !empty($order->customer_id) ? getCustomerName($order->customer_id) : $order->customer_name }}
                                         </td>
