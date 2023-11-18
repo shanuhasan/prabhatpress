@@ -103,6 +103,53 @@
     </section>
     <!-- /.content -->
 
+    <section class="content">
+        <!-- Default box -->
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Received Amount</th>
+                                <th>Payment Method</th>
+                                <th>Account</th>
+                                <th>Received By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if ($totalOrderItem->isNotEmpty())
+                                <?php $i = 1; ?>
+                                @foreach ($totalOrderItem as $item)
+                                    <tr>
+                                        <td>{{ $i++ }}</td>
+                                        <td>{{ !empty($item->customer_id) ? getCustomerName($item->customer_id) . ' (' . getCustomerCompany($item->customer_id) . ')' : getCustomerNameFromOrder($item->order_id) }}
+                                        </td>
+                                        <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
+                                        <td>₹{{ $item->amount }}</td>
+                                        <td>{{ $item->payment_method }}</td>
+                                        <td>{{ getUserName($item->in_account) }}</td>
+                                        <td>{{ getUserName($item->updated_by) }}</td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="5" align="center">Data not found.</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer clearfix">
+                    {{ $totalOrderItem->appends(['from_date' => $from_date, 'to_date' => $to_date])->links('pagination::bootstrap-5') }}
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+    </section>
 @endsection
 
 @section('script')

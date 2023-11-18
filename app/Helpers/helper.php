@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Customer;
 
 
@@ -10,7 +11,7 @@ function getUserName($id)
     
     if(empty($user))
     {
-        return '';
+        return 'NA';
     }
     return $user->name;
 }
@@ -33,9 +34,20 @@ function getCustomerName($id)
     
     if(empty($customer))
     {
-        return '';
+        return 'NA';
     }
     return $customer->name;
+}
+
+function getCustomerCompany($id)
+{
+    $customer =  Customer::find($id);
+    
+    if(empty($customer))
+    {
+        return 'NA';
+    }
+    return $customer->company;
 }
 
 function getCustomerPhone($id)
@@ -44,7 +56,7 @@ function getCustomerPhone($id)
     
     if(empty($customer))
     {
-        return '';
+        return 'NA';
     }
     return $customer->phone;
 }
@@ -55,7 +67,7 @@ function getCustomerDetail($id)
     
     if(empty($customer))
     {
-        return '';
+        return 'NA';
     }
     return $customer;
 }
@@ -80,6 +92,17 @@ function statusColor($status)
         $style = 'background:orange;color:#fff;';
     }
     return $style;
+}
+
+function getCustomerNameFromOrder($id)
+{
+    $order =  Order::find($id);
+    
+    if(empty($order))
+    {
+        return 'NA';
+    }
+    return $order->customer_name;
 }
 
 
