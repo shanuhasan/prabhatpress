@@ -56,19 +56,6 @@
         <!-- Default box -->
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="text-align:center">
-                            <h3>₹{{ $totalExpenses }}</h3>
-                            <h4>Total Expenses</h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="{{ route('expenses.index') }}" class="small-box-footer text-dark">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
 
                 <div class="col-lg-3 col-6">
                     <div class="small-box card">
@@ -80,6 +67,20 @@
                             <i class="ion ion-stats-bars"></i>
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="text-align:center">
+                            <h3>₹{{ $totalExpenses }}</h3>
+                            <h4>Total Expenses</h4>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="{{ route('expenses.index') }}" class="small-box-footer text-dark">More info <i
+                                class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 
