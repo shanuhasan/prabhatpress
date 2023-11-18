@@ -57,6 +57,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ route('report.index') }}" class="nav-link @yield('report')">
+                        <i class="nav-icon  fas fa-file"></i>
+                        <p>Report</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
 

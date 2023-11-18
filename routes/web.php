@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomerController;
@@ -82,6 +83,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/expenses/{id}/edit',[ExpenseController::class,'edit'])->name('expenses.edit');
     Route::post('/expenses/{id}',[ExpenseController::class,'update'])->name('expenses.update');
     Route::delete('/expenses/{id}',[ExpenseController::class,'delete'])->name('expenses.delete');
+
+     // report 
+     Route::get('/report',[ReportController::class,'index'])->name('report.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
