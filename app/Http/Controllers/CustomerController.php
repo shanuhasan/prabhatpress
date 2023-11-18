@@ -133,23 +133,12 @@ class CustomerController extends Controller
         //total order amount customer
         $totalAmount = Order::where('customer_id',$id)->sum('total_amount');
         $totalDiscount = Order::where('customer_id',$id)->sum('discount');
-
-        $totalAmountReceived = 0;
-
-        if($orders!=null)
-        {
-            foreach($orders as $key => $item)
-            {
-                $totalAmountReceived += OrderItem::where('order_id',$item->id)->sum('amount');
-            }
-        }  
         
         $customerTotalPayment = OrderItem::where('customer_id',$id)->sum('amount');
         $customerPayment = OrderItem::where('customer_id',$id)->get();
 
         $data['totalAmount'] = $totalAmount;
         $data['totalDiscount'] = $totalDiscount;
-        $data['totalAmountReceived'] = $totalAmountReceived;
         $data['customerTotalPayment'] = $customerTotalPayment;
         $data['customerPayment'] = $customerPayment;
         return view('customer.orders',$data);

@@ -163,9 +163,9 @@ $customerDetail = getCustomerDetail($customerId);
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <strong>₹{{ $totalDiscount }}</strong><br>
                                         Received Amount :-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <strong>₹{{ $totalAmountReceived + $customerTotalPayment }}</strong><br>
+                                        <strong>₹{{ $customerTotalPayment }}</strong><br>
                                         Remaining Balance :-&nbsp;&nbsp;
-                                        <strong>₹{{ $totalAmount - $totalDiscount - ($totalAmountReceived + $customerTotalPayment) }}</strong>
+                                        <strong>₹{{ $totalAmount - $totalDiscount - $customerTotalPayment }}</strong>
                                     </span>
                                     <div class="row">
                                         <div class="col-md-4">
