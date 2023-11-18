@@ -73,7 +73,20 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-6">
+                <div class="col-lg-3 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="text-align:center">
+                            <h3>₹{{ $totalReceivedAmount }}</h3>
+                            <h4>Total Received Amount</h4>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
                             <h3>{{ $todayOrder }}</h3>
@@ -87,7 +100,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-6">
+                <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
                             <h3>₹{{ $todayOrderAmount }}</h3>
@@ -97,7 +110,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-6">
+                <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
                             <h3>₹{{ $todayReceivedAmount }}</h3>
@@ -126,20 +139,6 @@
                         <div class="inner">
                             <h3>₹{{ $totalOrderAmount }}</h3>
                             <p>Total Order Amount</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="#" class="small-box-footer text-dark">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>₹{{ $totalReceivedAmount }}</h3>
-                            <p>Total Received Amount</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
