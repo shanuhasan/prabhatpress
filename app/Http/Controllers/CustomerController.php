@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Models\Customer;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
-use App\Models\CustomerPayment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -133,6 +132,7 @@ class CustomerController extends Controller
 
         //total order amount customer
         $totalAmount = Order::where('customer_id',$id)->sum('total_amount');
+        $totalDiscount = Order::where('customer_id',$id)->sum('discount');
 
         $totalAmountReceived = 0;
 
@@ -144,11 +144,11 @@ class CustomerController extends Controller
             }
         }  
         
-        // echo "<pre>";print_r($orderDetail);die;
-        $customerTotalPayment = CustomerPayment::where('customer_id',$id)->sum('amount');
-        $customerPayment = CustomerPayment::where('customer_id',$id)->get();
+        $customerTotalPayment = OrderItem::where('customer_id',$id)->sum('amount');
+        $customerPayment = OrderItem::where('customer_id',$id)->get();
 
         $data['totalAmount'] = $totalAmount;
+        $data['totalDiscount'] = $totalDiscount;
         $data['totalAmountReceived'] = $totalAmountReceived;
         $data['customerTotalPayment'] = $customerTotalPayment;
         $data['customerPayment'] = $customerPayment;
@@ -176,26 +176,11 @@ class CustomerController extends Controller
             $model->particular = $request->particular;
             $model->qty = $request->qty;
             $model->total_amount = $request->total_amount;
+            $model->discount = $request->discount;
             $model->status = $request->status;
             $model->delivery_at = $request->delivery_at;
             $model->created_by = Auth::user()->id;
             $model->save();
-            // if($model->save())
-            // {
-            //     if(!empty($request->advance_amount) && $request->advance_amount > 0)
-            //     {
-            //         $orderDetail = new OrderItem();
-            //         $orderDetail->order_id = $model->id;
-            //         $orderDetail->amount = $request->advance_amount;
-            //         $orderDetail->payment_method = $request->payment_method;
-            //         if($request->payment_method == 'Online')
-            //         {
-            //             $orderDetail->in_account = $request->in_account;
-            //         }
-            //         $orderDetail->updated_by = Auth::user()->id;
-            //         $orderDetail->save();
-            //     }
-            // }
 
             return redirect()->route('customer.order',$request->customer_id)->with('success','Order has been created successfully.');
 
@@ -234,7 +219,6 @@ class CustomerController extends Controller
 
         $validator = Validator::make($request->all(),[
             'particular'=>'required',
-            // 'total_amount'=>'required',
             'status'=>'required',
         ]);
 
@@ -242,7 +226,7 @@ class CustomerController extends Controller
 
             $model->particular = $request->particular;
             $model->qty = $request->qty;
-            // $model->total_amount = $request->total_amount;
+            $model->discount = $request->discount;
             $model->status = $request->status;
             $model->delivery_at = $request->delivery_at;
             $model->updated_by = Auth::user()->id;
@@ -266,7 +250,7 @@ class CustomerController extends Controller
         {
             if(!empty($request->amount) && $request->amount > 0)
             {
-                $model = new CustomerPayment();
+                $model = new OrderItem();
                 $model->customer_id = $request->customer_id;
                 $model->amount = $request->amount;
                 $model->payment_method = $request->payment_method;
@@ -309,7 +293,7 @@ class CustomerController extends Controller
 
     public function orderItemDelete($id, Request $request)
     {
-        $model = CustomerPayment::find($id);
+        $model = OrderItem::find($id);
 
         if(empty($model))
         {

@@ -95,7 +95,7 @@
                             </div>
 
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="total_amount">Total Amount*</label>
                                     <input type="number" readonly name="total_amount"
@@ -107,7 +107,19 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="discount">Discount</label>
+                                    <input type="number" name="discount"
+                                        class="form-control discount @error('discount') is-invalid	@enderror"
+                                        placeholder="Discount" value="{{ $order->discount }}">
+                                    @error('discount')
+                                        <p class="invalid-feedback">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="total_amount">Advance Amount</label>
                                     <input type="number" name="advance_amount"
@@ -164,7 +176,8 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="status">Status*</label>
-                                    <select name="status" class="form-control @error('particular') is-invalid	@enderror">
+                                    <select name="status"
+                                        class="form-control @error('particular') is-invalid	@enderror">
                                         <option {{ $order->status == 'Pending' ? 'selected' : '' }} value="Pending">
                                             Pending
                                         </option>
@@ -251,14 +264,20 @@
                                 </tr>
                             @endif
                             <tr>
-                                <th>Total Received Amount</th>
-                                <th colspan="5">₹{{ $total }}</th>
-
+                                <th>Total Amount</th>
+                                <th colspan="5">₹{{ $order->total_amount }}</th>
                             </tr>
                             <tr>
-                                <th>Balance Amount</th>
-                                <th colspan="5">₹{{ $order->total_amount - $total }}</th>
-
+                                <th>Discount</th>
+                                <th colspan="5">₹{{ !empty($order->discount) ? $order->discount : 0 }}</th>
+                            </tr>
+                            <tr>
+                                <th>Total Received Amount</th>
+                                <th colspan="5">₹{{ $total }}</th>
+                            </tr>
+                            <tr>
+                                <th>Remaining Balance</th>
+                                <th colspan="5">₹{{ $order->total_amount - $order->discount - $total }}</th>
                             </tr>
 
                         </tbody>

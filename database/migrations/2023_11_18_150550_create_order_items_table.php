@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customer_payments', function (Blueprint $table) {
+        Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
+            $table->integer('order_id')->nullable();
+            $table->integer('customer_id')->nullable();
             $table->double('amount',10,2)->nullable();
             $table->string('payment_method')->nullable();
             $table->integer('in_account')->nullable();
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customer_payments');
+        Schema::dropIfExists('order_items');
     }
 };

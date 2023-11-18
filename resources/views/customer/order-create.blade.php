@@ -64,7 +64,7 @@ $customerDetail = getCustomerDetail($customerId);
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="total_amount">Total Amount*</label>
                                     <input type="number" name="total_amount"
@@ -76,7 +76,19 @@ $customerDetail = getCustomerDetail($customerId);
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="discount">Discount</label>
+                                    <input type="number" name="discount"
+                                        class="form-control discount @error('discount') is-invalid	@enderror"
+                                        placeholder="Discount">
+                                    @error('discount')
+                                        <p class="invalid-feedback">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="delivery_at">Delivery At</label>
                                     <input type="text" name="delivery_at" id="delivery_at"
@@ -155,18 +167,3 @@ $customerDetail = getCustomerDetail($customerId);
     </section>
     <!-- /.content -->
 @endsection
-
-{{-- @section('script')
-    <script>
-        $('#payment_method').change(function(e) {
-            $('.inAccount').addClass('divHide');
-            var method = $(this).val();
-            if (method == 'Online') {
-                console.log(method);
-                $('.inAccount').removeClass('divHide');
-            }
-        });
-
-        $('#payment_method').change();
-    </script>
-@endsection --}}

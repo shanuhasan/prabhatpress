@@ -130,9 +130,13 @@
                 format: 'Y-m-d H:i:s',
             });
 
-            $('.js-datepicker').datetimepicker({
-                // options here
-                format: 'Y-m-d',
+            // $('.js-datepicker').datetimepicker({
+            //     // options here
+            //     format: 'Y-m-d',
+            // });
+
+            $('.js-datepicker').datepicker({
+                dateFormat: 'yy-mm-dd'
             });
 
             $('.js-filterdatepicker').datepicker({

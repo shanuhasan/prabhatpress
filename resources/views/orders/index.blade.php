@@ -54,6 +54,7 @@
                                 <th>Particular</th>
                                 <th>Qty</th>
                                 <th>Total Amount</th>
+                                <th>Discount</th>
                                 <th>Balance Amount</th>
                                 <th>Order By</th>
                                 <th width="100">Status</th>
@@ -80,8 +81,8 @@
                                         $days = numberOfDays(date('Y-m-d'), date($order->delivery_at));
                                     }
                                     
-                                    // echo $days;
-                                    // die();
+                                    //total Amount after discount
+                                    $totalAmountAfterDiscount = $order->total_amount - $order->discount;
                                     
                                     ?>
                                     <tr>
@@ -100,12 +101,13 @@
                                         </td>
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->total_amount }}</td>
+                                        <td>{{ !empty($order->discount) ? '₹' . $order->discount : '' }}</td>
                                         @if (!empty($order->customer_id))
                                             <td></td>
                                         @else
                                             <td
-                                                style="{{ $order->status == 'Delivered' && $order->total_amount - $advAmt > 0 ? 'background:red;color:#fff;font-weight:bold;' : '' }}">
-                                                ₹{{ $order->total_amount - $advAmt }}</td>
+                                                style="{{ $order->status == 'Delivered' && $totalAmountAfterDiscount - $advAmt > 0 ? 'background:red;color:#fff;font-weight:bold;' : '' }}">
+                                                ₹{{ $totalAmountAfterDiscount - $advAmt }}</td>
                                         @endif
 
                                         <td>{{ getUserName($order->created_by) }}</td>

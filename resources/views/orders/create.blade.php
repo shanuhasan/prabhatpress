@@ -94,7 +94,7 @@ use App\Models\Order;
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="total_amount">Total Amount*</label>
                                     <input type="number" name="total_amount"
@@ -106,7 +106,19 @@ use App\Models\Order;
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="discount">Discount</label>
+                                    <input type="number" name="discount"
+                                        class="form-control discount @error('discount') is-invalid	@enderror"
+                                        placeholder="Discount">
+                                    @error('discount')
+                                        <p class="invalid-feedback">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="total_amount">Advance Amount</label>
                                     <input type="number" name="advance_amount"

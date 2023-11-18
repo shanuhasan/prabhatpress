@@ -76,19 +76,6 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
-                            <h3>₹{{ $totalReceivedAmount }}</h3>
-                            <h4>Total Received Amount</h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="text-align:center">
                             <h3>{{ $todayOrder }}</h3>
                             <h4>Today Orders</h4>
                         </div>
@@ -103,8 +90,21 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
+                            <h3>₹{{ $totalReceivedAmount }}</h3>
+                            <h4>Total Received</h4>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="text-align:center">
                             <h3>₹{{ $todayOrderAmount }}</h3>
-                            <h4>Today Order Amount</h4>
+                            <h4>Today Order</h4>
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
@@ -114,7 +114,7 @@
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
                             <h3>₹{{ $todayReceivedAmount }}</h3>
-                            <h4>Today Amount</h4>
+                            <h4><strong>Today Received</strong></h4>
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>

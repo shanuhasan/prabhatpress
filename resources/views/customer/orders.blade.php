@@ -58,7 +58,7 @@ $customerDetail = getCustomerDetail($customerId);
                                 <th>Particular</th>
                                 <th>Qty</th>
                                 <th>Total Amount</th>
-                                {{-- <th>Balance Amount</th> --}}
+                                <th>Discount</th>
                                 <th>Order By</th>
                                 <th width="100">Status</th>
                                 <th width="100">Action</th>
@@ -97,9 +97,7 @@ $customerDetail = getCustomerDetail($customerId);
                                         </td>
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->total_amount }}</td>
-                                        {{-- <td
-                                            style="{{ $order->status == 'Complete' && $order->total_amount - $advAmt > 0 ? 'background:red;color:#fff;font-weight:bold;' : '' }}">
-                                            ₹{{ $order->total_amount - $advAmt }}</td> --}}
+                                        <td>{{ !empty($order->discount) ? '₹' . $order->discount : '' }}</td>
                                         <td>{{ getUserName($order->created_by) }}</td>
                                         <td style="{{ statusColor($order->status) }}">
                                             {{ $order->status }}</td>
@@ -157,13 +155,18 @@ $customerDetail = getCustomerDetail($customerId);
                             <input type="hidden" value="{{ $customerId }}" name="customer_id" id="customer_id">
                             <div class="card">
                                 <div class="card-body">
-                                    <span style="font-size: 24px;">Total Amount:- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <strong>
-                                            ₹{{ $totalAmount }}</strong><br>
-                                        Received Amount:-
+                                    <span style="font-size: 24px;">
+                                        Total Amount :-
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <strong>₹{{ $totalAmount }}</strong><br>
+                                        Discount :-
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <strong>₹{{ $totalDiscount }}</strong><br>
+                                        Received Amount :-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <strong>₹{{ $totalAmountReceived + $customerTotalPayment }}</strong><br>
-                                        Balance Amount:-
-                                        &nbsp;&nbsp;<strong>₹{{ $totalAmount - ($totalAmountReceived + $customerTotalPayment) }}</strong></span>
+                                        Remaining Balance :-&nbsp;&nbsp;
+                                        <strong>₹{{ $totalAmount - $totalDiscount - ($totalAmountReceived + $customerTotalPayment) }}</strong>
+                                    </span>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="mb-3">
