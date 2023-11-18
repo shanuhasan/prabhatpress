@@ -136,7 +136,7 @@ $customerDetail = getCustomerDetail($customerId);
                     </table>
                 </div>
                 <div class="card-footer clearfix">
-                    {{ $orders->links() }}
+                    {{ $orders->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>
