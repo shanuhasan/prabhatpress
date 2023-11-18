@@ -50,6 +50,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ route('expenses.index') }}" class="nav-link @yield('expenses')">
+                        <i class="nav-icon  fas fa-rupee-sign"></i>
+                        <p>Expenses</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
 

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
@@ -73,6 +74,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/delete-customer-order/{id}',[CustomerController::class,'orderDelete'])->name('customer.orders.delete');
     Route::delete('/delete-customer-order-item/{id}',[CustomerController::class,'orderItemDelete'])->name('customer.orders.item.delete');
     Route::post('/customer-order-payment',[CustomerController::class,'orderPayment'])->name('customer.orders.payment');
+
+    // expenses 
+    Route::get('/expenses',[ExpenseController::class,'index'])->name('expenses.index');
+    Route::get('/expenses/create',[ExpenseController::class,'create'])->name('expenses.create');
+    Route::post('/expenses/store',[ExpenseController::class,'store'])->name('expenses.store');
+    Route::get('/expenses/{id}/edit',[ExpenseController::class,'edit'])->name('expenses.edit');
+    Route::post('/expenses/{id}',[ExpenseController::class,'update'])->name('expenses.update');
+    Route::delete('/expenses/{id}',[ExpenseController::class,'delete'])->name('expenses.delete');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');

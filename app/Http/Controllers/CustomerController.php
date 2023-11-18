@@ -234,7 +234,7 @@ class CustomerController extends Controller
 
         $validator = Validator::make($request->all(),[
             'particular'=>'required',
-            'total_amount'=>'required',
+            // 'total_amount'=>'required',
             'status'=>'required',
         ]);
 
@@ -242,27 +242,11 @@ class CustomerController extends Controller
 
             $model->particular = $request->particular;
             $model->qty = $request->qty;
-            $model->total_amount = $request->total_amount;
+            // $model->total_amount = $request->total_amount;
             $model->status = $request->status;
             $model->delivery_at = $request->delivery_at;
             $model->updated_by = Auth::user()->id;
             $model->save();
-            // if($model->save())
-            // {
-            //     if(!empty($request->advance_amount) && $request->advance_amount > 0)
-            //     {
-            //         $orderDetail = new OrderItem();
-            //         $orderDetail->order_id = $model->id;
-            //         $orderDetail->amount = $request->advance_amount;
-            //         $orderDetail->payment_method = $request->payment_method;
-            //         if($request->payment_method == 'Online')
-            //         {
-            //             $orderDetail->in_account = $request->in_account;
-            //         }
-            //         $orderDetail->updated_by = Auth::user()->id;
-            //         $orderDetail->save();
-            //     }
-            // }
 
             return redirect()->route('customer.order',$model->customer_id)->with('success','Order updated successfully.');
 

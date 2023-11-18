@@ -165,7 +165,7 @@ class OrderController extends Controller
             'customer_name'=>'required',
             'phone'=>'required|min:10',
             'particular'=>'required',
-            'total_amount'=>'required',
+            // 'total_amount'=>'required',
             'payment_method'=>'required',
             'status'=>'required',
         ]);
@@ -177,7 +177,7 @@ class OrderController extends Controller
             $model->address = $request->address;
             $model->particular = $request->particular;
             $model->qty = $request->qty;
-            $model->total_amount = $request->total_amount;
+            // $model->total_amount = $request->total_amount;
             $model->status = $request->status;
             $model->delivery_at = $request->delivery_at;
             $model->updated_by = Auth::user()->id;
