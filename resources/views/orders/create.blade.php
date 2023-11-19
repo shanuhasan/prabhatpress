@@ -200,19 +200,6 @@ use App\Models\Order;
 
 @section('script')
     <script>
-        // $('.total_amount,.advance_amount').change(function(e) {
-        //     e.preventDefault();
-        //     var totalAmt = $('.total_amount').val();
-        //     var advanceAmt = $('.advance_amount').val();
-
-        //     var amount = totalAmt - advanceAmt;
-
-        //     $('.balance_amount').val(amount);
-
-        // });
-
-        // $('.total_amount,.advance_amount').change();
-
         $('#payment_method').change(function(e) {
 
             $('.inAccount').addClass('divHide');

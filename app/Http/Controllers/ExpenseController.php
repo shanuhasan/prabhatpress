@@ -43,6 +43,12 @@ class ExpenseController extends Controller
             $model = new Expense();
             $model->particular = $request->particular;
             $model->amount = $request->amount;
+            $model->payment_method = $request->payment_method;
+            if($request->payment_method == 'Online')
+            {
+                $model->from_account = $request->from_account;
+            }
+            
             $model->created_by = Auth::user()->id;
             $model->save();
 
@@ -83,6 +89,11 @@ class ExpenseController extends Controller
 
             $model->particular = $request->particular;
             $model->amount = $request->amount;
+            $model->payment_method = $request->payment_method;
+            if($request->payment_method == 'Online')
+            {
+                $model->from_account = $request->from_account;
+            }
             $model->created_by = Auth::user()->id;
             $model->save();
 

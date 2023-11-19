@@ -61,7 +61,7 @@
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
                             <h3>₹{{ $totalAmount }}</h3>
-                            <h4>Total Received Amount</h4>
+                            <h5>Total Received Amount</h5>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -70,11 +70,25 @@
                     </div>
                 </div>
 
+                @if (!empty($totalOnlineAmount))
+                    @foreach ($totalOnlineAmount as $item)
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box card">
+                                <div class="inner" style="text-align:center">
+                                    <h3>₹{{ $item['amount'] }}</h3>
+                                    <h5>Online Collection ({{ getUserName($item['in_account']) }})</h5>
+                                </div>
+                                <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+
                 <div class="col-lg-3 col-6">
                     <div class="small-box card">
-                        <div class="inner" style="text-align:center">
+                        <div class="inner" style="background:red;text-align:center;color:#ffffff">
                             <h3>₹{{ $totalExpenses }}</h3>
-                            <h4>Total Expenses</h4>
+                            <h5>Total Expenses</h5>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -86,9 +100,9 @@
 
                 <div class="col-lg-3 col-6">
                     <div class="small-box card">
-                        <div class="inner" style="text-align:center">
+                        <div class="inner blink-text-success" style="text-align:center">
                             <h3>₹{{ $totalAmount - $totalExpenses }}</h3>
-                            <h4>Total Amount</h4>
+                            <h5>Total Collection</h5>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -97,11 +111,39 @@
                     </div>
                 </div>
 
+                @if (!empty($totalOnlineExpenses))
+                    @foreach ($totalOnlineExpenses as $item)
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box card">
+                                <div class="inner" style="text-align:center">
+                                    <h3>₹{{ $item['amount'] }}</h3>
+                                    <h5>Online Expenses ({{ getUserName($item['from_account']) }})</h5>
+                                </div>
+                                <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+
             </div>
         </div>
         <!-- /.card -->
     </section>
     <!-- /.content -->
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Collection History</h1>
+                </div>
+                <div class="col-sm-6">
+
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
 
     <section class="content">
         <!-- Default box -->

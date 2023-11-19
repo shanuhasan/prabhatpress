@@ -74,6 +74,8 @@
                                 <th>#</th>
                                 <th>Particular</th>
                                 <th>Amount</th>
+                                <th>Payment Method</th>
+                                <th>From Account</th>
                                 <th>Date</th>
                                 <th>Created By</th>
                                 <th width="100">Action</th>
@@ -88,6 +90,8 @@
                                         <td>{{ $i++ }}</td>
                                         <td>{{ $item->particular }}</td>
                                         <td>₹{{ $item->amount }}</td>
+                                        <td>{{ $item->payment_method }}</td>
+                                        <td>{{ getUserName($item->from_account) }}</td>
                                         <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
                                         <td>{{ getUserName($item->created_by) }}</td>
                                         <td>
@@ -126,6 +130,8 @@
                                 <th></th>
                                 <th>Total</th>
                                 <th>₹{{ $totalExpensesAmount }}</th>
+                                <th></th>
+                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>

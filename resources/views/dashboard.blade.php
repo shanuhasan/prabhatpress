@@ -76,20 +76,6 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
-                            <h3>{{ $todayOrder }}</h3>
-                            <h4>Today Orders</h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="{{ route('orders.index') }}" class="small-box-footer text-dark">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="text-align:center">
                             <h3>₹{{ $totalReceivedAmount }}</h3>
                             <h4>Total Received</h4>
                         </div>
@@ -99,26 +85,63 @@
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
                 </div>
-
+                <div class="col-lg-3 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="text-align:center">
+                            <h3>{{ $todayOrder }}</h3>
+                            <h4>Today Orders</h4>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="{{ route('orders.index') }}" class="small-box-footer text-dark">
+                            More info <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
                 <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
                             <h3>₹{{ $todayOrderAmount }}</h3>
-                            <h4>Today Order</h4>
+                            <h4>Today Order Amount</h4>
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
                 </div>
+                <div class="col-lg-3 col-6"></div>
+
+                {{-- today amount --}}
 
                 <div class="col-lg-3 col-6">
                     <div class="small-box card">
-                        <div class="inner" style="text-align:center">
+                        <div class="inner" style="background:green;text-align:center;color:#ffffff">
                             <h3>₹{{ $todayReceivedAmount }}</h3>
                             <h4><strong>Today Received</strong></h4>
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
                 </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="background:red;text-align:center;color:#ffffff">
+                            <h3>₹{{ $todayExpenses }}</h3>
+                            <h4><strong>Today Expense</strong></h4>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="small-box card">
+                        <div class="inner blink-text-success" style="text-align:center">
+                            <h3>₹{{ $todayReceivedAmount - $todayExpenses }}</h3>
+                            <h4><strong>Today Collection</strong></h4>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6"></div>
 
                 @if (!empty($todayOnlineAmount))
                     @foreach ($todayOnlineAmount as $item)

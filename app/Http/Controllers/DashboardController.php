@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Order;
+use App\Models\Expense;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -66,6 +67,11 @@ class DashboardController extends Controller
         $todayReceivedAmount = OrderItem::whereDate('created_at','=',$currentDate)
                                         ->sum('amount');
         // end today received amount
+        $todayExpenses = Expense::whereDate('created_at','=',$currentDate)
+                                    ->sum('amount');
+        // today enpenses
+
+        //end today expenses
 
         // today online received amount with account name
         $todayOnlineAmount = OrderItem::select('in_account', DB::raw('SUM(amount) as amount'))
@@ -79,6 +85,7 @@ class DashboardController extends Controller
             'totalOrder'=>$totalOrder,
             'totalOrderAmount'=>$totalOrderAmount,
             'totalReceivedAmount'=>$totalReceivedAmount,
+            'todayExpenses'=>$todayExpenses,
             // 'totalOrderAmountCurrentMonth'=>$totalOrderAmountCurrentMonth,
             // 'totalOrderAmountLastMonth'=>$totalOrderAmountLastMonth,
             // 'totalOrderAmountLastThirtyDays'=>$totalOrderAmountLastThirtyDays,
