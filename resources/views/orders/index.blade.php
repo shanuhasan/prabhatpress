@@ -87,7 +87,14 @@
                                     ?>
                                     <tr>
                                         <td>{{ $i++ }}</td>
-                                        <td><a href="{{ route('orders.edit', $order->id) }}">{{ $order->order_no }}</a></td>
+                                        <td>
+                                            @if (!empty($order->customer_id))
+                                                <a
+                                                    href="{{ route('customer.order', $order->customer_id) }}">{{ $order->order_no }}</a>
+                                            @else
+                                                <a href="{{ route('orders.edit', $order->id) }}">{{ $order->order_no }}</a>
+                                            @endif
+                                        </td>
                                         <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
                                         <td
                                             class="{{ !empty($order->delivery_at) && $order->status == 'Pending' && $days <= +2 ? 'blink-text' : '' }}">
@@ -97,7 +104,14 @@
                                         </td>
                                         <td>{{ !empty($order->customer_id) ? getCustomerPhone($order->customer_id) : $order->phone }}
                                         </td>
-                                        <td><a href="{{ route('orders.edit', $order->id) }}">{{ $order->particular }}</a>
+                                        <td>
+                                            @if (!empty($order->customer_id))
+                                                <a
+                                                    href="{{ route('customer.order', $order->customer_id) }}">{{ $order->particular }}</a>
+                                            @else
+                                                <a
+                                                    href="{{ route('orders.edit', $order->id) }}">{{ $order->particular }}</a>
+                                            @endif
                                         </td>
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->total_amount }}</td>

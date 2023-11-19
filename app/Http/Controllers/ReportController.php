@@ -17,6 +17,19 @@ class ReportController extends Controller
         $totalExpenses = Expense::sum('amount');
         $totalOrderItem = OrderItem::orderBy('id','DESC');
 
+        if(!empty($request->get('from_date')))
+        {
+            $totalReceivedAmount = OrderItem::
+                                            whereDate('created_at','=',$request->get('from_date'))
+                                            ->sum('amount');
+
+            $totalExpenses = Expense::
+                                    whereDate('created_at','=',$request->get('from_date'))
+                                    ->sum('amount');
+
+            $totalOrderItem = OrderItem::whereDate('created_at','=',$request->get('from_date'));
+        }
+
         if(!empty($request->get('from_date')) && !empty($request->get('to_date')))
         {
             $totalReceivedAmount = OrderItem::
@@ -31,20 +44,7 @@ class ReportController extends Controller
 
             $totalOrderItem = OrderItem::whereDate('created_at','>=',$request->get('from_date'))
                                     ->whereDate('created_at','<=',$request->get('to_date'));
-        }
-
-        if(!empty($request->get('from_date')))
-        {
-            $totalReceivedAmount = OrderItem::
-                                            whereDate('created_at','=',$request->get('from_date'))
-                                            ->sum('amount');
-
-            $totalExpenses = Expense::
-                                    whereDate('created_at','=',$request->get('from_date'))
-                                    ->sum('amount');
-
-            $totalOrderItem = OrderItem::whereDate('created_at','=',$request->get('from_date'));
-        }
+        }        
 
         $totalAmount = $totalReceivedAmount;
         // $totalOrderItem = $totalOrderItem->paginate(20);
