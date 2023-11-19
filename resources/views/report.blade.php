@@ -57,7 +57,52 @@
         <div class="container-fluid">
             <div class="row">
 
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="background:green;color:#ffffff">
+                            <h4><strong>Total Received</strong></h4>
+                            <h5>Cash : - ₹{{ $totalCashAmount }}</h5>
+                            @if (!empty($totalOnlineAmount))
+                                @foreach ($totalOnlineAmount as $item)
+                                    <h5>Online ({{ getUserName($item['in_account']) }}):- ₹{{ $item['amount'] }}</h5>
+                                @endforeach
+                            @endif
+                            <h3>Total : - ₹{{ $totalAmount }}</h3>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="background:red;color:#ffffff">
+                            <h4><strong>Total Expenses</strong></h4>
+                            <h5>Cash : - ₹{{ $totalCashExpenses }}</h5>
+                            @if (!empty($totalOnlineExpenses))
+                                @foreach ($totalOnlineExpenses as $item)
+                                    <h5>Online ({{ getUserName($item['from_account']) }}):- ₹{{ $item['amount'] }}</h5>
+                                @endforeach
+                            @endif
+                            <h3>Total : - ₹{{ $totalExpenses }}</h3>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+
                 <div class="col-lg-3 col-6">
+                    <div class="small-box card">
+                        <div class="inner blink-text-success" style="text-align:center">
+                            <h4>Total Collection</h4>
+                            <h3>₹{{ $totalAmount - $totalExpenses }}</h3>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+
+                {{-- <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
                             <h3>₹{{ $totalAmount }}</h3>
@@ -68,9 +113,9 @@
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
-                </div>
+                </div> --}}
 
-                @if (!empty($totalOnlineAmount))
+                {{-- @if (!empty($totalOnlineAmount))
                     @foreach ($totalOnlineAmount as $item)
                         <div class="col-lg-3 col-6">
                             <div class="small-box card">
@@ -82,9 +127,9 @@
                             </div>
                         </div>
                     @endforeach
-                @endif
+                @endif --}}
 
-                <div class="col-lg-3 col-6">
+                {{-- <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner" style="background:red;text-align:center;color:#ffffff">
                             <h3>₹{{ $totalExpenses }}</h3>
@@ -96,21 +141,10 @@
                         <a href="{{ route('expenses.index') }}" class="small-box-footer text-dark">More info <i
                                 class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                </div>
+                </div> --}}
 
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner blink-text-success" style="text-align:center">
-                            <h3>₹{{ $totalAmount - $totalExpenses }}</h3>
-                            <h5>Total Collection</h5>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
-                    </div>
-                </div>
 
+                {{-- 
                 @if (!empty($totalOnlineExpenses))
                     @foreach ($totalOnlineExpenses as $item)
                         <div class="col-lg-3 col-6">
@@ -123,7 +157,7 @@
                             </div>
                         </div>
                     @endforeach
-                @endif
+                @endif --}}
 
             </div>
         </div>

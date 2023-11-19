@@ -72,20 +72,7 @@
                                 class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="text-align:center">
-                            <h3>₹{{ $totalReceivedAmount }}</h3>
-                            <h4>Total Received</h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-6 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
                             <h3>{{ $todayOrder }}</h3>
@@ -99,7 +86,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-6 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
                             <h3>₹{{ $todayOrderAmount }}</h3>
@@ -108,31 +95,42 @@
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
                 </div>
-                <div class="col-lg-3 col-6"></div>
 
                 {{-- today amount --}}
 
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-4 col-6">
                     <div class="small-box card">
-                        <div class="inner" style="background:green;text-align:center;color:#ffffff">
-                            <h3>₹{{ $todayReceivedAmount }}</h3>
+                        <div class="inner" style="background:green;color:#ffffff">
                             <h4><strong>Today Received</strong></h4>
+                            <h5>Cash : - ₹{{ $todayCashAmount }}</h5>
+                            @if (!empty($todayOnlineAmount))
+                                @foreach ($todayOnlineAmount as $item)
+                                    <h5>Online ({{ getUserName($item['in_account']) }}):- ₹{{ $item['amount'] }}</h5>
+                                @endforeach
+                            @endif
+                            <h3>Total : - ₹{{ $todayReceivedAmount }}</h3>
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-4 col-6">
                     <div class="small-box card">
-                        <div class="inner" style="background:red;text-align:center;color:#ffffff">
-                            <h3>₹{{ $todayExpenses }}</h3>
-                            <h4><strong>Today Expense</strong></h4>
+                        <div class="inner" style="background:red;color:#ffffff">
+                            <h4><strong>Today Expenses</strong></h4>
+                            <h5>Cash : - ₹{{ $todayCashExpenses }}</h5>
+                            @if (!empty($todayOnlineExpenses))
+                                @foreach ($todayOnlineExpenses as $item)
+                                    <h5>Online ({{ getUserName($item['from_account']) }}):- ₹{{ $item['amount'] }}</h5>
+                                @endforeach
+                            @endif
+                            <h3>Total : - ₹{{ $todayExpenses }}</h3>
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner blink-text-success" style="text-align:center">
                             <h3>₹{{ $todayReceivedAmount - $todayExpenses }}</h3>
@@ -141,9 +139,29 @@
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
                 </div>
-                <div class="col-lg-3 col-6"></div>
 
-                @if (!empty($todayOnlineAmount))
+
+                {{-- <div class="col-lg-3 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="background:green;text-align:center;color:#ffffff">
+                            <h3>₹{{ $todayReceivedAmount }}</h3>
+                            <h4><strong>Today Received</strong></h4>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div> --}}
+
+                {{-- <div class="col-lg-3 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="background:red;text-align:center;color:#ffffff">
+                            <h3>₹{{ $todayExpenses }}</h3>
+                            <h4><strong>Today Expense</strong></h4>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div> --}}
+
+                {{-- @if (!empty($todayOnlineAmount))
                     @foreach ($todayOnlineAmount as $item)
                         <div class="col-lg-4 col-6">
                             <div class="small-box card">
@@ -155,7 +173,7 @@
                             </div>
                         </div>
                     @endforeach
-                @endif
+                @endif --}}
 
                 {{-- <div class="col-lg-4 col-6">
                     <div class="small-box card">

@@ -66,11 +66,21 @@ class DashboardController extends Controller
         // today received amount
         $todayReceivedAmount = OrderItem::whereDate('created_at','=',$currentDate)
                                         ->sum('amount');
+        $todayCashAmount = OrderItem::whereDate('created_at','=',$currentDate)
+                                        ->where('payment_method','Cash')
+                                        ->sum('amount');
         // end today received amount
+
+        // today enpenses
         $todayExpenses = Expense::whereDate('created_at','=',$currentDate)
                                     ->sum('amount');
-        // today enpenses
-
+        $todayCashExpenses = Expense::whereDate('created_at','=',$currentDate)
+                                    ->where('payment_method','Cash')
+                                    ->sum('amount');
+        $todayOnlineExpenses = Expense::select('from_account', DB::raw('SUM(amount) as amount'))
+                                        ->whereDate('created_at','=',$currentDate)
+                                        ->where('payment_method','Online')
+                                        ->groupBy('from_account')->get()->toArray();
         //end today expenses
 
         // today online received amount with account name
@@ -86,6 +96,8 @@ class DashboardController extends Controller
             'totalOrderAmount'=>$totalOrderAmount,
             'totalReceivedAmount'=>$totalReceivedAmount,
             'todayExpenses'=>$todayExpenses,
+            'todayCashExpenses'=>$todayCashExpenses,
+            'todayOnlineExpenses'=>$todayOnlineExpenses,
             // 'totalOrderAmountCurrentMonth'=>$totalOrderAmountCurrentMonth,
             // 'totalOrderAmountLastMonth'=>$totalOrderAmountLastMonth,
             // 'totalOrderAmountLastThirtyDays'=>$totalOrderAmountLastThirtyDays,
@@ -96,7 +108,7 @@ class DashboardController extends Controller
             'totalOrderDelivered'=>$totalOrderDelivered,
             'todayOrderAmount'=>$todayOrderAmount,
             'todayReceivedAmount'=>$todayReceivedAmount,
-            // 'todayOnlineAmount'=>$todayOnlineAmount,
+            'todayCashAmount'=>$todayCashAmount,
             'todayOnlineAmount'=>$todayOnlineAmount,
         ]);
     }
