@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
-            $table->integer('order_id')->nullable();
-            $table->integer('customer_id')->nullable();
-            $table->double('amount',10,2)->nullable();
-            $table->string('payment_method')->nullable();
-            $table->integer('in_account')->nullable();
-            $table->integer('updated_by')->nullable();
-            $table->timestamps();
-        });
+        if ( !Schema::hasTable('order_items') ) {
+            Schema::create('order_items', function (Blueprint $table) {
+                $table->id();
+                $table->integer('order_id')->nullable();
+                $table->integer('customer_id')->nullable();
+                $table->double('amount',10,2)->nullable();
+                $table->string('payment_method')->nullable();
+                $table->integer('in_account')->nullable();
+                $table->integer('updated_by')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**
