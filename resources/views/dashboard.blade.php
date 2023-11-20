@@ -108,7 +108,7 @@
                                     <h5>Online ({{ getUserName($item['in_account']) }}):- ₹{{ $item['amount'] }}</h5>
                                 @endforeach
                             @endif
-                            <h3>Total : - ₹{{ $todayReceivedAmount }}</h3>
+                            <h4>Total : - ₹{{ $todayReceivedAmount }}</h3>
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
@@ -124,7 +124,7 @@
                                     <h5>Online ({{ getUserName($item['from_account']) }}):- ₹{{ $item['amount'] }}</h5>
                                 @endforeach
                             @endif
-                            <h3>Total : - ₹{{ $todayExpenses }}</h3>
+                            <h4>Total : - ₹{{ $todayExpenses }}</h3>
                         </div>
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
