@@ -21,11 +21,11 @@
                 <div class="card-body">
                     <h1 style="text-align: center">Rough Estimate</h1>
                     <div class="row">
-                        {{-- <div class="col-md-3">
+                        <div class="col-md-3">
                             <div class="mb-3">
-                                <h2>Particular :- {{ $order->particular }}</h2>
+                                <h2>Item :- {{ $order->particular }}</h2>
                             </div>
-                        </div> --}}
+                        </div>
 
                         <div class="col-md-3">
                             <div class="mb-3">
@@ -60,7 +60,12 @@
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <p>Note:- </p>
+                                <h4>Note:- आर्डर देने पर 75% अडवांस देना होगा अन्य अपना कार्य अधूरा समझे। 15 दिन के बाद तथा
+                                    बिना पर्ची के सामान नहीं मिलेगा।
+                                    अपना मैटर स्वयं चैक कर लें, गलती होने पर हमारी जिम्मेदारी नहीं होगी। आप का कार्य लेट
+                                    होने पर कोई वाद मान्य नहीं
+                                    होगा क्योंकि टैक्निकल प्राॅब्लम के चलते ऐसा होना सम्भव है। नोट टैक्स एक्सट्रा होगा।
+                                    भूलचूक लेनी देनी</h4>
                             </div>
                         </div>
                     </div>
