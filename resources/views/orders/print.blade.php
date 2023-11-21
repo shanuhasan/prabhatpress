@@ -21,41 +21,38 @@
                 <div class="card-body">
                     <h1 style="text-align: center">Rough Estimate</h1>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-12">
                             <div class="mb-3">
-                                <h2>Item :- {{ $order->particular }}</h2>
+                                <strong>
+                                    Customer Name:-
+                                    {{ !empty($order->customer_id) ? getCustomerName($order->customer_id) : $order->customer_name }}<br>
+                                    Order No. :- {{ $order->order_no }}</br>
+                                </strong>
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-12">
                             <div class="mb-3">
-                                <h2>Customer Name :-
-                                    {{ !empty($order->customer_id) ? getCustomerName($order->customer_id) : $order->customer_name }}
-                                </h2>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <h2>Order No. :- {{ $order->order_no }}</h2>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <h2>Quantity:- {{ $order->qty }}</h2r=>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <h2>Total Amount:- ₹{{ $order->total_amount }}</h2>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <h2>Bal Amount:- ₹{{ $order->total_amount - $order->discount - $advAmt }}</h2>
+                                <table cellpadding="3" cellspacing='3' border="0" width="700">
+                                    <thead>
+                                        <tr style="background: #ccc">
+                                            <th>#</th>
+                                            <th>Item</th>
+                                            <th>Qty</th>
+                                            <th>Total</th>
+                                            <th>Bal. Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td>{{ $order->particular }}</td>
+                                            <td>{{ $order->qty }}</td>
+                                            <td>₹{{ $order->total_amount }}</td>
+                                            <td>₹{{ $order->total_amount - $order->discount - $advAmt }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <div class="col-md-12">
