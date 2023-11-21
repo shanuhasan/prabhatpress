@@ -261,4 +261,28 @@ class OrderController extends Controller
             'message'=>'Order Item deleted successfully.'
         ]);
     }
+
+    public function print($id)
+    {
+        $order = Order::find($id);
+        if(empty($order))
+        {
+            return redirect()->route('orders.index');
+        }
+
+        $orderDetail = OrderItem::where('order_id',$order->id)->get();
+
+        $advAmt = 0;
+        if (!empty($orderDetail)) {
+            foreach ($orderDetail as $k => $vl) {
+                $advAmt += $vl->amount;
+            }
+        }
+
+        $data['order'] = $order;
+        $data['orderDetail'] = $orderDetail;
+        $data['advAmt'] = $advAmt;
+
+        return view('orders.print',$data);
+    }
 }

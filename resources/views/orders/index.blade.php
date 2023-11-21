@@ -161,6 +161,10 @@
                                                         clip-rule="evenodd"></path>
                                                 </svg>
                                             </a>
+
+                                            <a href="{{ route('orders.print', $order->id) }}">
+                                                <i class="fa fa-print" aria-hidden="true"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach

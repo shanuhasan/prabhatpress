@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/order/{id}',[OrderController::class,'update'])->name('orders.update');
     Route::delete('/order/{id}',[OrderController::class,'delete'])->name('orders.delete');
     Route::delete('/order/item/{id}',[OrderController::class,'deleteItem'])->name('orders.item.delete');
+    Route::get('/print/{id}', [OrderController::class, 'print'])->name('orders.print');
 
     // users 
     Route::get('/user',[UserController::class,'index'])->name('user.index');
