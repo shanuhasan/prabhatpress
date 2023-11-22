@@ -32,7 +32,7 @@ use App\Models\Order;
                                 <div class="mb-3">
                                     <label for="particular">Particular*</label>
                                     <input type="text" name="particular"
-                                        class="form-control @error('particular') is-invalid	@enderror"
+                                        class="form-control text-to-upper @error('particular') is-invalid	@enderror"
                                         placeholder="Particular">
                                     @error('particular')
                                         <p class="invalid-feedback">{{ $message }}</p>

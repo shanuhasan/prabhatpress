@@ -103,6 +103,8 @@
     <script src="{{ asset('admin-assets/js/adminlte.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('admin-assets/js/demo.js') }}"></script>
+    <script src="{{ asset('admin-assets/js/common.js') }}"></script>
+    <script src="{{ asset('admin-assets/js/form-sanitization.js') }}"></script>
 
     <script src="{{ asset('admin-assets/plugins/summernote/summernote.min.js') }}"></script>
 

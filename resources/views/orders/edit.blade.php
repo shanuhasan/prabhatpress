@@ -31,8 +31,8 @@
                                 <div class="mb-3">
                                     <label for="order_no">Order No.*</label>
                                     <input type="text" readonly name="order_no"
-                                        class="form-control @error('order_no') is-invalid	@enderror" placeholder="Order No."
-                                        value="{{ $order->order_no }}">
+                                        class="form-control text-to-upper @error('order_no') is-invalid	@enderror"
+                                        placeholder="Order No." value="{{ $order->order_no }}">
                                     @error('order_no')
                                         <p class="invalid-feedback">{{ $message }}</p>
                                     @enderror
@@ -43,7 +43,7 @@
                                 <div class="mb-3">
                                     <label for="customer_name">Name*</label>
                                     <input type="text" name="customer_name"
-                                        class="form-control @error('customer_name') is-invalid	@enderror"
+                                        class="form-control text-to-upper @error('customer_name') is-invalid	@enderror"
                                         placeholder="Customer Name" value="{{ $order->customer_name }}">
                                     @error('customer_name')
                                         <p class="invalid-feedback">{{ $message }}</p>
@@ -66,7 +66,7 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="phone">Address</label>
-                                    <textarea name="address" id="address" class="form-control" cols="30" rows="5">{!! $order->address !!}</textarea>
+                                    <textarea name="address" id="address" class="form-control text-to-upper" cols="30" rows="5">{!! $order->address !!}</textarea>
                                 </div>
                             </div>
 
@@ -74,7 +74,7 @@
                                 <div class="mb-3">
                                     <label for="particular">Particular*</label>
                                     <input type="text" name="particular"
-                                        class="form-control @error('particular') is-invalid	@enderror"
+                                        class="form-control text-to-upper @error('particular') is-invalid	@enderror"
                                         placeholder="Particular" value="{{ $order->particular }}">
                                     @error('particular')
                                         <p class="invalid-feedback">{{ $message }}</p>
