@@ -32,6 +32,10 @@
   display: none;
 }
 
+.text-success {
+  background-color: green;
+}
+
 .blink-text {
 
   animation: blinkingText 2s infinite;

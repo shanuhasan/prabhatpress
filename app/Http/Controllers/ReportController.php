@@ -24,6 +24,9 @@ class ReportController extends Controller
             
         $totalCashAmount = OrderItem::where('payment_method','Cash')
                                             ->sum('amount');
+
+        $onlyTotalOnlineAmount = OrderItem::where('payment_method','Online')
+                                            ->sum('amount');
         //end total online received amount with account name
 
         // total expenses amount
@@ -43,6 +46,9 @@ class ReportController extends Controller
             $totalReceivedAmount = OrderItem::whereDate('created_at','=',$request->get('from_date'))
                                             ->sum('amount');
             $totalCashAmount     = OrderItem::where('payment_method','Cash')
+                                            ->whereDate('created_at','=',$request->get('from_date'))
+                                            ->sum('amount');
+            $onlyTotalOnlineAmount = OrderItem::where('payment_method','Online')
                                             ->whereDate('created_at','=',$request->get('from_date'))
                                             ->sum('amount');
             $totalOnlineAmount   = OrderItem::select('in_account', DB::raw('SUM(amount) as amount'))
@@ -72,6 +78,10 @@ class ReportController extends Controller
                                             ->whereDate('created_at','<=',$request->get('to_date'))
                                             ->sum('amount');
             $totalCashAmount     = OrderItem::where('payment_method','Cash')
+                                            ->whereDate('created_at','>=',$request->get('from_date'))
+                                            ->whereDate('created_at','<=',$request->get('to_date'))
+                                            ->sum('amount');
+            $onlyTotalOnlineAmount = OrderItem::where('payment_method','Online')
                                             ->whereDate('created_at','>=',$request->get('from_date'))
                                             ->whereDate('created_at','<=',$request->get('to_date'))
                                             ->sum('amount');
@@ -105,6 +115,7 @@ class ReportController extends Controller
         return view('report',[
             'totalAmount'=>$totalAmount,
             'totalOnlineAmount'=>$totalOnlineAmount,
+            'onlyTotalOnlineAmount'=>$onlyTotalOnlineAmount,
             'totalCashAmount'=>$totalCashAmount,
             'totalExpenses'=>$totalExpenses,
             'totalCashExpenses'=>$totalCashExpenses,
@@ -112,6 +123,29 @@ class ReportController extends Controller
             'totalOrderItem'=>$totalOrderItem,
             'from_date'=>$request->get('from_date'),
             'to_date'=>$request->get('to_date'),
+        ]);
+    }
+
+    public function onlinePayment(Request $request)
+    {
+        $onlineAmount = OrderItem::where('payment_method','Online');
+        $totalOnlineAmount = OrderItem::where('payment_method','Online')->sum('amount');
+
+        if(!empty($request->get('from_date')))
+        {
+            $onlineAmount = OrderItem::where('payment_method','Online')
+                                            ->whereDate('created_at','=',$request->get('from_date'));
+            $totalOnlineAmount = OrderItem::where('payment_method','Online')
+                                    ->whereDate('created_at','=',$request->get('from_date'))
+                                    ->sum('amount');
+        }
+
+        $onlineAmount = $onlineAmount->paginate(20);
+
+        return view('online-payment',[
+            'onlineAmount'=>$onlineAmount,
+            'totalOnlineAmount'=>$totalOnlineAmount,
+            'from_date'=>$request->get('from_date'),
         ]);
     }
 }

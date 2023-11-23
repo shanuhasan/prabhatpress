@@ -241,7 +241,7 @@
                                         <td>{{ $item->payment_method }}</td>
                                         <td>{{ getUserName($item->in_account) }}</td>
                                         <td>{{ getUserName($item->updated_by) }}</td>
-                                        <td>
+                                        {{-- <td>
                                             <a href="javascript:void()"
                                                 onclick="deleteOrderItem({{ $item->id }},{{ $order->id }})"
                                                 class="text-danger w-4 h-4 mr-1">
@@ -254,7 +254,7 @@
                                                         clip-rule="evenodd"></path>
                                                 </svg>
                                             </a>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                     <?php $total += $item->amount; ?>
                                 @endforeach

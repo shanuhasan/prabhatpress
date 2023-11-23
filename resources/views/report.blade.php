@@ -88,8 +88,23 @@
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
                 </div>
+                <div class="col-lg-4 col-6"></div>
 
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="text-align:center;background:green;color:#ffffff">
+                            <h4>Total Online Collection</h4>
+                            <h3>₹{{ $onlyTotalOnlineAmount }}</h3>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="{{ route('report.onlinePayment') }}" class="small-box-footer text-dark">More info <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner blink-text-success" style="text-align:center">
                             <h4>Total Collection</h4>

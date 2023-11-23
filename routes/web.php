@@ -85,8 +85,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/expenses/{id}',[ExpenseController::class,'update'])->name('expenses.update');
     Route::delete('/expenses/{id}',[ExpenseController::class,'delete'])->name('expenses.delete');
 
-     // report 
-     Route::get('/report',[ReportController::class,'index'])->name('report.index');
+    // report 
+    Route::get('/report',[ReportController::class,'index'])->name('report.index');
+    Route::get('/report/online-payment',[ReportController::class,'onlinePayment'])->name('report.onlinePayment');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');

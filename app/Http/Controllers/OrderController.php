@@ -31,7 +31,7 @@ class OrderController extends Controller
 
     public function pending(Request $request)
     {
-        $orders = Order::where('status','Pending')->orderBy('id', 'ASC'); 
+        $orders = Order::where('status','Pending')->orderBy('id', 'DESC'); 
 
         if(!empty($request->get('keyword')))
         {
@@ -49,7 +49,7 @@ class OrderController extends Controller
 
     public function complete(Request $request)
     {
-        $orders = Order::where('status','Completed')->orderBy('id', 'ASC'); 
+        $orders = Order::where('status','Completed')->orderBy('id', 'DESC'); 
 
         if(!empty($request->get('keyword')))
         {
@@ -67,7 +67,7 @@ class OrderController extends Controller
 
     public function delivered(Request $request)
     {
-        $orders = Order::where('status','Delivered')->orderBy('id', 'ASC'); 
+        $orders = Order::where('status','Delivered')->orderBy('id', 'DESC'); 
 
         if(!empty($request->get('keyword')))
         {
