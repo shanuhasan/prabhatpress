@@ -11,7 +11,17 @@
 
             .card-body {
                 border: 1px solid #000;
-                width: 75% !important;
+                width: 100% !important;
+            }
+
+            .subhead {
+                background: #000 !important;
+                color: #000 !important;
+                padding: 5px !important;
+            }
+
+            th {
+                color: #000;
             }
         }
     </style>
@@ -41,8 +51,8 @@
                                 Mob. 9528571108
                         </div>
                     </div>
-                    <div
-                        style="border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;background: #ccc;color:#000;padding:5px">
+                    <div class="subhead"
+                        style="border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000;background: #000;color:#ffffff;padding:5px">
                         <h5 style="margin: 0px">Nai Basti, Naugawan Sadat-244251 Distt. Amroha UP India, Cont. 8077955145
                         </h5>
                     </div>
@@ -54,7 +64,7 @@
                         </strong>
                     </div>
                     <table style="border:1px solid #000" cellpadding="3" cellspacing='3' border="0" width="700">
-                        <thead style="background: #ccc">
+                        <thead style="background: #000;color:#ffffff">
                             <tr>
                                 <th style="border:1px solid #000;text-align:center">#</th>
                                 <th style="border:1px solid #000;text-align:center">Item</th>
