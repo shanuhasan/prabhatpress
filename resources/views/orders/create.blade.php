@@ -55,9 +55,10 @@ use App\Models\Order;
 
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="phone">Phone*</label>
+                                    <label for="phone">Phone</label>
                                     <input type="text" name="phone"
-                                        class="form-control @error('phone') is-invalid	@enderror" placeholder="Phone">
+                                        class="form-control only-number @error('phone') is-invalid	@enderror"
+                                        placeholder="Phone">
                                     @error('phone')
                                         <p class="invalid-feedback">{{ $message }}</p>
                                     @enderror
@@ -175,9 +176,9 @@ use App\Models\Order;
                                 <div class="mb-3">
                                     <label for="status">Status*</label>
                                     <select name="status" class="form-control @error('status') is-invalid	@enderror">
-                                        <option value="Pending">Pending</option>
-                                        <option value="Completed">Completed</option>
-                                        <option value="Delivered">Delivered</option>
+                                        @foreach (statusList() as $key => $item)
+                                            <option value={{ $key }}>{{ $item }}</option>
+                                        @endforeach
                                     </select>
                                     @error('status')
                                         <p class="invalid-feedback">{{ $message }}</p>

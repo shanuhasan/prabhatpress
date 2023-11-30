@@ -91,6 +91,28 @@ class DashboardController extends Controller
                                         ->get()->toArray();
         //end today online received amount with account name
 
+        $totalOrders = Order::where('status','Delivered')->get();
+
+        $totalSum = 0;
+        $orderItemSum = 0;
+        $borrowAmount = 0;
+        $totalDiscount = 0;
+        if( !empty($totalOrders))
+        {
+            foreach($totalOrders as $vl)
+            {
+                $totalSum += $vl->total_amount;
+                $totalDiscount += $vl->discount;
+    
+                $orderItemSum += OrderItem::where('order_id',$vl->id)->sum('amount');
+            }
+    
+            $borrowAmount =  $totalSum - $totalDiscount - $orderItemSum;
+        }
+       
+
+        // print_r($orderItemSum);
+
         return view('dashboard',[
             'totalOrder'=>$totalOrder,
             'totalOrderAmount'=>$totalOrderAmount,
@@ -110,6 +132,7 @@ class DashboardController extends Controller
             'todayReceivedAmount'=>$todayReceivedAmount,
             'todayCashAmount'=>$todayCashAmount,
             'todayOnlineAmount'=>$todayOnlineAmount,
+            'borrowAmount'=>$borrowAmount,
         ]);
     }
 }

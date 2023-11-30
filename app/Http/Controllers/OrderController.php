@@ -93,7 +93,7 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(),[
             'order_no'=>'required|unique:orders',
             'customer_name'=>'required',
-            'phone'=>'required|min:10',
+            // 'phone'=>'required|min:10',
             'particular'=>'required',
             'total_amount'=>'required',
             'payment_method'=>'required',
@@ -163,7 +163,7 @@ class OrderController extends Controller
 
         $validator = Validator::make($request->all(),[
             'customer_name'=>'required',
-            'phone'=>'required|min:10',
+            // 'phone'=>'required|min:10',
             'particular'=>'required',
             // 'total_amount'=>'required',
             'payment_method'=>'required',

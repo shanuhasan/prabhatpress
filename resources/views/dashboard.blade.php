@@ -72,7 +72,19 @@
                                 class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-6 col-6">
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="background:red;color:#ffffff;text-align:center">
+                            <h3>₹{{ $borrowAmount }}</h3>
+                            <h4>Borrow Amount</h4>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
                             <h3>{{ $todayOrder }}</h3>
@@ -86,7 +98,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-6 col-6">
+                <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center">
                             <h3>₹{{ $todayOrderAmount }}</h3>

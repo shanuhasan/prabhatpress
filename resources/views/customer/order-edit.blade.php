@@ -144,13 +144,10 @@
                                 <div class="mb-3">
                                     <label for="status">Status*</label>
                                     <select name="status" class="form-control @error('particular') is-invalid	@enderror">
-                                        <option {{ $order->status == 'Pending' ? 'selected' : '' }} value="Pending">
-                                            Pending
-                                        </option>
-                                        <option {{ $order->status == 'Completed' ? 'selected' : '' }} value="Completed">
-                                            Completed</option>
-                                        <option {{ $order->status == 'Delivered' ? 'selected' : '' }} value="Delivered">
-                                            Delivered</option>
+                                        @foreach (statusList() as $key => $item)
+                                            <option {{ $order->status == statusList()[$key] ? 'selected' : '' }}
+                                                value={{ $key }}>{{ $item }}</option>
+                                        @endforeach
                                     </select>
                                     @error('status')
                                         <p class="invalid-feedback">{{ $message }}</p>

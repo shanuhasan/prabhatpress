@@ -53,10 +53,10 @@
 
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="phone">Phone*</label>
+                                    <label for="phone">Phone</label>
                                     <input type="text" name="phone"
-                                        class="form-control @error('phone') is-invalid	@enderror" placeholder="Phone"
-                                        value="{{ $order->phone }}">
+                                        class="form-control only-number @error('phone') is-invalid	@enderror"
+                                        placeholder="Phone" value="{{ $order->phone }}">
                                     @error('phone')
                                         <p class="invalid-feedback">{{ $message }}</p>
                                     @enderror
@@ -178,13 +178,10 @@
                                     <label for="status">Status*</label>
                                     <select name="status"
                                         class="form-control @error('particular') is-invalid	@enderror">
-                                        <option {{ $order->status == 'Pending' ? 'selected' : '' }} value="Pending">
-                                            Pending
-                                        </option>
-                                        <option {{ $order->status == 'Completed' ? 'selected' : '' }} value="Completed">
-                                            Completed</option>
-                                        <option {{ $order->status == 'Delivered' ? 'selected' : '' }} value="Delivered">
-                                            Delivered</option>
+                                        @foreach (statusList() as $key => $item)
+                                            <option {{ $order->status == statusList()[$key] ? 'selected' : '' }}
+                                                value={{ $key }}>{{ $item }}</option>
+                                        @endforeach
                                     </select>
                                     @error('status')
                                         <p class="invalid-feedback">{{ $message }}</p>

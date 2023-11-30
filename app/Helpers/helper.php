@@ -105,4 +105,16 @@ function getCustomerNameFromOrder($id)
     return $order->customer_name;
 }
 
+function statusList()
+{
+    $list = [
+        'Pending'=>'Pending',
+        'Printing'=>'Printing',
+        'Completed'=>'Completed',
+        'Delivered'=>'Delivered',
+    ];
+
+    return $list;
+}
+
 
