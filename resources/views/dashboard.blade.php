@@ -76,12 +76,13 @@
                     <div class="small-box card">
                         <div class="inner" style="background:red;color:#ffffff;text-align:center">
                             <h3>₹{{ $borrowAmount }}</h3>
-                            <h4>Borrow Amount</h4>
+                            <h4>Pending Amount</h4>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                        <a href="{{ route('orders.delivered', ['pendingAmount' => true]) }}"
+                            class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-6">
