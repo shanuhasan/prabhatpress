@@ -36,6 +36,8 @@ class ReportController extends Controller
                                         ->groupBy('from_account')->get()->toArray();
         $totalCashExpenses = Expense::where('payment_method','Cash')
                                             ->sum('amount');
+
+        $allOnlineExpenses = Expense::where('payment_method','Online')->sum('amount');
         //end total expenses amount
 
         if(!empty($request->get('from_date')))
@@ -67,6 +69,10 @@ class ReportController extends Controller
                                             ->where('payment_method','Online')
                                             ->whereDate('created_at','=',$request->get('from_date'))
                                             ->groupBy('from_account')->get()->toArray();
+
+            $allOnlineExpenses = Expense::where('payment_method','Online')
+                                    ->whereDate('created_at','=',$request->get('from_date'))
+                                    ->sum('amount');
         }
 
         if(!empty($request->get('from_date')) && !empty($request->get('to_date')))
@@ -105,6 +111,11 @@ class ReportController extends Controller
                                         ->whereDate('created_at','>=',$request->get('from_date'))
                                         ->whereDate('created_at','<=',$request->get('to_date'))
                                         ->groupBy('from_account')->get()->toArray();
+
+            $allOnlineExpenses = Expense::where('payment_method','Online')
+                                    ->whereDate('created_at','>=',$request->get('from_date'))
+                                    ->whereDate('created_at','<=',$request->get('to_date'))
+                                    ->sum('amount');
         }        
 
         $totalAmount = $totalReceivedAmount;
@@ -120,6 +131,7 @@ class ReportController extends Controller
             'totalExpenses'=>$totalExpenses,
             'totalCashExpenses'=>$totalCashExpenses,
             'totalOnlineExpenses'=>$totalOnlineExpenses,
+            'allOnlineExpenses'=>$allOnlineExpenses,
             'totalOrderItem'=>$totalOrderItem,
             'from_date'=>$request->get('from_date'),
             'to_date'=>$request->get('to_date'),

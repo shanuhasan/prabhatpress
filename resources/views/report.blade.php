@@ -88,12 +88,26 @@
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
                 </div>
-                <div class="col-lg-4 col-6"></div>
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="background:green;color:#ffffff">
+                            <h4><strong>Total Collection</strong></h4>
+                            <h5>Cash : - ₹{{ $totalCashAmount - $totalCashExpenses }}</h5>
+                            @if (!empty($totalOnlineExpenses))
+                                @foreach ($totalOnlineExpenses as $item)
+                                    <h5>&nbsp;</h5>
+                                @endforeach
+                            @endif
+                            <h4>Total : - ₹{{ $totalAmount - $totalExpenses }}</h3>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
 
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner" style="text-align:center;background:green;color:#ffffff">
-                            <h4>Total Online Collection</h4>
+                            <h4>Total Online Received</h4>
                             <h3>₹{{ $onlyTotalOnlineAmount }}</h3>
                         </div>
                         <div class="icon">
@@ -106,9 +120,9 @@
 
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
-                        <div class="inner blink-text-success" style="text-align:center">
-                            <h4>Total Collection</h4>
-                            <h3>₹{{ $totalAmount - $totalExpenses }}</h3>
+                        <div class="inner" style="text-align:center;background:red;color:#ffffff">
+                            <h4>Online</h4>
+                            <h3>₹{{ $onlyTotalOnlineAmount - $allOnlineExpenses }}</h3>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
