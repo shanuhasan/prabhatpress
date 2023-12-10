@@ -77,11 +77,6 @@
                                     if (!empty($order->delivery_at)) {
                                         $days = numberOfDays(date('Y-m-d'), date($order->delivery_at));
                                     }
-                                    
-                                    // for pending amount order when order delivered
-                                    if (Request::get('pendingAmount') && $order->total_amount - $advAmt == 0) {
-                                        continue;
-                                    }
                                     ?>
                                     <tr>
                                         <td>{{ $i++ }}</td>

@@ -83,6 +83,24 @@ class OrderController extends Controller
         return view('orders.delivered',$data);
     }
 
+    public function pendingAmountOrder(Request $request)
+    {
+        $orders = Order::where('status','Delivered')->where('is_pending_amount','2')->orderBy('id', 'DESC'); 
+
+        if(!empty($request->get('keyword')))
+        {
+            $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
+            $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
+            $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
+            $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
+        }
+
+        $orders = $orders->paginate(20);
+
+        $data['orders'] = $orders;
+        return view('orders.delivered',$data);
+    }
+
     public function create()
     {
         return view('orders.create');
@@ -125,7 +143,16 @@ class OrderController extends Controller
                         $orderDetail->in_account = $request->in_account;
                     }
                     $orderDetail->updated_by = Auth::user()->id;
-                    $orderDetail->save();
+                    if($orderDetail->save()){
+                        if($model->status == 'Delivered' && $model->total_amount > $orderDetail->amount){
+                            $model->is_pending_amount = 2;
+                            $model->save();
+                        }
+                        else{
+                            $model->is_pending_amount = 1;
+                            $model->save();
+                        }
+                    }
                 }
             }
 
@@ -195,6 +222,17 @@ class OrderController extends Controller
                     }
                     $orderDetail->updated_by = Auth::user()->id;
                     $orderDetail->save();
+                    $orderItemSum = 0;
+                    $orderItemSum += OrderItem::where('order_id',$id)->sum('amount');
+                    if($orderDetail->save()){
+                        if($model->status == 'Delivered' && $model->total_amount > $orderItemSum){
+                            $model->is_pending_amount = 2;
+                            $model->save();
+                        }else{
+                            $model->is_pending_amount = 1;
+                            $model->save();
+                        }
+                    }
                 }
             }
 

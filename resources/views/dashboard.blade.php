@@ -81,8 +81,8 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="{{ route('orders.delivered', ['pendingAmount' => true]) }}"
-                            class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('orders.pendingAmountOrder') }}" class="small-box-footer text-dark">More info <i
+                                class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-6">
