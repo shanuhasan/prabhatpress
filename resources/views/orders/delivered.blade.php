@@ -54,7 +54,7 @@
                                 <th>Particular</th>
                                 <th>Qty</th>
                                 <th>Total Amount</th>
-                                {{-- <th>Advance</th> --}}
+                                <th>Discount</th>
                                 <th>Balance Amount</th>
                                 <th width="100">Status</th>
                                 <th width="100">Action</th>
@@ -91,10 +91,10 @@
                                         <td><a href="{{ route('orders.edit', $order->id) }}">{{ $order->particular }}</a>
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->total_amount }}</td>
-                                        {{-- <td>₹{{ $advAmt }}</td> --}}
+                                        <td>₹{{ $order->discount }}</td>
                                         <td
                                             style="{{ $order->status == 'Delivered' && $order->total_amount - $advAmt > 0 ? 'background:red;color:#fff;font-weight:bold;' : '' }}">
-                                            ₹{{ $order->total_amount - $advAmt }}</td>
+                                            ₹{{ $order->total_amount - $order->discount - $advAmt }}</td>
                                         <td style="{{ statusColor($order->status) }}">
                                             {{ $order->status }}</td>
                                         <td>

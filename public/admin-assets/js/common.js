@@ -15,22 +15,22 @@
     $('.js-datetimepicker').datetimepicker({
         'format': 'DD-MM-YYYY'
     });
-    
+
     $('.js-datepicker-max-yesterday').datetimepicker({
         'format': 'DD-MM-YYYY',
         maxDate: $.now()
     });
-    
+
     $('.js-datepicker-start-todate').datetimepicker({
         'format': 'DD-MM-YYYY',
         minDate: $.now()
     });
-    
+
     $('.js-domicile-issue-date-max').datetimepicker({
         'format': 'DD-MM-YYYY',
         minDate: '2000-11-09'
     });
-    
+
     $('.from__date,.to__date').datetimepicker({
         format: 'DD-MM-YYYY',
         useCurrent: false,
@@ -58,7 +58,7 @@
             jackColor: '#2ec4b6'
         });
     });
- 
+
     $('.js-openMenu').on('click', function () {
         $('.c-f-navigation__wrapper-mainMenu').toggleClass('active');
     });

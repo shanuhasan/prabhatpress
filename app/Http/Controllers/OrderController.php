@@ -128,6 +128,7 @@ class OrderController extends Controller
             $model->qty = $request->qty;
             $model->total_amount = $request->total_amount;
             $model->status = $request->status;
+            $model->discount = $request->discount;
             $model->delivery_at = $request->delivery_at;
             $model->created_by = Auth::user()->id;
             if($model->save())
@@ -143,16 +144,18 @@ class OrderController extends Controller
                         $orderDetail->in_account = $request->in_account;
                     }
                     $orderDetail->updated_by = Auth::user()->id;
-                    if($orderDetail->save()){
-                        if($model->status == 'Delivered' && $model->total_amount > $orderDetail->amount){
-                            $model->is_pending_amount = 2;
-                            $model->save();
-                        }
-                        else{
-                            $model->is_pending_amount = 1;
-                            $model->save();
-                        }
-                    }
+                    $orderDetail->save();
+                }
+
+                $orderItemSum = 0;
+                $orderItemSum += OrderItem::where('order_id',$model->id)->sum('amount');
+                if($model->status == 'Delivered' && ($model->total_amount - $model->discount) > $orderDetail->amount){
+                    $model->is_pending_amount = 2;
+                    $model->save();
+                }
+                else{
+                    $model->is_pending_amount = 1;
+                    $model->save();
                 }
             }
 
@@ -171,7 +174,9 @@ class OrderController extends Controller
             return redirect()->route('orders.index');
         }
 
-        $orderDetail = OrderItem::where('order_id',$order->id)->get();
+        $orderDetail = OrderItem::where('order_id',$order->id)
+                                ->orderBy('id','DESC')
+                                ->get();
 
         $data['order'] = $order;
         $data['orderDetail'] = $orderDetail;
@@ -210,6 +215,8 @@ class OrderController extends Controller
             $model->updated_by = Auth::user()->id;
             if($model->save())
             {
+                $orderItemSum = 0;
+
                 if(!empty($request->advance_amount) && $request->advance_amount > 0)
                 {
                     $orderDetail = new OrderItem();
@@ -222,17 +229,15 @@ class OrderController extends Controller
                     }
                     $orderDetail->updated_by = Auth::user()->id;
                     $orderDetail->save();
-                    $orderItemSum = 0;
-                    $orderItemSum += OrderItem::where('order_id',$id)->sum('amount');
-                    if($orderDetail->save()){
-                        if($model->status == 'Delivered' && $model->total_amount > $orderItemSum){
-                            $model->is_pending_amount = 2;
-                            $model->save();
-                        }else{
-                            $model->is_pending_amount = 1;
-                            $model->save();
-                        }
-                    }
+                }
+
+                $orderItemSum += OrderItem::where('order_id',$id)->sum('amount');
+                if($model->status == 'Delivered' && ($model->total_amount - $request->discount) > $orderItemSum){
+                    $model->is_pending_amount = 2;
+                    $model->save();
+                }else{
+                    $model->is_pending_amount = 1;
+                    $model->save();
                 }
             }
 
