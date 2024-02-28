@@ -26,26 +26,12 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="name">Name</label>
-                                    <input type="text" name="name" class="form-control" placeholder="Name"
-                                        value="{{ Request::get('name') }}">
+                                    <label for="search">Search</label>
+                                    <input type="text" name="search" class="form-control"
+                                        placeholder="Name/Particular/Phone/Order No." value="{{ Request::get('search') }}">
                                 </div>
                                 <button type="submit" class="btn btn-success">Filter</button>
                                 <a href="{{ route('orders.index') }}" class="btn btn-danger">Reset</a>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="particular">Particular</label>
-                                    <input type="text" name="particular" class="form-control" placeholder="Particular"
-                                        value="{{ Request::get('particular') }}">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="phone">Phone</label>
-                                    <input type="text" name="phone" class="form-control only-number"
-                                        placeholder="Phone" value="{{ Request::get('phone') }}">
-                                </div>
                             </div>
 
                             <div class="col-md-3">
@@ -57,6 +43,18 @@
                                             <option {{ Request::get('status') == statusList()[$key] ? 'selected' : '' }}
                                                 value={{ $key }}>{{ $item }}</option>
                                         @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="pending-amount">Order Amount Pending</label>
+                                    <select name="pending-amount" class="form-control">
+                                        <option value="">Select Status</option>
+                                        <option value="2"
+                                            {{ Request::get('pending-amount') == '2' ? 'selected' : '' }}>Pending Amount
+                                        </option>
                                     </select>
                                 </div>
                             </div>
