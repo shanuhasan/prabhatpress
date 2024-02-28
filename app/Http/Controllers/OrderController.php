@@ -15,12 +15,33 @@ class OrderController extends Controller
     {
         $orders = Order::latest(); 
 
-        if(!empty($request->get('keyword')))
+
+        // if(!empty($request->get('keyword')))
+        // {
+        //     $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
+        //     $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
+        //     $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
+        //     $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
+        // }
+
+        if(!empty($request->get('particular')))
         {
-            $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
-            $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
-            $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
-            $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
+            $orders = $orders->where('particular','like','%'.$request->get('particular').'%');
+        }
+
+        if(!empty($request->get('name')))
+        {
+            $orders = $orders->orWhere('customer_name','like','%'.$request->get('name').'%');
+        }
+
+        if(!empty($request->get('phone')))
+        {
+            $orders = $orders->orWhere('phone','like','%'.$request->get('phone').'%');
+        }
+
+        if(!empty($request->get('status')))
+        {
+            $orders = $orders->where('status', $request->get('status'));
         }
 
         $orders = $orders->paginate(20);
@@ -29,59 +50,59 @@ class OrderController extends Controller
         return view('orders.index',$data);
     }
 
-    public function pending(Request $request)
-    {
-        $orders = Order::where('status','Pending')->orderBy('id', 'DESC'); 
+    // public function pending(Request $request)
+    // {
+    //     $orders = Order::where('status','Pending')->orderBy('id', 'DESC'); 
 
-        if(!empty($request->get('keyword')))
-        {
-            $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
-            $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
-            $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
-            $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
-        }
+    //     if(!empty($request->get('keyword')))
+    //     {
+    //         $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
+    //         $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
+    //         $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
+    //         $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
+    //     }
 
-        $orders = $orders->paginate(20);
+    //     $orders = $orders->paginate(20);
 
-        $data['orders'] = $orders;
-        return view('orders.pending',$data);
-    }
+    //     $data['orders'] = $orders;
+    //     return view('orders.pending',$data);
+    // }
 
-    public function complete(Request $request)
-    {
-        $orders = Order::where('status','Completed')->orderBy('id', 'DESC'); 
+    // public function complete(Request $request)
+    // {
+    //     $orders = Order::where('status','Completed')->orderBy('id', 'DESC'); 
 
-        if(!empty($request->get('keyword')))
-        {
-            $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
-            $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
-            $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
-            $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
-        }
+    //     if(!empty($request->get('keyword')))
+    //     {
+    //         $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
+    //         $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
+    //         $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
+    //         $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
+    //     }
 
-        $orders = $orders->paginate(20);
+    //     $orders = $orders->paginate(20);
 
-        $data['orders'] = $orders;
-        return view('orders.complete',$data);
-    }
+    //     $data['orders'] = $orders;
+    //     return view('orders.complete',$data);
+    // }
 
-    public function delivered(Request $request)
-    {
-        $orders = Order::where('status','Delivered')->orderBy('id', 'DESC'); 
+    // public function delivered(Request $request)
+    // {
+    //     $orders = Order::where('status','Delivered')->orderBy('id', 'DESC'); 
 
-        if(!empty($request->get('keyword')))
-        {
-            $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
-            $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
-            $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
-            $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
-        }
+    //     if(!empty($request->get('keyword')))
+    //     {
+    //         $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
+    //         $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
+    //         $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
+    //         $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
+    //     }
 
-        $orders = $orders->paginate(20);
+    //     $orders = $orders->paginate(20);
 
-        $data['orders'] = $orders;
-        return view('orders.delivered',$data);
-    }
+    //     $data['orders'] = $orders;
+    //     return view('orders.delivered',$data);
+    // }
 
     public function pendingAmountOrder(Request $request)
     {
@@ -209,6 +230,7 @@ class OrderController extends Controller
             $model->address = $request->address;
             $model->particular = $request->particular;
             $model->qty = $request->qty;
+            $model->total_amount = $request->total_amount;
             $model->discount = $request->discount;
             $model->status = $request->status;
             $model->delivery_at = $request->delivery_at;

@@ -43,8 +43,8 @@
                             <h3>{{ $totalOrderPending }}</h3>
                             <h4>Pending Orders</h4>
                         </div>
-                        <a href="{{ route('orders.pending') }}" class="small-box-footer text-dark">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('orders.index', ['status' => 'Pending']) }}"
+                            class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 
@@ -57,8 +57,8 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="{{ route('orders.complete') }}" class="small-box-footer text-dark">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('orders.index', ['status' => 'Completed']) }}"
+                            class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 
@@ -68,8 +68,8 @@
                             <h3>{{ $totalOrderDelivered }}</h3>
                             <h4>Delivered Orders</h4>
                         </div>
-                        <a href="{{ route('orders.delivered') }}" class="small-box-footer text-dark">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('orders.index', ['status' => 'Delivered']) }}"
+                            class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-6">
