@@ -58,7 +58,7 @@ $customerDetail = getCustomerDetail($customerId);
                                 <th>Particular</th>
                                 <th>Qty</th>
                                 <th>Total Amount</th>
-                                <th>Discount</th>
+                                {{-- <th>Discount</th> --}}
                                 <th>Order By</th>
                                 <th width="100">Status</th>
                                 <th width="100">Action</th>
@@ -97,7 +97,7 @@ $customerDetail = getCustomerDetail($customerId);
                                         </td>
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->total_amount }}</td>
-                                        <td>{{ !empty($order->discount) ? '₹' . $order->discount : '' }}</td>
+                                        {{-- <td>{{ !empty($order->discount) ? '₹' . $order->discount : '' }}</td> --}}
                                         <td>{{ getUserName($order->created_by) }}</td>
                                         <td style="{{ statusColor($order->status) }}">
                                             {{ $order->status }}</td>
@@ -161,28 +161,28 @@ $customerDetail = getCustomerDetail($customerId);
                                         <strong>₹{{ $totalAmount }}</strong><br>
                                         Discount :-
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <strong>₹{{ $totalDiscount }}</strong><br>
+                                        <strong>₹{{ $totalDiscount + $customerTotalDiscount }}</strong><br>
                                         Received Amount :-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <strong>₹{{ $customerTotalPayment }}</strong><br>
                                         Remaining Balance :-&nbsp;&nbsp;
-                                        <strong>₹{{ $totalAmount - $totalDiscount - $customerTotalPayment }}</strong>
+                                        <strong>₹{{ $totalAmount - $totalDiscount - $customerTotalPayment - $customerTotalDiscount }}</strong>
                                     </span>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="mb-3">
                                                 <label for="order_no">Amount</label>
                                                 <input type="text" name="amount"
-                                                    class="form-control @error('amount') is-invalid	@enderror"
+                                                    class="form-control only-number @error('amount') is-invalid	@enderror"
                                                     placeholder="Amount">
                                                 @error('amount')
                                                     <p class="invalid-feedback">{{ $message }}</p>
                                                 @enderror
                                             </div>
-                                            <button type="submit" class="btn btn-success">Submit</button>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="mb-3">
-                                                <label for="payment_method">Payment Method*</label>
+                                                <label for="payment_method">Payment Method<span
+                                                        style="color: red">*</span></label>
                                                 <select name="payment_method"
                                                     class="form-control @error('payment_method') is-invalid	@enderror"
                                                     id="payment_method">
@@ -210,7 +210,19 @@ $customerDetail = getCustomerDetail($customerId);
                                             </div>
                                         </div>
 
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="order_no">Discount</label>
+                                                <input type="text" name="discount"
+                                                    class="form-control only-number @error('discount') is-invalid	@enderror"
+                                                    placeholder="Discount">
+                                                @error('discount')
+                                                    <p class="invalid-feedback">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                        </div>
                                     </div>
+                                    <button type="submit" class="btn btn-success">Submit</button>
                                 </div>
                             </div>
                         </form>
@@ -226,6 +238,7 @@ $customerDetail = getCustomerDetail($customerId);
                                                 <tr>
                                                     <th>Date</th>
                                                     <th>Received Amount</th>
+                                                    <th>Discount</th>
                                                     <th>Payment Method</th>
                                                     <th>Account</th>
                                                     <th>Received By</th>
@@ -237,7 +250,9 @@ $customerDetail = getCustomerDetail($customerId);
                                                     @foreach ($customerPayment as $item)
                                                         <tr>
                                                             <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
-                                                            <td>₹{{ $item->amount }}</td>
+                                                            <td>{{ !empty($item->amount) ? '₹' . $item->amount : '' }}
+                                                            <td>{{ !empty($item->discount) ? '₹' . $item->discount : '' }}
+                                                            </td>
                                                             <td>{{ $item->payment_method }}</td>
                                                             <td>{{ getUserName($item->in_account) }}</td>
                                                             <td>{{ getUserName($item->updated_by) }}</td>

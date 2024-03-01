@@ -135,11 +135,13 @@ class CustomerController extends Controller
         $totalDiscount = Order::where('customer_id',$id)->sum('discount');
         
         $customerTotalPayment = OrderItem::where('customer_id',$id)->sum('amount');
+        $customerTotalDiscount = OrderItem::where('customer_id',$id)->sum('discount');
         $customerPayment = OrderItem::where('customer_id',$id)->get();
 
         $data['totalAmount'] = $totalAmount;
         $data['totalDiscount'] = $totalDiscount;
         $data['customerTotalPayment'] = $customerTotalPayment;
+        $data['customerTotalDiscount'] = $customerTotalDiscount;
         $data['customerPayment'] = $customerPayment;
         return view('customer.orders',$data);
     }
@@ -165,7 +167,7 @@ class CustomerController extends Controller
             $model->particular = $request->particular;
             $model->qty = $request->qty;
             $model->total_amount = $request->total_amount;
-            $model->discount = $request->discount;
+            // $model->discount = $request->discount;
             $model->status = $request->status;
             $model->delivery_at = $request->delivery_at;
             $model->created_by = Auth::user()->id;
@@ -215,7 +217,7 @@ class CustomerController extends Controller
 
             $model->particular = $request->particular;
             $model->qty = $request->qty;
-            $model->discount = $request->discount;
+            // $model->discount = $request->discount;
             $model->status = $request->status;
             $model->delivery_at = $request->delivery_at;
             $model->updated_by = Auth::user()->id;
@@ -231,18 +233,19 @@ class CustomerController extends Controller
     public function orderPayment(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'amount'=>'required|numeric',
+            // 'amount'=>'required|numeric',
             'payment_method'=>'required',
         ]);
 
         if($validator->passes())
         {
-            if(!empty($request->amount) && $request->amount > 0)
+            if((!empty($request->amount) && $request->amount > 0) || (!empty($request->discount) && $request->discount > 0))
             {
                 $model = new OrderItem();
                 $model->customer_id = $request->customer_id;
                 $model->amount = $request->amount;
                 $model->payment_method = $request->payment_method;
+                $model->discount = $request->discount;
                 if($request->payment_method == 'Online')
                 {
                     $model->in_account = $request->in_account;

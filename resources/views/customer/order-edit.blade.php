@@ -74,7 +74,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            {{-- <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="discount">Discount</label>
                                     <input type="number" name="discount"
@@ -84,7 +84,7 @@
                                         <p class="invalid-feedback">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-4">
                                 <div class="mb-3">
