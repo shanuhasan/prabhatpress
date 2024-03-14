@@ -32,8 +32,6 @@
                                     <input type="text" name="from_date" class="form-control js-filterdatepicker"
                                         placeholder="From Date" value="{{ Request::get('from_date') }}">
                                 </div>
-                                <button type="submit" class="btn btn-success">Filter</button>
-                                <a href="{{ route('report.index') }}" class="btn btn-danger">Reset</a>
                             </div>
 
                             <div class="col-md-3">
@@ -43,8 +41,9 @@
                                         placeholder="To Date" value="{{ Request::get('to_date') }}">
                                 </div>
                             </div>
-
                         </div>
+                        <button type="submit" class="btn btn-success">Filter</button>
+                        <a href="{{ route('report.index') }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>

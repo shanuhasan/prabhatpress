@@ -30,8 +30,6 @@
                                     <input type="text" name="search" class="form-control"
                                         placeholder="Name/Particular/Phone/Order No." value="{{ Request::get('search') }}">
                                 </div>
-                                <button type="submit" class="btn btn-success">Filter</button>
-                                <a href="{{ route('orders.index') }}" class="btn btn-danger">Reset</a>
                             </div>
 
                             <div class="col-md-3">
@@ -59,6 +57,8 @@
                                 </div>
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Filter</button>
+                        <a href="{{ route('orders.index') }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>

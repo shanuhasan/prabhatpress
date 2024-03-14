@@ -10,20 +10,30 @@ use Illuminate\Support\Facades\Validator;
 
 class ExpenseController extends Controller
 {
+    private $companyId;
+
+    public function __construct(){
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next){
+            $this->companyId = Auth::user()->company_id;
+            return $next($request);
+        });
+    }
+
     public function index(Request $request)
     {
-        $expenses = Expense::latest(); 
-        $totalExpensesAmount = Expense::sum('amount');
+        $expenses = Expense::where('company_id',$this->companyId)->latest();
+        $totalExpensesAmount = Expense::where('company_id',$this->companyId);
 
         if(!empty($request->get('date')))
         {
             $expenses = $expenses->whereDate('created_at',$request->get('date'));
-            $totalExpensesAmount = Expense::whereDate('created_at',$request->get('date'))->sum('amount');
+            $totalExpensesAmount = $totalExpensesAmount->whereDate('created_at',$request->get('date'));
         }
         $expenses = $expenses->paginate(20);
 
         $data['expenses'] = $expenses;
-        $data['totalExpensesAmount'] = $totalExpensesAmount;
+        $data['totalExpensesAmount'] = $totalExpensesAmount->sum('amount');
         return view('expenses.index',$data);
     }
 
@@ -41,6 +51,7 @@ class ExpenseController extends Controller
 
         if($validator->passes()){
             $model = new Expense();
+            $model->company_id = $this->companyId;
             $model->particular = $request->particular;
             $model->amount = $request->amount;
             $model->payment_method = $request->payment_method;
@@ -61,7 +72,7 @@ class ExpenseController extends Controller
 
     public function edit($id , Request $request){
 
-        $expense = Expense::find($id);
+        $expense = Expense::findByIdAndCompanyId($id,$this->companyId);
         if(empty($expense))
         {
             return redirect()->route('expenses.index');
@@ -74,7 +85,7 @@ class ExpenseController extends Controller
 
     public function update($id, Request $request){
 
-        $model = Expense::find($id);
+        $model = Expense::findByIdAndCompanyId($id,$this->companyId);
         if(empty($model))
         {
             return redirect()->route('expenses.index')->with('error','Order not found.');
@@ -106,7 +117,7 @@ class ExpenseController extends Controller
 
     public function delete($id, Request $request)
     {
-        $model = Expense::find($id);
+        $model = Expense::findByIdAndCompanyId($id,$this->companyId);
 
         if(empty($model))
         {

@@ -12,9 +12,19 @@ use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
+    private $companyId;
+
+    public function __construct(){
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next){
+            $this->companyId = Auth::user()->company_id;
+            return $next($request);
+        });
+    }
+
     public function index(Request $request)
     {
-        $customers = Customer::where('status',1)->latest();
+        $customers = Customer::where('company_id',$this->companyId)->where('status',1)->latest();
 
         if(!empty($request->get('keyword')))
         {
@@ -43,7 +53,8 @@ class CustomerController extends Controller
         if($validator->passes())
         {
             $model = new Customer();
-            $model->name = $request->name;
+            $model->company_id = $this->companyId;
+            $model->name = $request->name; 
             $model->email = $request->email;
             $model->phone = $request->phone;
             $model->company = $request->company;
@@ -59,7 +70,7 @@ class CustomerController extends Controller
 
     public function edit($id , Request $request){
 
-        $customer = Customer::find($id);
+        $customer = Customer::findByIdAndCompanyId($id,$this->companyId);
         if(empty($customer))
         {
             return redirect()->route('customer.index');
@@ -70,7 +81,7 @@ class CustomerController extends Controller
 
     public function update($id, Request $request){
 
-        $model = Customer::find($id);
+        $model = Customer::findByIdAndCompanyId($id,$this->companyId);
         if(empty($model))
         {
             return redirect()->back()->with('error','Customer not found.');
@@ -100,7 +111,7 @@ class CustomerController extends Controller
     }
 
     public function destroy($id, Request $request){
-        $model = Customer::find($id);
+        $model = Customer::findByIdAndCompanyId($id,$this->companyId);
 
         if(empty($model))
         {
@@ -126,17 +137,17 @@ class CustomerController extends Controller
     }
 
     public function orders($id){
-        $orders = Order::where('customer_id',$id)->paginate(10);
+        $orders = Order::where('company_id',$this->companyId)->where('customer_id',$id)->paginate(10);
         $data['orders'] = $orders;
         $data['customerId'] = $id;
 
         //total order amount customer
-        $totalAmount = Order::where('customer_id',$id)->sum('total_amount');
-        $totalDiscount = Order::where('customer_id',$id)->sum('discount');
+        $totalAmount = Order::where('company_id',$this->companyId)->where('customer_id',$id)->sum('total_amount');
+        $totalDiscount = Order::where('company_id',$this->companyId)->where('customer_id',$id)->sum('discount');
         
-        $customerTotalPayment = OrderItem::where('customer_id',$id)->sum('amount');
-        $customerTotalDiscount = OrderItem::where('customer_id',$id)->sum('discount');
-        $customerPayment = OrderItem::where('customer_id',$id)->get();
+        $customerTotalPayment = OrderItem::where('company_id',$this->companyId)->where('customer_id',$id)->sum('amount');
+        $customerTotalDiscount = OrderItem::where('company_id',$this->companyId)->where('customer_id',$id)->sum('discount');
+        $customerPayment = OrderItem::where('company_id',$this->companyId)->where('customer_id',$id)->get();
 
         $data['totalAmount'] = $totalAmount;
         $data['totalDiscount'] = $totalDiscount;
@@ -162,6 +173,7 @@ class CustomerController extends Controller
 
         if($validator->passes()){
             $model = new Order();
+            $model->company_id = $this->companyId;
             $model->order_no = $request->order_no;
             $model->customer_id = $request->customer_id;
             $model->particular = $request->particular;
@@ -183,6 +195,7 @@ class CustomerController extends Controller
     public function orderEdit($customerId,$orderId){
 
         $order = Order::where('id',$orderId)
+                        ->where('company_id',$this->companyId)
                         ->where('customer_id',$customerId)
                         ->first();
         if(empty($order))
@@ -190,7 +203,7 @@ class CustomerController extends Controller
             return redirect()->route('orders.index');
         }
 
-        $orderDetail = OrderItem::where('order_id',$order->id)->get();
+        $orderDetail = OrderItem::where('company_id',$this->companyId)->where('order_id',$order->id)->get();
 
         $data['order'] = $order;
         $data['orderDetail'] = $orderDetail;
@@ -202,7 +215,7 @@ class CustomerController extends Controller
 
     public function orderUpdate($id, Request $request){
 
-        $model = Order::find($id);
+        $model = Order::findByIdAndCompanyId($id,$this->companyId);
         if(empty($model))
         {
             return redirect()->route('orders.index')->with('error','Order not found.');
@@ -242,6 +255,7 @@ class CustomerController extends Controller
             if((!empty($request->amount) && $request->amount > 0) || (!empty($request->discount) && $request->discount > 0))
             {
                 $model = new OrderItem();
+                $model->company_id = $this->companyId;
                 $model->customer_id = $request->customer_id;
                 $model->amount = $request->amount;
                 $model->payment_method = $request->payment_method;
@@ -262,7 +276,7 @@ class CustomerController extends Controller
 
     public function orderDelete($id, Request $request)
     {
-        $model = Order::find($id);
+        $model = Order::findByIdAndCompanyId($id,$this->companyId);
 
         if(empty($model))
         {
@@ -285,7 +299,7 @@ class CustomerController extends Controller
 
     public function orderItemDelete($id, Request $request)
     {
-        $model = OrderItem::find($id);
+        $model = OrderItem::findByIdAndCompanyId($id,$this->companyId);
 
         if(empty($model))
         {

@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Expense extends Model
 {
     use HasFactory;
+
+    static public function findByIdAndCompanyId($id,$companyId){
+        return self::where('id','=',$id)->where('company_id','=',$companyId)->first();
+    } 
 }

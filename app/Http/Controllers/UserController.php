@@ -4,15 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    private $companyId;
+    private $userId;
+
+    public function __construct(){
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next){
+            $this->companyId = Auth::user()->company_id;
+            $this->userId = Auth::user()->id;
+            return $next($request);
+        });
+    }
+    
     public function index(Request $request)
     {
-        $users = User::latest();
+        $users = User::where('company_id',$this->companyId)
+                        ->where('id','!=',$this->userId)
+                        ->latest();
 
         if(!empty($request->get('keyword')))
         {
@@ -44,6 +59,7 @@ class UserController extends Controller
         if($validator->passes())
         {
             $model = new User();
+            $model->company_id = $this->companyId;
             $model->name = $request->name;
             $model->email = $request->email;
             $model->phone = $request->phone;
@@ -60,7 +76,8 @@ class UserController extends Controller
 
     public function edit($id , Request $request){
 
-        $user = User::find($id);
+        $user = User::findByIdAndCompanyId($id,$this->companyId);
+
         if(empty($user))
         {
             return redirect()->route('user.index');
@@ -71,7 +88,7 @@ class UserController extends Controller
 
     public function update($id, Request $request){
 
-        $model = User::find($id);
+        $model = User::findByIdAndCompanyId($id,$this->companyId);
         if(empty($model))
         {
             return redirect()->back()->with('error','User not found.');
@@ -105,7 +122,7 @@ class UserController extends Controller
     }
 
     public function destroy($id, Request $request){
-        $model = User::find($id);
+        $model = User::findByIdAndCompanyId($id,$this->companyId);
         if(empty($model))
         {
             $request->session()->flash('error','User not found.');

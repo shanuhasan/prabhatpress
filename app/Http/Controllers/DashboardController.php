@@ -8,54 +8,67 @@ use App\Models\Expense;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+
+    private $companyId;
+
+    public function __construct(){
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next){
+            $this->companyId = Auth::user()->company_id;
+            return $next($request);
+        });
+    }
+
     public function index()
     {
         $currentDate = Carbon::now()->format('Y-m-d');
-        $totalOrder = Order::count();
+        $totalOrder = Order::where('company_id',$this->companyId)->count();
 
         // total order amount with discount
-            $totalAmount = Order::sum('total_amount');
-            $totalDiscount = Order::sum('discount');
+            $totalAmount = Order::where('company_id',$this->companyId)->sum('total_amount');
+            $totalDiscount = Order::where('company_id',$this->companyId)->sum('discount');
             $totalOrderAmount = $totalAmount - $totalDiscount;
         // end total order amount with discount
 
         //total received amount
-            $totalReceivedAmount = OrderItem::sum('amount');
+            $totalReceivedAmount = OrderItem::where('company_id',$this->companyId)->sum('amount');
         //end total received amount
 
         //start orders count
-            $totalOrderPending = Order::where('status','Pending')->count();
-            $totalOrderComplete = Order::where('status','Completed')->count();
-            $totalOrderDelivered = Order::where('status','Delivered')->count();
-            $todayOrder = Order::whereDate('created_at','=',$currentDate)->count();
+            $totalOrderPending = Order::where('company_id',$this->companyId)->where('status','Pending')->count();
+            $totalOrderComplete = Order::where('company_id',$this->companyId)->where('status','Completed')->count();
+            $totalOrderDelivered = Order::where('company_id',$this->companyId)->where('status','Delivered')->count();
+            $todayOrder = Order::where('company_id',$this->companyId)->whereDate('created_at','=',$currentDate)->count();
         //end orders count
         
         //today order amount 
-            $todayAmount = Order::whereDate('created_at','=',$currentDate)
+            $todayAmount = Order::where('company_id',$this->companyId)->whereDate('created_at','=',$currentDate)
                                         ->sum('total_amount');
-            $todayOrderDiscount = Order::whereDate('created_at','=',$currentDate)
+            $todayOrderDiscount = Order::where('company_id',$this->companyId)->whereDate('created_at','=',$currentDate)
                                         ->sum('discount');
             $todayOrderAmount = $todayAmount - $todayOrderDiscount;
         //end today order amount 
         
         // today received amount
-            $todayReceivedAmount = OrderItem::whereDate('created_at','=',$currentDate)
+            $todayReceivedAmount = OrderItem::where('company_id',$this->companyId)->whereDate('created_at','=',$currentDate)
                                             ->sum('amount');
-            $todayCashAmount = OrderItem::whereDate('created_at','=',$currentDate)
+            $todayCashAmount = OrderItem::where('company_id',$this->companyId)->whereDate('created_at','=',$currentDate)
                                         ->where('payment_method','Cash')
                                         ->sum('amount');
         // end today received amount
 
         // today enpenses
-            $todayExpenses = Expense::whereDate('created_at','=',$currentDate)
+            $todayExpenses = Expense::where('company_id',$this->companyId)->whereDate('created_at','=',$currentDate)
                                         ->sum('amount');
-            $todayCashExpenses = Expense::whereDate('created_at','=',$currentDate)
+            $todayCashExpenses = Expense::where('company_id',$this->companyId)->whereDate('created_at','=',$currentDate)
                                         ->where('payment_method','Cash')
                                         ->sum('amount');
             $todayOnlineExpenses = Expense::select('from_account', DB::raw('SUM(amount) as amount'))
+                                        ->where('company_id',$this->companyId)
                                         ->whereDate('created_at','=',$currentDate)
                                         ->where('payment_method','Online')
                                         ->groupBy('from_account')->get()->toArray();
@@ -63,13 +76,17 @@ class DashboardController extends Controller
 
         // today online received amount with account name
             $todayOnlineAmount = OrderItem::select('in_account', DB::raw('SUM(amount) as amount'))
+                                        ->where('company_id',$this->companyId)
                                         ->where('payment_method','Online')
                                         ->whereDate('created_at','=',$currentDate)
                                         ->groupBy('in_account')
                                         ->get()->toArray();
         //end today online received amount with account name
 
-        $totalOrders = Order::where('status','Delivered')->where('is_pending_amount','2')->get();
+        $totalOrders = Order::where('company_id',$this->companyId)
+                                ->where('status','Delivered')
+                                ->where('is_pending_amount','2')
+                                ->get();
 
         $totalSum = 0;
         $orderItemSum = 0;
@@ -82,7 +99,7 @@ class DashboardController extends Controller
                 $totalSum += $vl->total_amount;
                 $totalDiscount += $vl->discount;
     
-                $orderItemSum += OrderItem::where('order_id',$vl->id)->sum('amount');
+                $orderItemSum += OrderItem::where('company_id',$this->companyId)->where('order_id',$vl->id)->sum('amount');
             }
     
             $borrowAmount =  $totalSum - $totalDiscount - $orderItemSum;

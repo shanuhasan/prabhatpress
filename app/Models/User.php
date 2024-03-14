@@ -42,4 +42,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    static public function findByIdAndCompanyId($id,$companyId){
+        return self::where('id','=',$id)->where('company_id','=',$companyId)->first();
+    } 
 }

@@ -8,111 +8,128 @@ use App\Models\Expense;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
+    private $companyId;
+
+    public function __construct(){
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next){
+            $this->companyId = Auth::user()->company_id;
+            return $next($request);
+        });
+    }
+    
     public function index(Request $request)
     {
-        $totalReceivedAmount = OrderItem::sum('amount');        
+        $totalReceivedAmount = OrderItem::where('company_id',$this->companyId)->sum('amount');
        
-        $totalOrderItem = OrderItem::orderBy('id','DESC');
+        $totalOrderItem = OrderItem::where('company_id',$this->companyId)->orderBy('id','DESC');
 
         // total online received amount with account name
         $totalOnlineAmount = OrderItem::select('in_account', DB::raw('SUM(amount) as amount'))
+                                        ->where('company_id',$this->companyId)
                                         ->where('payment_method','Online')
                                         ->groupBy('in_account')->get()->toArray();
             
-        $totalCashAmount = OrderItem::where('payment_method','Cash')
+        $totalCashAmount = OrderItem::where('company_id',$this->companyId)
+                                            ->where('payment_method','Cash')
                                             ->sum('amount');
 
-        $onlyTotalOnlineAmount = OrderItem::where('payment_method','Online')
+        $onlyTotalOnlineAmount = OrderItem::where('company_id',$this->companyId)
+                                            ->where('payment_method','Online')
                                             ->sum('amount');
         //end total online received amount with account name
 
         // total expenses amount
-        $totalExpenses = Expense::sum('amount');
+        $totalExpenses = Expense::where('company_id',$this->companyId)->sum('amount');
         $totalOnlineExpenses = Expense::select('from_account', DB::raw('SUM(amount) as amount'))
+                                        ->where('company_id',$this->companyId)
                                         ->where('payment_method','Online')
                                         ->groupBy('from_account')->get()->toArray();
-        $totalCashExpenses = Expense::where('payment_method','Cash')
+        $totalCashExpenses = Expense::where('company_id',$this->companyId)
+                                            ->where('payment_method','Cash')
                                             ->sum('amount');
 
-        $allOnlineExpenses = Expense::where('payment_method','Online')->sum('amount');
+        $allOnlineExpenses = Expense::where('company_id',$this->companyId)->where('payment_method','Online')->sum('amount');
         //end total expenses amount
 
         if(!empty($request->get('from_date')))
         {
 
-            $totalOrderItem = OrderItem::whereDate('created_at','=',$request->get('from_date'));
+            $totalOrderItem = OrderItem::where('company_id',$this->companyId)->whereDate('created_at','=',$request->get('from_date'));
 
-            $totalReceivedAmount = OrderItem::whereDate('created_at','=',$request->get('from_date'))
+            $totalReceivedAmount = OrderItem::where('company_id',$this->companyId)->whereDate('created_at','=',$request->get('from_date'))
                                             ->sum('amount');
-            $totalCashAmount     = OrderItem::where('payment_method','Cash')
+            $totalCashAmount     = OrderItem::where('company_id',$this->companyId)->where('payment_method','Cash')
                                             ->whereDate('created_at','=',$request->get('from_date'))
                                             ->sum('amount');
-            $onlyTotalOnlineAmount = OrderItem::where('payment_method','Online')
+            $onlyTotalOnlineAmount = OrderItem::where('company_id',$this->companyId)->where('payment_method','Online')
                                             ->whereDate('created_at','=',$request->get('from_date'))
                                             ->sum('amount');
             $totalOnlineAmount   = OrderItem::select('in_account', DB::raw('SUM(amount) as amount'))
+                                            ->where('company_id',$this->companyId)
                                             ->where('payment_method','Online')
                                             ->whereDate('created_at','=',$request->get('from_date'))
                                             ->groupBy('in_account')->get()->toArray();
 
-            $totalExpenses       = Expense::whereDate('created_at','=',$request->get('from_date'))
+            $totalExpenses       = Expense::where('company_id',$this->companyId)->whereDate('created_at','=',$request->get('from_date'))
                                             ->sum('amount');
 
-            $totalCashExpenses   = Expense::where('payment_method','Cash')
+            $totalCashExpenses   = Expense::where('company_id',$this->companyId)->where('payment_method','Cash')
                                             ->whereDate('created_at','=',$request->get('from_date'))
                                             ->sum('amount');
             
             $totalOnlineExpenses = Expense::select('from_account', DB::raw('SUM(amount) as amount'))
-                                            ->where('payment_method','Online')
+                                            ->where('company_id',$this->companyId)->where('payment_method','Online')
                                             ->whereDate('created_at','=',$request->get('from_date'))
                                             ->groupBy('from_account')->get()->toArray();
 
-            $allOnlineExpenses = Expense::where('payment_method','Online')
+            $allOnlineExpenses = Expense::where('company_id',$this->companyId)->where('payment_method','Online')
                                     ->whereDate('created_at','=',$request->get('from_date'))
                                     ->sum('amount');
         }
 
         if(!empty($request->get('from_date')) && !empty($request->get('to_date')))
         {
-            $totalOrderItem = OrderItem::whereDate('created_at','>=',$request->get('from_date'))
+            $totalOrderItem = OrderItem::where('company_id',$this->companyId)->whereDate('created_at','>=',$request->get('from_date'))
                                     ->whereDate('created_at','<=',$request->get('to_date'));
 
-            $totalReceivedAmount = OrderItem::whereDate('created_at','>=',$request->get('from_date'))
+            $totalReceivedAmount = OrderItem::where('company_id',$this->companyId)->whereDate('created_at','>=',$request->get('from_date'))
                                             ->whereDate('created_at','<=',$request->get('to_date'))
                                             ->sum('amount');
-            $totalCashAmount     = OrderItem::where('payment_method','Cash')
+            $totalCashAmount     = OrderItem::where('company_id',$this->companyId)->where('payment_method','Cash')
                                             ->whereDate('created_at','>=',$request->get('from_date'))
                                             ->whereDate('created_at','<=',$request->get('to_date'))
                                             ->sum('amount');
-            $onlyTotalOnlineAmount = OrderItem::where('payment_method','Online')
+            $onlyTotalOnlineAmount = OrderItem::where('company_id',$this->companyId)->where('payment_method','Online')
                                             ->whereDate('created_at','>=',$request->get('from_date'))
                                             ->whereDate('created_at','<=',$request->get('to_date'))
                                             ->sum('amount');
             $totalOnlineAmount   = OrderItem::select('in_account', DB::raw('SUM(amount) as amount'))
-                                            ->where('payment_method','Online')
+                                            ->where('company_id',$this->companyId)->where('payment_method','Online')
                                             ->whereDate('created_at','>=',$request->get('from_date'))
                                             ->whereDate('created_at','<=',$request->get('to_date'))
                                             ->groupBy('in_account')->get()->toArray();
 
-            $totalExpenses       = Expense::whereDate('created_at','>=',$request->get('from_date'))
+            $totalExpenses       = Expense::where('company_id',$this->companyId)->whereDate('created_at','>=',$request->get('from_date'))
                                         ->whereDate('created_at','<=',$request->get('to_date'))
                                         ->sum('amount');
 
-            $totalCashExpenses   = Expense::where('payment_method','Cash')
+            $totalCashExpenses   = Expense::where('company_id',$this->companyId)->where('payment_method','Cash')
                                         ->whereDate('created_at','>=',$request->get('from_date'))
                                         ->whereDate('created_at','<=',$request->get('to_date'))
                                         ->sum('amount');
 
             $totalOnlineExpenses = Expense::select('from_account', DB::raw('SUM(amount) as amount'))
-                                        ->where('payment_method','Online')
+                                        ->where('company_id',$this->companyId)->where('payment_method','Online')
                                         ->whereDate('created_at','>=',$request->get('from_date'))
                                         ->whereDate('created_at','<=',$request->get('to_date'))
                                         ->groupBy('from_account')->get()->toArray();
 
-            $allOnlineExpenses = Expense::where('payment_method','Online')
+            $allOnlineExpenses = Expense::where('company_id',$this->companyId)->where('payment_method','Online')
                                     ->whereDate('created_at','>=',$request->get('from_date'))
                                     ->whereDate('created_at','<=',$request->get('to_date'))
                                     ->sum('amount');
@@ -140,14 +157,14 @@ class ReportController extends Controller
 
     public function onlinePayment(Request $request)
     {
-        $onlineAmount = OrderItem::where('payment_method','Online');
-        $totalOnlineAmount = OrderItem::where('payment_method','Online')->sum('amount');
+        $onlineAmount = OrderItem::where('company_id',$this->companyId)->where('payment_method','Online');
+        $totalOnlineAmount = OrderItem::where('company_id',$this->companyId)->where('payment_method','Online')->sum('amount');
 
         if(!empty($request->get('from_date')))
         {
-            $onlineAmount = OrderItem::where('payment_method','Online')
+            $onlineAmount = OrderItem::where('company_id',$this->companyId)->where('payment_method','Online')
                                             ->whereDate('created_at','=',$request->get('from_date'));
-            $totalOnlineAmount = OrderItem::where('payment_method','Online')
+            $totalOnlineAmount = OrderItem::where('company_id',$this->companyId)->where('payment_method','Online')
                                     ->whereDate('created_at','=',$request->get('from_date'))
                                     ->sum('amount');
         }

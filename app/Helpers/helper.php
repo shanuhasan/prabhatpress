@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Auth;
 
 
 function getUserName($id)
@@ -18,7 +19,8 @@ function getUserName($id)
 
 function getUsers()
 {
-    $user =  User::where('status',1)->get();
+    $companyId = Auth::user()->company_id;
+    $user =  User::where('company_id',$companyId)->where('status',1)->get();
     
     if(empty($user))
     {

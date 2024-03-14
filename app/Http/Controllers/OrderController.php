@@ -11,9 +11,19 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
+    private $companyId;
+
+    public function __construct(){
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next){
+            $this->companyId = Auth::user()->company_id;
+            return $next($request);
+        });
+    }
+
     public function index(Request $request)
     {
-        $orders = Order::latest(); 
+        $orders = Order::where('company_id',$this->companyId)->latest();
 
 
         if(!empty($request->get('search')))
@@ -40,78 +50,6 @@ class OrderController extends Controller
         return view('orders.index',$data);
     }
 
-    // public function pending(Request $request)
-    // {
-    //     $orders = Order::where('status','Pending')->orderBy('id', 'DESC'); 
-
-    //     if(!empty($request->get('keyword')))
-    //     {
-    //         $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
-    //         $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
-    //         $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
-    //         $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
-    //     }
-
-    //     $orders = $orders->paginate(20);
-
-    //     $data['orders'] = $orders;
-    //     return view('orders.pending',$data);
-    // }
-
-    // public function complete(Request $request)
-    // {
-    //     $orders = Order::where('status','Completed')->orderBy('id', 'DESC'); 
-
-    //     if(!empty($request->get('keyword')))
-    //     {
-    //         $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
-    //         $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
-    //         $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
-    //         $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
-    //     }
-
-    //     $orders = $orders->paginate(20);
-
-    //     $data['orders'] = $orders;
-    //     return view('orders.complete',$data);
-    // }
-
-    // public function delivered(Request $request)
-    // {
-    //     $orders = Order::where('status','Delivered')->orderBy('id', 'DESC'); 
-
-    //     if(!empty($request->get('keyword')))
-    //     {
-    //         $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
-    //         $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
-    //         $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
-    //         $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
-    //     }
-
-    //     $orders = $orders->paginate(20);
-
-    //     $data['orders'] = $orders;
-    //     return view('orders.delivered',$data);
-    // }
-
-    // public function pendingAmountOrder(Request $request)
-    // {
-    //     $orders = Order::where('status','Delivered')->where('is_pending_amount','2')->orderBy('id', 'DESC'); 
-
-    //     if(!empty($request->get('keyword')))
-    //     {
-    //         $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
-    //         $orders = $orders->orWhere('customer_name','like','%'.$request->get('keyword').'%');
-    //         $orders = $orders->orWhere('phone','like','%'.$request->get('keyword').'%');
-    //         $orders = $orders->orWhere('order_no','like','%'.$request->get('keyword').'%');
-    //     }
-
-    //     $orders = $orders->paginate(20);
-
-    //     $data['orders'] = $orders;
-    //     return view('orders.delivered',$data);
-    // }
-
     public function create()
     {
         return view('orders.create');
@@ -131,6 +69,7 @@ class OrderController extends Controller
 
         if($validator->passes()){
             $model = new Order();
+            $model->company_id = $this->companyId;
             $model->order_no = $request->order_no;
             $model->customer_name = $request->customer_name;
             $model->phone = $request->phone;
@@ -147,6 +86,7 @@ class OrderController extends Controller
                 if(!empty($request->advance_amount) && $request->advance_amount > 0)
                 {
                     $orderDetail = new OrderItem();
+                    $orderDetail->company_id = $this->companyId;
                     $orderDetail->order_id = $model->id;
                     $orderDetail->amount = $request->advance_amount;
                     $orderDetail->payment_method = $request->payment_method;
@@ -159,7 +99,7 @@ class OrderController extends Controller
                 }
 
                 $orderItemSum = 0;
-                $orderItemSum += OrderItem::where('order_id',$model->id)->sum('amount');
+                $orderItemSum += OrderItem::where('company_id',$this->companyId)->where('order_id',$model->id)->sum('amount');
                 if($model->status == 'Delivered' && ($model->total_amount - $model->discount) > $orderDetail->amount){
                     $model->is_pending_amount = 2;
                     $model->save();
@@ -179,13 +119,14 @@ class OrderController extends Controller
 
     public function edit($id , Request $request){
 
-        $order = Order::find($id);
+        $order = Order::findByIdAndCompanyId($id,$this->companyId);
         if(empty($order))
         {
             return redirect()->route('orders.index');
         }
 
-        $orderDetail = OrderItem::where('order_id',$order->id)
+        $orderDetail = OrderItem::where('company_id',$this->companyId)
+                                ->where('order_id',$order->id)
                                 ->orderBy('id','DESC')
                                 ->get();
 
@@ -198,7 +139,7 @@ class OrderController extends Controller
 
     public function update($id, Request $request){
 
-        $model = Order::find($id);
+        $model = Order::findByIdAndCompanyId($id,$this->companyId);
         if(empty($model))
         {
             return redirect()->route('orders.index')->with('error','Order not found.');
@@ -232,6 +173,7 @@ class OrderController extends Controller
                 if(!empty($request->advance_amount) && $request->advance_amount > 0)
                 {
                     $orderDetail = new OrderItem();
+                    $orderDetail->company_id = $this->companyId;
                     $orderDetail->order_id = $model->id;
                     $orderDetail->amount = $request->advance_amount;
                     $orderDetail->payment_method = $request->payment_method;
@@ -243,7 +185,10 @@ class OrderController extends Controller
                     $orderDetail->save();
                 }
 
-                $orderItemSum += OrderItem::where('order_id',$id)->sum('amount');
+                $orderItemSum += OrderItem::where('company_id',$this->companyId)
+                                            ->where('order_id',$id)
+                                            ->sum('amount');
+
                 if($model->status == 'Delivered' && ($model->total_amount - $request->discount) > $orderItemSum){
                     $model->is_pending_amount = 2;
                     $model->save();
@@ -262,8 +207,8 @@ class OrderController extends Controller
 
     public function delete($id, Request $request)
     {
-        $model = Order::find($id);
-        $orderItem = OrderItem::where('order_id',$id)->get();
+        $model = Order::findByIdAndCompanyId($id,$this->companyId);
+        $orderItem = OrderItem::where('company_id',$this->companyId)->where('order_id',$id)->get();
 
 
         if(empty($model))
@@ -279,7 +224,7 @@ class OrderController extends Controller
         {
             foreach($orderItem as $item)
             {
-                $detailModel = OrderItem::find($item->id);
+                $detailModel = OrderItem::findByIdAndCompanyId($item->id,$this->companyId);
                 $detailModel->delete();
             }
         }
@@ -296,7 +241,7 @@ class OrderController extends Controller
 
     public function deleteItem($id, Request $request)
     {
-        $model = OrderItem::find($id);
+        $model = OrderItem::findByIdAndCompanyId($id,$this->companyId);
 
         if(empty($model))
         {
@@ -319,13 +264,14 @@ class OrderController extends Controller
 
     public function print($id)
     {
-        $order = Order::find($id);
+        $order = Order::findByIdAndCompanyId($id,$this->companyId);
+
         if(empty($order))
         {
             return redirect()->route('orders.index');
         }
 
-        $orderDetail = OrderItem::where('order_id',$order->id)->get();
+        $orderDetail = OrderItem::where('company_id',$this->companyId)->where('order_id',$order->id)->get();
 
         $advAmt = 0;
         if (!empty($orderDetail)) {
