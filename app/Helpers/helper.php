@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Company;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 
@@ -119,4 +120,14 @@ function statusList()
     return $list;
 }
 
+function getCompanyName($id)
+{
+    $company =  Company::find($id);
+    
+    if(empty($company))
+    {
+        return '';
+    }
+    return $company->name;
+}
 
