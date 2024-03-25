@@ -86,10 +86,15 @@
                             @if ($expenses->isNotEmpty())
                                 <?php $i = 1; ?>
                                 @foreach ($expenses as $item)
+                                    @php
+                                        $style = '';
+                                        if (date('d-m-Y', strtotime($item->created_at)) == date('d-m-Y')) {
+                                            $style = 'background:green;color:#fff';
+                                        }
+                                    @endphp
                                     <tr>
                                         <td>{{ $i++ }}</td>
-                                        <td
-                                            style="background: {{ date('d-m-Y', strtotime($item->created_at)) == date('d-m-Y') ? 'green' : '' }}">
+                                        <td style="{{ $style }}">
                                             {{ date('d-m-Y', strtotime($item->created_at)) }}</td>
                                         <td>{{ $item->particular }}</td>
                                         <td>₹{{ $item->amount }}</td>
