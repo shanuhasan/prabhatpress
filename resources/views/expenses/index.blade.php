@@ -72,11 +72,11 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Date</th>
                                 <th>Particular</th>
                                 <th>Amount</th>
                                 <th>Payment Method</th>
                                 <th>From Account</th>
-                                <th>Date</th>
                                 <th>Created By</th>
                                 <th width="100">Action</th>
                             </tr>
@@ -88,11 +88,13 @@
                                 @foreach ($expenses as $item)
                                     <tr>
                                         <td>{{ $i++ }}</td>
+                                        <td
+                                            style="background: {{ date('d-m-Y', strtotime($item->created_at)) == date('d-m-Y') ? 'green' : '' }}">
+                                            {{ date('d-m-Y', strtotime($item->created_at)) }}</td>
                                         <td>{{ $item->particular }}</td>
                                         <td>₹{{ $item->amount }}</td>
                                         <td>{{ $item->payment_method }}</td>
                                         <td>{{ getUserName($item->from_account) }}</td>
-                                        <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
                                         <td>{{ getUserName($item->created_by) }}</td>
                                         <td>
                                             <a href="{{ route('expenses.edit', $item->id) }}">
