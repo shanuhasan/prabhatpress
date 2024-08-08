@@ -19,7 +19,7 @@ class UserController extends Controller
             $users = $users->where('name','like','%'.$request->get('keyword').'%');
         }
 
-        $users = $users->paginate(10);
+        $users = $users->paginate(100);
 
         return view('user.index',[
             'users'=>$users

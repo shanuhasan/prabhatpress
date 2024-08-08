@@ -120,7 +120,7 @@ class ReportController extends Controller
 
         $totalAmount = $totalReceivedAmount;
         // $totalOrderItem = $totalOrderItem->paginate(20);
-        $totalOrderItem = $totalOrderItem->paginate(20);
+        $totalOrderItem = $totalOrderItem->paginate(100);
 
 
         return view('report',[
@@ -152,7 +152,7 @@ class ReportController extends Controller
                                     ->sum('amount');
         }
 
-        $onlineAmount = $onlineAmount->paginate(20);
+        $onlineAmount = $onlineAmount->paginate(100);
 
         return view('online-payment',[
             'onlineAmount'=>$onlineAmount,

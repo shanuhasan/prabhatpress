@@ -21,7 +21,7 @@ class CustomerController extends Controller
             $customers = $customers->where('name','like','%'.$request->get('keyword').'%');
         }
 
-        $customers = $customers->paginate(10);
+        $customers = $customers->paginate(100);
 
         return view('customer.index',[
             'customers'=>$customers
@@ -126,7 +126,7 @@ class CustomerController extends Controller
     }
 
     public function orders($id){
-        $orders = Order::where('customer_id',$id)->paginate(10);
+        $orders = Order::where('customer_id',$id)->paginate(100);
         $data['orders'] = $orders;
         $data['customerId'] = $id;
 

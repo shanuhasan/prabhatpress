@@ -34,7 +34,7 @@ class OrderController extends Controller
             $orders = $orders->where('status', 'Delivered')->where('is_pending_amount',$request->get('pending-amount'));
         }
 
-        $orders = $orders->paginate(20);
+        $orders = $orders->paginate(100);
 
         $data['orders'] = $orders;
         return view('orders.index',$data);

@@ -20,7 +20,7 @@ class ExpenseController extends Controller
             $expenses = $expenses->whereDate('created_at',$request->get('date'));
             $totalExpensesAmount = Expense::whereDate('created_at',$request->get('date'))->sum('amount');
         }
-        $expenses = $expenses->paginate(20);
+        $expenses = $expenses->paginate(100);
 
         $data['expenses'] = $expenses;
         $data['totalExpensesAmount'] = $totalExpensesAmount;
