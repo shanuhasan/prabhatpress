@@ -13,31 +13,28 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $orders = Order::latest(); 
+        $orders = Order::latest();
 
 
-        if(!empty($request->get('search')))
-        {
-            $orders = $orders->where('particular','like','%'.$request->get('search').'%');
-            $orders = $orders->orWhere('customer_name','like','%'.$request->get('search').'%');
-            $orders = $orders->orWhere('phone','like','%'.$request->get('search').'%');
-            $orders = $orders->orWhere('order_no','like','%'.$request->get('search').'%');
+        if (!empty($request->get('search'))) {
+            $orders = $orders->where('particular', 'like', '%' . $request->get('search') . '%');
+            $orders = $orders->orWhere('customer_name', 'like', '%' . $request->get('search') . '%');
+            $orders = $orders->orWhere('phone', 'like', '%' . $request->get('search') . '%');
+            $orders = $orders->orWhere('order_no', 'like', '%' . $request->get('search') . '%');
         }
 
-        if(!empty($request->get('status')))
-        {
+        if (!empty($request->get('status'))) {
             $orders = $orders->where('status', $request->get('status'));
         }
 
-        if(!empty($request->get('pending-amount')))
-        {
-            $orders = $orders->where('status', 'Delivered')->where('is_pending_amount',$request->get('pending-amount'));
+        if (!empty($request->get('pending-amount'))) {
+            $orders = $orders->where('status', 'Delivered')->where('is_pending_amount', $request->get('pending-amount'));
         }
 
         $orders = $orders->paginate(100);
 
         $data['orders'] = $orders;
-        return view('orders.index',$data);
+        return view('orders.index', $data);
     }
 
     // public function pending(Request $request)
@@ -117,19 +114,20 @@ class OrderController extends Controller
         return view('orders.create');
     }
 
-    public function store(Request $request){
-        
-        $validator = Validator::make($request->all(),[
-            'order_no'=>'required|unique:orders',
-            'customer_name'=>'required',
+    public function store(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'order_no' => 'required|unique:orders',
+            'customer_name' => 'required',
             // 'phone'=>'required|min:10',
-            'particular'=>'required',
-            'total_amount'=>'required',
-            'payment_method'=>'required',
-            'status'=>'required',
+            'particular' => 'required',
+            'total_amount' => 'required',
+            'payment_method' => 'required',
+            'status' => 'required',
         ]);
 
-        if($validator->passes()){
+        if ($validator->passes()) {
             $model = new Order();
             $model->order_no = $request->order_no;
             $model->customer_name = $request->customer_name;
@@ -142,16 +140,13 @@ class OrderController extends Controller
             $model->discount = $request->discount;
             $model->delivery_at = $request->delivery_at;
             $model->created_by = Auth::user()->id;
-            if($model->save())
-            {
-                if(!empty($request->advance_amount) && $request->advance_amount > 0)
-                {
+            if ($model->save()) {
+                if (!empty($request->advance_amount) && $request->advance_amount > 0) {
                     $orderDetail = new OrderItem();
                     $orderDetail->order_id = $model->id;
                     $orderDetail->amount = $request->advance_amount;
                     $orderDetail->payment_method = $request->payment_method;
-                    if($request->payment_method == 'Online')
-                    {
+                    if ($request->payment_method == 'Online') {
                         $orderDetail->in_account = $request->in_account;
                     }
                     $orderDetail->updated_by = Auth::user()->id;
@@ -159,61 +154,58 @@ class OrderController extends Controller
                 }
 
                 $orderItemSum = 0;
-                $orderItemSum += OrderItem::where('order_id',$model->id)->sum('amount');
-                if($model->status == 'Delivered' && ($model->total_amount - $model->discount) > $orderDetail->amount){
+                $orderItemSum += OrderItem::where('order_id', $model->id)->sum('amount');
+                if ($model->status == 'Delivered' && ($model->total_amount - $model->discount) > $orderDetail->amount) {
                     $model->is_pending_amount = 2;
                     $model->save();
-                }
-                else{
+                } else {
                     $model->is_pending_amount = 1;
                     $model->save();
                 }
             }
 
-            return redirect()->route('orders.index')->with('success','Order has been created successfully.');
-
-        }else{
+            return redirect()->route('orders.index')->with('success', 'Order has been created successfully.');
+        } else {
             return Redirect::back()->withErrors($validator);
         }
     }
 
-    public function edit($id , Request $request){
+    public function edit($id, Request $request)
+    {
 
         $order = Order::find($id);
-        if(empty($order))
-        {
+        if (empty($order)) {
             return redirect()->route('orders.index');
         }
 
-        $orderDetail = OrderItem::where('order_id',$order->id)
-                                ->orderBy('id','DESC')
-                                ->get();
+        $orderDetail = OrderItem::where('order_id', $order->id)
+            ->orderBy('id', 'DESC')
+            ->get();
 
         $data['order'] = $order;
         $data['orderDetail'] = $orderDetail;
 
-        return view('orders.edit',$data);
-        
+        return view('orders.edit', $data);
     }
 
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
 
         $model = Order::find($id);
-        if(empty($model))
-        {
-            return redirect()->route('orders.index')->with('error','Order not found.');
+        if (empty($model)) {
+            return redirect()->route('orders.index')->with('error', 'Order not found.');
         }
 
-        $validator = Validator::make($request->all(),[
-            'customer_name'=>'required',
+        $validator = Validator::make($request->all(), [
+            'customer_name' => 'required',
             // 'phone'=>'required|min:10',
-            'particular'=>'required',
+            'particular' => 'required',
             // 'total_amount'=>'required',
-            'payment_method'=>'required',
-            'status'=>'required',
+            'payment_method' => 'required',
+            'status' => 'required',
         ]);
 
-        if($validator->passes()){
+        if ($validator->passes()) {
 
             $model->customer_name = $request->customer_name;
             $model->phone = $request->phone;
@@ -225,37 +217,33 @@ class OrderController extends Controller
             $model->status = $request->status;
             $model->delivery_at = $request->delivery_at;
             $model->updated_by = Auth::user()->id;
-            if($model->save())
-            {
+            if ($model->save()) {
                 $orderItemSum = 0;
 
-                if(!empty($request->advance_amount) && $request->advance_amount > 0)
-                {
+                if (!empty($request->advance_amount) && $request->advance_amount > 0) {
                     $orderDetail = new OrderItem();
                     $orderDetail->order_id = $model->id;
                     $orderDetail->amount = $request->advance_amount;
                     $orderDetail->payment_method = $request->payment_method;
-                    if($request->payment_method == 'Online')
-                    {
+                    if ($request->payment_method == 'Online') {
                         $orderDetail->in_account = $request->in_account;
                     }
                     $orderDetail->updated_by = Auth::user()->id;
                     $orderDetail->save();
                 }
 
-                $orderItemSum += OrderItem::where('order_id',$id)->sum('amount');
-                if($model->status == 'Delivered' && ($model->total_amount - $request->discount) > $orderItemSum){
+                $orderItemSum += OrderItem::where('order_id', $id)->sum('amount');
+                if ($model->status == 'Delivered' && ($model->total_amount - $request->discount) > $orderItemSum) {
                     $model->is_pending_amount = 2;
                     $model->save();
-                }else{
+                } else {
                     $model->is_pending_amount = 1;
                     $model->save();
                 }
             }
 
-            return redirect()->route('orders.index')->with('success','Order updated successfully.');
-
-        }else{
+            return redirect()->route('orders.edit', $id)->with('success', 'Order updated successfully.');
+        } else {
             return Redirect::back()->withErrors($validator);
         }
     }
@@ -263,22 +251,19 @@ class OrderController extends Controller
     public function delete($id, Request $request)
     {
         $model = Order::find($id);
-        $orderItem = OrderItem::where('order_id',$id)->get();
+        $orderItem = OrderItem::where('order_id', $id)->get();
 
 
-        if(empty($model))
-        {
-            $request->session()->flash('error','Order not found.');
+        if (empty($model)) {
+            $request->session()->flash('error', 'Order not found.');
             return response()->json([
-                'status'=>true,
-                'message'=>'Order not found.'
+                'status' => true,
+                'message' => 'Order not found.'
             ]);
         }
 
-        if(!empty($orderItem))
-        {
-            foreach($orderItem as $item)
-            {
+        if (!empty($orderItem)) {
+            foreach ($orderItem as $item) {
                 $detailModel = OrderItem::find($item->id);
                 $detailModel->delete();
             }
@@ -286,11 +271,11 @@ class OrderController extends Controller
 
         $model->delete();
 
-        $request->session()->flash('success','Order deleted successfully.');
+        $request->session()->flash('success', 'Order deleted successfully.');
 
         return response()->json([
-            'status'=>true,
-            'message'=>'Order deleted successfully.'
+            'status' => true,
+            'message' => 'Order deleted successfully.'
         ]);
     }
 
@@ -298,34 +283,32 @@ class OrderController extends Controller
     {
         $model = OrderItem::find($id);
 
-        if(empty($model))
-        {
-            $request->session()->flash('error','Order Item not found.');
+        if (empty($model)) {
+            $request->session()->flash('error', 'Order Item not found.');
             return response()->json([
-                'status'=>true,
-                'message'=>'Order Item not found.'
+                'status' => true,
+                'message' => 'Order Item not found.'
             ]);
         }
 
         $model->delete();
 
-        $request->session()->flash('success','Order Item deleted successfully.');
+        $request->session()->flash('success', 'Order Item deleted successfully.');
 
         return response()->json([
-            'status'=>true,
-            'message'=>'Order Item deleted successfully.'
+            'status' => true,
+            'message' => 'Order Item deleted successfully.'
         ]);
     }
 
     public function print($id)
     {
         $order = Order::find($id);
-        if(empty($order))
-        {
+        if (empty($order)) {
             return redirect()->route('orders.index');
         }
 
-        $orderDetail = OrderItem::where('order_id',$order->id)->get();
+        $orderDetail = OrderItem::where('order_id', $order->id)->get();
 
         $advAmt = 0;
         if (!empty($orderDetail)) {
@@ -338,6 +321,6 @@ class OrderController extends Controller
         $data['orderDetail'] = $orderDetail;
         $data['advAmt'] = $advAmt;
 
-        return view('orders.print',$data);
+        return view('orders.print', $data);
     }
 }

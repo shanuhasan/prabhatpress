@@ -133,18 +133,6 @@
 
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="delivery_at">Delivery At</label>
-                                    <input type="text" name="delivery_at" id="delivery_at"
-                                        class="form-control js-datepicker" placeholder="Delivery At"
-                                        value="{{ $order->delivery_at }}">
-                                    @error('delivery_at')
-                                        <p class="invalid-feedback">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="mb-3">
                                     <label for="payment_method">Payment Method*</label>
                                     <select name="payment_method"
                                         class="form-control @error('payment_method') is-invalid	@enderror"
@@ -189,11 +177,22 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="delivery_at">Delivery At</label>
+                                <input type="text" name="delivery_at" id="delivery_at"
+                                    class="form-control js-datepicker" placeholder="Delivery At"
+                                    value="{{ $order->delivery_at }}">
+                                @error('delivery_at')
+                                    <p class="invalid-feedback">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Update</button>
+                        <a href="{{ route('orders.index') }}" class="btn btn-info">Cancel</a>
                     </div>
-                </div>
-                <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-success">Update</button>
-                    <a href="{{ route('orders.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>
         </div>
@@ -225,7 +224,7 @@
                                 <th>Payment Method</th>
                                 <th>Account</th>
                                 <th>Received By</th>
-                                <th></th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -238,7 +237,7 @@
                                         <td>{{ $item->payment_method }}</td>
                                         <td>{{ getUserName($item->in_account) }}</td>
                                         <td>{{ getUserName($item->updated_by) }}</td>
-                                        {{-- <td>
+                                        <td>
                                             <a href="javascript:void()"
                                                 onclick="deleteOrderItem({{ $item->id }},{{ $order->id }})"
                                                 class="text-danger w-4 h-4 mr-1">
@@ -251,7 +250,7 @@
                                                         clip-rule="evenodd"></path>
                                                 </svg>
                                             </a>
-                                        </td> --}}
+                                        </td>
                                     </tr>
                                     <?php $total += $item->amount; ?>
                                 @endforeach
