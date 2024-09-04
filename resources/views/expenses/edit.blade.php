@@ -1,3 +1,6 @@
+<?php
+use App\Models\Expense;
+?>
 @extends('layouts.app')
 @section('title', 'Edit Expense')
 @section('expenses', 'active')
@@ -33,6 +36,21 @@
                                         class="form-control @error('particular') is-invalid	@enderror"
                                         placeholder="Particular" value="{{ $expense->particular }}">
                                     @error('particular')
+                                        <p class="invalid-feedback">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="type">Type*</label>
+                                    <select name="type" class="form-control @error('type') is-invalid	@enderror">
+                                        @foreach (Expense::getExpenseList() as $key => $item)
+                                            <option {{ $expense->type == $key ? 'selected' : '' }}
+                                                value="{{ $key }}">{{ $item }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('type')
                                         <p class="invalid-feedback">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -85,11 +103,9 @@
                                 </div>
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Update</button>
+                        <a href="{{ route('expenses.index') }}" class="btn btn-info">Cancel</a>
                     </div>
-                </div>
-                <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-success">Update</button>
-                    <a href="{{ route('expenses.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>
         </div>

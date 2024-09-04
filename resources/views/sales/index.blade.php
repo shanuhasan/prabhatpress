@@ -1,19 +1,16 @@
-<?php
-use App\Models\Expense;
-?>
 @extends('layouts.app')
-@section('title', 'Expenses')
-@section('expenses', 'active')
+@section('title', 'Sales')
+@section('sales', 'active')
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Expenses</h1>
+                    <h1>Sales</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('expenses.create') }}" class="btn btn-primary">Add Expense</a>
+                    <a href="{{ route('sale.create') }}" class="btn btn-primary">Add Sale</a>
                 </div>
             </div>
         </div>
@@ -33,22 +30,11 @@ use App\Models\Expense;
                                     <input type="text" name="date" class="form-control js-filterdatepicker"
                                         placeholder="Date" value="{{ Request::get('date') }}">
                                 </div>
+                                <button type="submit" class="btn btn-success">Filter</button>
+                                <a href="{{ route('sale.index') }}" class="btn btn-danger">Reset</a>
                             </div>
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="type">Type</label>
-                                    <select name="type" class="form-control">
-                                        <option value="">Select Type</option>
-                                        @foreach (Expense::getExpenseList() as $key => $item)
-                                            <option {{ Request::get('type') == $key ? 'selected' : '' }}
-                                                value="{{ $key }}">{{ $item }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+
                         </div>
-                        <button type="submit" class="btn btn-success">Filter</button>
-                        <a href="{{ route('expenses.index') }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>
@@ -61,25 +47,6 @@ use App\Models\Expense;
         <div class="container-fluid">
             @include('message')
             <div class="card">
-                {{-- <form action="" method="get">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <a href="{{ route('expenses.index') }}" class="btn btn-danger">Reset</a>
-                        </div>
-                        <div class="card-tools">
-                            <div class="input-group input-group" style="width: 250px;">
-                                <input type="text" value="{{ Request::get('keyword') }}" name="keyword"
-                                    class="form-control float-right" placeholder="Search">
-
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-default">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form> --}}
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
@@ -89,35 +56,25 @@ use App\Models\Expense;
                                 <th>Particular</th>
                                 <th>Amount</th>
                                 <th>Payment Method</th>
-                                <th>From Account</th>
-                                <th>Created By</th>
-                                <th>Type</th>
+                                <th>Account</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            @if ($expenses->isNotEmpty())
+                            @if ($sales->isNotEmpty())
                                 <?php $i = 1; ?>
-                                @foreach ($expenses as $item)
-                                    @php
-                                        $style = '';
-                                        if (date('d-m-Y', strtotime($item->created_at)) == date('d-m-Y')) {
-                                            $style = 'background:green;color:#fff';
-                                        }
-                                    @endphp
+                                @foreach ($sales as $item)
                                     <tr>
                                         <td>{{ $i++ }}</td>
-                                        <td style="{{ $style }}">
+                                        <td>
                                             {{ date('d-m-Y', strtotime($item->created_at)) }}</td>
                                         <td>{{ $item->particular }}</td>
                                         <td>₹{{ $item->amount }}</td>
                                         <td>{{ $item->payment_method }}</td>
-                                        <td>{{ getUserName($item->from_account) }}</td>
-                                        <td>{{ getUserName($item->created_by) }}</td>
-                                        <td>{{ $item->type }}</td>
+                                        <td>{{ getUserName($item->in_account) }}</td>
                                         <td>
-                                            <a href="{{ route('expenses.edit', $item->id) }}">
+                                            <a href="{{ route('sale.edit', $item->id) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                     fill="currentColor" aria-hidden="true">
@@ -126,7 +83,7 @@ use App\Models\Expense;
                                                     </path>
                                                 </svg>
                                             </a>
-                                            <a href="javascript:void()" onclick="deleteExpense({{ $item->id }})"
+                                            <a href="javascript:void()" onclick="deleteSale({{ $item->id }})"
                                                 class="text-danger w-4 h-4 mr-1">
                                                 <svg wire:loading.remove.delay="" wire:target=""
                                                     class="filament-link-icon w-4 h-4 mr-1"
@@ -152,7 +109,7 @@ use App\Models\Expense;
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th>₹{{ $totalExpensesAmount }}</th>
+                                <th>₹{{ $totalSalesAmount }}</th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -162,7 +119,7 @@ use App\Models\Expense;
                     </table>
                 </div>
                 <div class="card-footer clearfix">
-                    {{ $expenses->links('pagination::bootstrap-5') }}
+                    {{ $sales->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>
@@ -173,8 +130,8 @@ use App\Models\Expense;
 
 @section('script')
     <script>
-        function deleteExpense(id) {
-            var url = "{{ route('expenses.delete', 'ID') }}";
+        function deleteSale(id) {
+            var url = "{{ route('sale.delete', 'ID') }}";
             var newUrl = url.replace('ID', id);
 
             if (confirm('Are you sure want to delete?')) {
@@ -188,7 +145,7 @@ use App\Models\Expense;
                     },
                     success: function(response) {
                         if (response['status']) {
-                            window.location.href = "{{ route('expenses.index') }}";
+                            window.location.href = "{{ route('sale.index') }}";
                         }
                     }
                 });

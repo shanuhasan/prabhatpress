@@ -2,41 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Expense;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
-class ExpenseController extends Controller
+class SaleController extends Controller
 {
     public function index(Request $request)
     {
-        $expenses = Expense::latest();
-        $totalExpensesAmount = Expense::latest();
+        $sales = OrderItem::latest()->where('type', '=', OrderItem::SALE);
+        $totalSalesAmount = OrderItem::where('type', '=', OrderItem::SALE);
 
         if (!empty($request->get('date'))) {
-            $expenses = $expenses->whereDate('created_at', $request->get('date'));
-            $totalExpensesAmount = Expense::whereDate('created_at', $request->get('date'));
+            $sales = $sales->whereDate('created_at', $request->get('date'));
+            $totalSalesAmount = OrderItem::whereDate('created_at', $request->get('date'));
         }
 
-        if (!empty($request->get('type'))) {
-            $expenses = $expenses->where('type', $request->get('type'));
-            $totalExpensesAmount = Expense::where('type', $request->get('type'));
-        }
+        $totalSalesAmount = $totalSalesAmount->sum('amount');
+        $sales = $sales->paginate(100);
 
-        $totalExpensesAmount = $totalExpensesAmount->sum('amount');
-
-        $expenses = $expenses->paginate(100);
-
-        $data['expenses'] = $expenses;
-        $data['totalExpensesAmount'] = $totalExpensesAmount;
-        return view('expenses.index', $data);
+        $data['sales'] = $sales;
+        $data['totalSalesAmount'] = $totalSalesAmount;
+        return view('sales.index', $data);
     }
 
     public function create()
     {
-        return view('expenses.create');
+        return view('sales.create');
     }
 
     public function store(Request $request)
@@ -48,19 +42,19 @@ class ExpenseController extends Controller
         ]);
 
         if ($validator->passes()) {
-            $model = new Expense();
+            $model = new OrderItem();
             $model->particular = $request->particular;
+            $model->type = OrderItem::SALE;
             $model->amount = $request->amount;
-            $model->type = $request->type;
             $model->payment_method = $request->payment_method;
             if ($request->payment_method == 'Online') {
-                $model->from_account = $request->from_account;
+                $model->in_account = $request->in_account;
             }
 
-            $model->created_by = Auth::user()->id;
+            // $model->created_by = Auth::user()->id;
             $model->save();
 
-            return redirect()->route('expenses.index')->with('success', 'Expense added successfully.');
+            return redirect()->route('sale.index')->with('success', 'Sale added successfully.');
         } else {
             return Redirect::back()->withErrors($validator);
         }
@@ -69,21 +63,21 @@ class ExpenseController extends Controller
     public function edit($id, Request $request)
     {
 
-        $expense = Expense::find($id);
+        $expense = OrderItem::find($id);
         if (empty($expense)) {
-            return redirect()->route('expenses.index');
+            return redirect()->route('sale.index');
         }
 
         $data['expense'] = $expense;
-        return view('expenses.edit', $data);
+        return view('sales.edit', $data);
     }
 
     public function update($id, Request $request)
     {
 
-        $model = Expense::find($id);
+        $model = OrderItem::find($id);
         if (empty($model)) {
-            return redirect()->route('expenses.index')->with('error', 'Order not found.');
+            return redirect()->route('sale.index')->with('error', 'Order not found.');
         }
 
         $validator = Validator::make($request->all(), [
@@ -93,17 +87,17 @@ class ExpenseController extends Controller
 
         if ($validator->passes()) {
 
+            $model->type = OrderItem::SALE;
             $model->particular = $request->particular;
             $model->amount = $request->amount;
-            $model->type = $request->type;
             $model->payment_method = $request->payment_method;
             if ($request->payment_method == 'Online') {
-                $model->from_account = $request->from_account;
+                $model->in_account = $request->in_account;
             }
-            $model->created_by = Auth::user()->id;
+            // $model->created_by = Auth::user()->id;
             $model->save();
 
-            return redirect()->route('expenses.index')->with('success', 'Expense updated successfully.');
+            return redirect()->route('sale.index')->with('success', 'Sale updated successfully.');
         } else {
             return Redirect::back()->withErrors($validator);
         }
@@ -111,22 +105,22 @@ class ExpenseController extends Controller
 
     public function delete($id, Request $request)
     {
-        $model = Expense::find($id);
+        $model = OrderItem::find($id);
 
         if (empty($model)) {
-            $request->session()->flash('error', 'Expense not found.');
+            $request->session()->flash('error', 'Sale not found.');
             return response()->json([
                 'status' => true,
-                'message' => 'Expense not found.'
+                'message' => 'Sale not found.'
             ]);
         }
         $model->delete();
 
-        $request->session()->flash('success', 'Expense deleted successfully.');
+        $request->session()->flash('success', 'Sale deleted successfully.');
 
         return response()->json([
             'status' => true,
-            'message' => 'Expense deleted successfully.'
+            'message' => 'Sale deleted successfully.'
         ]);
     }
 }

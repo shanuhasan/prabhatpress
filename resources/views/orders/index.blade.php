@@ -10,6 +10,7 @@
                     <h1>Orders</h1>
                 </div>
                 <div class="col-sm-6 text-right">
+                    <a href="{{ route('sale.index') }}" class="btn btn-success">Current Sale</a>
                     <a href="{{ route('orders.create') }}" class="btn btn-primary">New Order</a>
                 </div>
             </div>

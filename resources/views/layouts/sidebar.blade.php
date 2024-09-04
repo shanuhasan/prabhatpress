@@ -36,6 +36,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ route('sale.index') }}" class="nav-link @yield('sales')">
+                        <i class="nav-icon  fas fa-rupee-sign"></i>
+                        <p>Sales</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('orders.index') }}" class="nav-link @yield('orders')">
                         <i class="nav-icon  fab fa-first-order"></i>
                         <p>Orders</p>
