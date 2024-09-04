@@ -51,7 +51,7 @@ class SaleController extends Controller
                 $model->in_account = $request->in_account;
             }
 
-            // $model->created_by = Auth::user()->id;
+            $model->updated_by = Auth::user()->id;
             $model->save();
 
             return redirect()->route('sale.index')->with('success', 'Sale added successfully.');
@@ -94,7 +94,7 @@ class SaleController extends Controller
             if ($request->payment_method == 'Online') {
                 $model->in_account = $request->in_account;
             }
-            // $model->created_by = Auth::user()->id;
+            $model->updated_by = Auth::user()->id;
             $model->save();
 
             return redirect()->route('sale.index')->with('success', 'Sale updated successfully.');

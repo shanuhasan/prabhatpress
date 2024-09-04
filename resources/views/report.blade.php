@@ -229,10 +229,18 @@
                             @if ($totalOrderItem->isNotEmpty())
                                 <?php $i = 1; ?>
                                 @foreach ($totalOrderItem as $item)
+                                    <?php
+                                    if (!empty($item->customer_id)) {
+                                        $name = getCustomerName($item->customer_id) . ' (' . getCustomerCompany($item->customer_id) . ')';
+                                    } elseif (!empty($item->order_id)) {
+                                        $name = getCustomerNameFromOrder($item->order_id);
+                                    } else {
+                                        $name = $item->particular;
+                                    }
+                                    ?>
                                     <tr>
                                         <td>{{ $i++ }}</td>
-                                        <td>{{ !empty($item->customer_id) ? getCustomerName($item->customer_id) . ' (' . getCustomerCompany($item->customer_id) . ')' : getCustomerNameFromOrder($item->order_id) }}
-                                        </td>
+                                        <td>{{ $name }}</td>
                                         <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
                                         <td>₹{{ $item->amount }}</td>
                                         <td>{{ $item->payment_method }}</td>
