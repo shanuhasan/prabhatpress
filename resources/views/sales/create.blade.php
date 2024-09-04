@@ -83,7 +83,7 @@ use App\Models\Order;
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success">Create</button>
-                        <a href="{{ route('expenses.index') }}" class="btn btn-info">Cancel</a>
+                        <a href="{{ route('sale.index') }}" class="btn btn-info">Cancel</a>
                     </div>
                 </div>
             </form>
