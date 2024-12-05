@@ -20,6 +20,14 @@ class ExpenseController extends Controller
             $totalExpensesAmount = Expense::whereDate('created_at', $request->get('date'));
         }
 
+        if (!empty($request->get('year'))) {
+            $expenses = $expenses->whereYear('created_at', $request->get('year'));
+            $totalExpensesAmount = Expense::whereYear('created_at', $request->get('year'));
+        } else {
+            $expenses = $expenses->whereYear('created_at', date('Y'));
+            $totalExpensesAmount = Expense::whereYear('created_at', date('Y'));
+        }
+
         if (!empty($request->get('type'))) {
             $expenses = $expenses->where('type', $request->get('type'));
             $totalExpensesAmount = Expense::where('type', $request->get('type'));

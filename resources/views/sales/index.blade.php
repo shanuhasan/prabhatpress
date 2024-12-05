@@ -30,11 +30,26 @@
                                     <input type="text" name="date" class="form-control js-filterdatepicker"
                                         placeholder="Date" value="{{ Request::get('date') }}">
                                 </div>
-                                <button type="submit" class="btn btn-success">Filter</button>
-                                <a href="{{ route('sale.index') }}" class="btn btn-danger">Reset</a>
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="year">Year</label>
+                                    <select name="year" class="form-control">
+                                        <option value="">Select Year</option>
+                                        @foreach (years() as $year)
+                                            <option
+                                                {{ (empty(Request::get('year')) ? date('Y') : Request::get('year') == $year) ? 'selected' : '' }}
+                                                value={{ $year }}>{{ $year }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
                         </div>
+                        <button type="submit" class="btn btn-success">Filter</button>
+                        <a href="{{ route('sale.index') }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>

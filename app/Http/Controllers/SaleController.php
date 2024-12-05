@@ -20,6 +20,14 @@ class SaleController extends Controller
             $totalSalesAmount = OrderItem::whereDate('created_at', $request->get('date'));
         }
 
+        if (!empty($request->get('year'))) {
+            $sales = $sales->whereYear('created_at', $request->get('year'));
+            $totalSalesAmount = OrderItem::whereYear('created_at', $request->get('year'));
+        } else {
+            $sales = $sales->whereYear('created_at', date('Y'));
+            $totalSalesAmount = OrderItem::whereYear('created_at', date('Y'));
+        }
+
         $totalSalesAmount = $totalSalesAmount->sum('amount');
         $sales = $sales->paginate(100);
 

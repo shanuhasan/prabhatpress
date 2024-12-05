@@ -46,6 +46,19 @@ use App\Models\Expense;
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="year">Year</label>
+                                    <select name="year" class="form-control">
+                                        <option value="">Select Year</option>
+                                        @foreach (years() as $year)
+                                            <option
+                                                {{ (empty(Request::get('year')) ? date('Y') : Request::get('year') == $year) ? 'selected' : '' }}
+                                                value={{ $year }}>{{ $year }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-success">Filter</button>
                         <a href="{{ route('expenses.index') }}" class="btn btn-danger">Reset</a>

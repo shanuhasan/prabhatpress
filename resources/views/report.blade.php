@@ -32,10 +32,7 @@
                                     <input type="text" name="from_date" class="form-control js-filterdatepicker"
                                         placeholder="From Date" value="{{ Request::get('from_date') }}">
                                 </div>
-                                <button type="submit" class="btn btn-success">Filter</button>
-                                <a href="{{ route('report.index') }}" class="btn btn-danger">Reset</a>
                             </div>
-
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="to_date">To Date</label>
@@ -43,8 +40,22 @@
                                         placeholder="To Date" value="{{ Request::get('to_date') }}">
                                 </div>
                             </div>
-
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="year">Year</label>
+                                    <select name="year" class="form-control">
+                                        <option value="">Select Year</option>
+                                        @foreach (years() as $year)
+                                            <option
+                                                {{ (empty(Request::get('year')) ? date('Y') : Request::get('year') == $year) ? 'selected' : '' }}
+                                                value={{ $year }}>{{ $year }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Filter</button>
+                        <a href="{{ route('report.index') }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>
