@@ -71,6 +71,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ route('supplier.index') }}" class="nav-link @yield('supplier')">
+                        <i class="nav-icon  fas fa-user"></i>
+                        <p>Supplier</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
 
