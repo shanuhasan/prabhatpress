@@ -75,10 +75,9 @@
                             </tr>
                         </thead>
                         <tbody>
-
+                            <?php $i = 1;
+                            $total = 0; ?>
                             @if ($items->isNotEmpty())
-                                <?php $i = 1;
-                                $total = 0; ?>
                                 @foreach ($items as $item)
                                     <tr>
                                         <td>{{ $i++ }}</td>
