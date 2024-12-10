@@ -8,7 +8,9 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +100,25 @@ Route::middleware('auth')->group(function () {
     // report 
     Route::get('/report', [ReportController::class, 'index'])->name('report.index');
     Route::get('/report/online-payment', [ReportController::class, 'onlinePayment'])->name('report.onlinePayment');
+
+    // suppliers 
+    Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index');
+    Route::get('/supplier/create', [SupplierController::class, 'create'])->name('supplier.create');
+    Route::post('/supplier/store', [SupplierController::class, 'store'])->name('supplier.store');
+    Route::get('/supplier/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
+    Route::post('/supplier/{id}', [SupplierController::class, 'update'])->name('supplier.update');
+    Route::get('/supplier/{id}', [SupplierController::class, 'destroy'])->name('supplier.delete');
+
+    //supplier items
+    Route::get('/supplier/items/{id}', [SupplierController::class, 'items'])->name('supplier.item');
+    Route::get('/supplier/items/{id}/create', [SupplierController::class, 'itemCreate'])->name('supplier.item.create');
+    Route::post('/supplier/items/store', [SupplierController::class, 'itemStore'])->name('supplier.item.store');
+    Route::get('/supplier/items/{guid}/edit/{itemGuid}', [SupplierController::class, 'itemEdit'])->name('supplier.item.edit');
+    Route::post('/supplier/item/{itemId}', [SupplierController::class, 'itemUpdate'])->name('supplier.item.update');
+    Route::delete('/supplier/item/delete/{id}', [SupplierController::class, 'itemDelete'])->name('supplier.item.delete');
+    Route::delete('/supplier/item/detail/delete/{id}', [SupplierController::class, 'itemDetailDelete'])->name('supplier.item.detail.delete');
+    Route::post('/supplier-item-payment', [SupplierController::class, 'itemPayment'])->name('supplier.item.payment');
+    Route::get('/supplier/items/{id}/export', [ExportController::class, 'exportToCsv'])->name('supplier.item.export');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
