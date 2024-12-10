@@ -59,8 +59,12 @@
                                 @foreach ($suppliers as $supplier)
                                     <tr>
                                         <td>{{ $i++ }}</td>
-                                        <td>{{ $supplier->name }}</td>
-                                        <td>{{ $supplier->phone }}</td>
+                                        <td> <a
+                                                href="{{ route('supplier.item', $supplier->guid) }}">{{ $supplier->name }}</a>
+                                        </td>
+                                        <td><a
+                                                href="{{ route('supplier.item', $supplier->guid) }}">{{ $supplier->phone }}</a>
+                                        </td>
                                         <td>
                                             <a href="{{ route('supplier.item', $supplier->guid) }}">
                                                 Items

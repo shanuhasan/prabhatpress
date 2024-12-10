@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use App\Models\SupplierItem;
+use App\Models\SupplierItemDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -123,9 +124,17 @@ class SupplierController extends Controller
             return Redirect::back();
         }
         $items = SupplierItem::where('supplier_id', $supplier->id)->paginate(50);
+
+        $totalAmount = SupplierItem::where('supplier_id', $supplier->id)->sum('amount');
+        $totalPayment = SupplierItemDetail::where('supplier_id', $supplier->id)->sum('amount');
+        $itemDetails = SupplierItemDetail::where('supplier_id', $supplier->id)->get();
+
         $data['items'] = $items;
         $data['supplierId'] = $supplier->id;
         $data['supplier'] = $supplier;
+        $data['totalAmount'] = $totalAmount;
+        $data['totalPayment'] = $totalPayment;
+        $data['itemDetails'] = $itemDetails;
         return view('supplier.item', $data);
     }
 
@@ -140,17 +149,29 @@ class SupplierController extends Controller
 
     public function itemStore(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'supplier_id' => 'required',
-            'type' => 'required',
-            'particular' => 'required',
-            'qty' => 'required',
-            'size_1' => 'required',
-            'size_2' => 'required',
-            'size_3' => 'required',
-            'rate' => 'required',
-            'amount' => 'required',
-        ]);
+        if ($request->type == '1') {
+            $validator = Validator::make($request->all(), [
+                'supplier_id' => 'required',
+                'type' => 'required',
+                'particular' => 'required',
+                'qty' => 'required',
+                'size_1' => 'required',
+                'size_2' => 'required',
+                'size_3' => 'required',
+                'rate' => 'required',
+                'amount' => 'required',
+            ]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'supplier_id' => 'required',
+                'type' => 'required',
+                'particular' => 'required',
+                'qty' => 'required',
+                'rate' => 'required',
+                'amount' => 'required',
+            ]);
+        }
+
 
         if ($validator->passes()) {
             $model = new SupplierItem();
@@ -254,5 +275,47 @@ class SupplierController extends Controller
             'status' => true,
             'message' => 'Item deleted successfully.'
         ]);
+    }
+
+    public function itemDetailDelete($id, Request $request)
+    {
+        $model = SupplierItemDetail::find($id);
+
+        if (empty($model)) {
+            $request->session()->flash('error', 'Item Detail not found.');
+            return response()->json([
+                'status' => true,
+                'message' => 'Item Detail not found.'
+            ]);
+        }
+
+        $model->delete();
+
+        $request->session()->flash('success', 'Item Detail deleted successfully.');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Item Detail deleted successfully.'
+        ]);
+    }
+
+    public function itemPayment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|numeric',
+            'payment_method' => 'required',
+        ]);
+
+        if ($validator->passes()) {
+            $model = new SupplierItemDetail();
+            $model->supplier_id = $request->supplier_id;
+            $model->amount = $request->amount;
+            $model->payment_method = $request->payment_method;
+            $model->discount = $request->discount;
+            $model->save();
+            return redirect()->back()->with('success', 'Payment Updated successfully.');
+        } else {
+            return Redirect::back()->withErrors($validator);
+        }
     }
 }

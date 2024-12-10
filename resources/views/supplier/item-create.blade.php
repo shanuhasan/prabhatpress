@@ -3,6 +3,12 @@
 @section('supplier', 'active')
 
 @section('content')
+
+    <style>
+        .hide {
+            display: none;
+        }
+    </style>
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid my-2">
@@ -32,7 +38,7 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="type">Type<span style="color: red">*</span></label>
-                                    <select name="type" class="form-control @error('type') is-invalid	@enderror">
+                                    <select name="type" class="form-control type @error('type') is-invalid @enderror">
                                         <option value="">Select Type</option>
                                         @foreach (type() as $key => $item)
                                             <option value={{ $key }}>{{ $item }}</option>
@@ -68,7 +74,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-4 hide typeAttr">
                                 <div class="mb-3">
                                     <label for="size_1">Size<span style="color: red">*</span></label>
                                     <div class="row">
@@ -95,7 +101,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-4 hide typeAttr">
                                 <div class="mb-3">
                                     <label for="size_3">Sq. Fit<span style="color: red">*</span></label>
                                     <input type="number" name="size_3" readonly
@@ -132,7 +138,7 @@
                         </div>
                         <div class="">
                             <button type="submit" class="btn btn-success">Create</button>
-                            <a href="{{ route('supplier.item', $supplier->id) }}" class="btn btn-info">Cancel</a>
+                            <a href="{{ route('supplier.item', $supplier->guid) }}" class="btn btn-info">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -145,47 +151,81 @@
 
 @section('script')
     <script>
-        $('.size_1,.size_2').change(function(e) {
-            var size_1 = $(".size_1").val();
-            var size_2 = $(".size_2").val();
+        // $('.size_1,.size_2,.qty').change(function(e) {
+        //     var size_1 = $(".size_1").val();
+        //     var size_2 = $(".size_2").val();
+        //     var qty = $(".qty").val();
 
-            if (size_1 != '' && size_2 != "") {
-                $(".size_3").val(size_1 * size_2);
+        //     if (size_1 != '' && size_2 != "" && qty != "") {
+        //         $(".size_3").val(size_1 * size_2 * qty);
+        //     } else {
+        //         $(".size_3").val(0);
+        //     }
+
+        //     $('.rate').change();
+        // });
+
+        // $('.size_1,.size_2').change();
+
+        // $('.rate').change(function(e) {
+        //     var rate = $(this).val();
+        //     var sqFit = $(".size_3").val();
+
+        //     if (sqFit != '' && rate != '') {
+        //         $(".amount").val(rate * sqFit);
+        //     } else {
+        //         $(".amount").val(0);
+        //     }
+        // });
+
+        // $('.rate').change();
+
+        $('.type').change(function(e) {
+            var type = $(this).val();
+
+            if (type != '1') {
+                $(".typeAttr").addClass('hide');
             } else {
-                $(".size_3").val(0);
-            }
-
-            $('.rate').change();
-        });
-
-        $('.size_1,.size_2').change();
-
-        $('.rate').change(function(e) {
-            var rate = $(this).val();
-            var sqFit = $(".size_3").val();
-            var qty = $(".qty").val();
-
-            if (sqFit != '' && rate != '' && qty) {
-                $(".amount").val(rate * sqFit * qty);
-            } else {
-                $(".amount").val(0);
-            }
-        });
-
-        $('.rate').change();
-
-        $('.qty').change(function(e) {
-            var qty = $(this).val();
-            var sqFit = $(".size_3").val();
-            var rate = $(".rate").val();
-
-            if (sqFit != '' && rate != '' && qty) {
-                $(".amount").val(rate * sqFit * qty);
-            } else {
-                $(".amount").val(0);
+                $(".typeAttr").removeClass('hide');
             }
         });
 
-        $('.qty').change();
+        $('.type').change();
+
+
+        // Function to calculate size_3 based on size_1, size_2, and qty
+        function calculateSize() {
+            const size_1 = parseFloat($(".size_1").val()) || 0;
+            const size_2 = parseFloat($(".size_2").val()) || 0;
+            const qty = parseFloat($(".qty").val()) || 0;
+            const size_3 = size_1 && size_2 && qty ? size_1 * size_2 * qty : 0;
+
+            $(".size_3").val(size_3);
+
+            // Trigger recalculation of the amount when size_3 changes
+            calculateAmount();
+        }
+
+        // Function to calculate the amount based on rate and size_3
+        function calculateAmount() {
+            const rate = parseFloat($(".rate").val()) || 0;
+            const size_3 = parseFloat($(".size_3").val()) || 0;
+            const qty = parseFloat($(".qty").val()) || 0;
+
+            var amount = rate && size_3 ? rate * size_3 : 0;
+            if (size_3 == 0) {
+                var amount = rate && qty ? rate * qty : 0;
+            }
+
+            $(".amount").val(amount);
+        }
+
+        // Event listeners
+        $('.size_1, .size_2, .qty').on('change', calculateSize);
+        $('.rate').on('change', calculateAmount);
+
+        // Trigger initial calculations
+        calculateSize();
+        calculateAmount();
     </script>
 @endsection

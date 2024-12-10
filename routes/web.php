@@ -8,6 +8,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SupplierController;
 
@@ -115,6 +116,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/supplier/items/{guid}/edit/{itemGuid}', [SupplierController::class, 'itemEdit'])->name('supplier.item.edit');
     Route::post('/supplier/item/{itemId}', [SupplierController::class, 'itemUpdate'])->name('supplier.item.update');
     Route::delete('/supplier/item/delete/{id}', [SupplierController::class, 'itemDelete'])->name('supplier.item.delete');
+    Route::delete('/supplier/item/detail/delete/{id}', [SupplierController::class, 'itemDetailDelete'])->name('supplier.item.detail.delete');
+    Route::post('/supplier-item-payment', [SupplierController::class, 'itemPayment'])->name('supplier.item.payment');
+    Route::get('/supplier/items/{id}/export', [ExportController::class, 'exportToCsv'])->name('supplier.item.export');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');

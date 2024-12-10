@@ -13,4 +13,9 @@ class SupplierItem extends Model
     {
         return self::where('guid', $guid)->first();
     }
+
+    static public function findSupplierId($id)
+    {
+        return self::where('supplier_id', $id)->get();
+    }
 }
