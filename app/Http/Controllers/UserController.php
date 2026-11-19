@@ -36,7 +36,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),[
             'name'=>'required|min:3',
             'phone'=>'required|numeric|min:10',
-            'status'=>'required',
+            'status'=>'required|in:0,1',
             'email'=>'required|email|unique:users',
             'password'=>'required|min:5|confirmed',
         ]);
@@ -81,8 +81,13 @@ class UserController extends Controller
             'email'=>'required|email|unique:users,email,'.$id.',id',
             'name'=>'required|min:3',
             'phone'=>'required|numeric|min:10',
-            'status'=>'required',
+            'status'=>'required|in:0,1',
         ]);
+
+        // Don't let a user block their own account and lock themselves out.
+        if ((int) $model->id === (int) $request->user()->id && (int) $request->status !== 1) {
+            return Redirect::back()->withInput()->with('error', 'You cannot block your own account.');
+        }
 
         if($validator->passes()){
 
@@ -112,6 +117,14 @@ class UserController extends Controller
             return response()->json([
                 'status'=>true,
                 'message'=>'User not found.'
+            ]);
+        }
+
+        if ((int) $model->id === (int) $request->user()->id) {
+            $request->session()->flash('error','You cannot delete your own account.');
+            return response()->json([
+                'status'=>true,
+                'message'=>'You cannot delete your own account.'
             ]);
         }
 

@@ -32,7 +32,7 @@ Route::get('/', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/clear-cache', function () {
         Artisan::call('cache:clear');
         Artisan::call('route:clear');

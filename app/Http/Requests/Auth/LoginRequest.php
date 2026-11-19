@@ -49,19 +49,18 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Only active users (status = 1) may log in.
         $user = Auth::user();
-        if($user->status == 1)
-        {
-            RateLimiter::clear($this->throttleKey());
-        }else{
+        if ((int) $user->status !== 1) {
             Auth::logout();
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => 'Your account is blocked. Please contact the administrator.',
             ]);
         }
-        
+
+        RateLimiter::clear($this->throttleKey());
     }
 
     /**

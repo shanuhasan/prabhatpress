@@ -20,6 +20,7 @@
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
+            @include('message')
             <form action="{{ route('user.update', $user->id) }}" id="userForm" method="post">
                 @csrf
                 <div class="card">
