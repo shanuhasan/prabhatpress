@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReportController;
@@ -27,18 +28,18 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/clear-cache', function () {
-    Artisan::call('cache:clear');
-    Artisan::call('route:clear');
-
-    return "Cache cleared successfully";
-});
-
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/clear-cache', function () {
+        Artisan::call('cache:clear');
+        Artisan::call('route:clear');
+
+        return "Cache cleared successfully";
+    });
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
@@ -60,7 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
     Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::post('/user/{id}', [UserController::class, 'update'])->name('user.update');
-    Route::get('/user/{id}', [UserController::class, 'destroy'])->name('user.delete');
+    Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.delete');
 
 
     // customers 
@@ -69,7 +70,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/customer/store', [CustomerController::class, 'store'])->name('customer.store');
     Route::get('/customer/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
     Route::post('/customer/{id}', [CustomerController::class, 'update'])->name('customer.update');
-    Route::get('/customer/{id}', [CustomerController::class, 'destroy'])->name('customer.delete');
+    Route::delete('/customer/{id}', [CustomerController::class, 'destroy'])->name('customer.delete');
 
     //customer orders
     Route::get('/customer/orders/{id}', [CustomerController::class, 'orders'])->name('customer.order');
@@ -107,7 +108,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/supplier/store', [SupplierController::class, 'store'])->name('supplier.store');
     Route::get('/supplier/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
     Route::post('/supplier/{id}', [SupplierController::class, 'update'])->name('supplier.update');
-    Route::get('/supplier/{id}', [SupplierController::class, 'destroy'])->name('supplier.delete');
+    Route::delete('/supplier/{id}', [SupplierController::class, 'destroy'])->name('supplier.delete');
 
     //supplier items
     Route::get('/supplier/items/{id}', [SupplierController::class, 'items'])->name('supplier.item');

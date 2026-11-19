@@ -20,6 +20,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
+        $this->ensureRegistrationOpen();
+
         return view('auth.register');
     }
 
@@ -30,6 +32,8 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $this->ensureRegistrationOpen();
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
@@ -42,10 +46,24 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // The first (and only self-registered) account must be active,
+        // otherwise LoginRequest rejects it on the next login.
+        $user->status = 1;
+        $user->save();
+
         event(new Registered($user));
 
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    /**
+     * Public registration is only allowed to create the very first account.
+     * After that, staff users are added from the Users module.
+     */
+    private function ensureRegistrationOpen(): void
+    {
+        abort_if(User::exists(), 404);
     }
 }

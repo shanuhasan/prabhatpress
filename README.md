@@ -1,66 +1,140 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Prabhat Press — Order & Accounts Management
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A web app for running a printing press. It tracks customer print orders from booking to delivery, records payments (cash and online, per receiving account), logs expenses and walk-in sales, manages supplier work and payments, and shows daily and yearly financial reports.
 
-## About Laravel
+Built on **Laravel 10** (PHP 8.1+), Blade views, Laravel Breeze authentication, MySQL, and Vite + Tailwind/Alpine for assets.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Module | What it does |
+| --- | --- |
+| **Dashboard** | Today's orders and order value, money received today (cash vs. online per account), today's expenses, order counts by status, and outstanding balances on delivered orders. |
+| **Orders** | Create, edit, delete and print orders (order no., order book no., particulars, quantity, total, discount, advance, balance, delivery date). Filtered lists for **Pending**, **Completed**, **Delivered** and **Pending amount**. Status flow: `Pending → Printing → Completed → Delivered`. |
+| **Customers** | Customer records (name, phone, email, address, company), each customer's orders, and recording payments against an order. |
+| **Payments / Sales** | Payments are stored in `order_items`. Walk-in sales that aren't tied to an order go in the same table with `type = 1` (`OrderItem::SALE`). Each entry records payment method (Cash/Online), the receiving account (`in_account`) and any discount. |
+| **Expenses** | Daily expenses with payment method and the account paid from (`from_account`). |
+| **Suppliers** | Supplier records, supplier work items (particulars, qty, sizes, rate, amount, balance, mail / print-received flags, type *Flex* / *Other*), payments to suppliers (cash/online, discount), and **CSV export** of a supplier's items. |
+| **Reports** | Received amounts vs. expenses, broken down by account, filterable by date and year. Includes a separate online-payment report. |
+| **Users** | Staff user management (role, status, phone, image), profile editing and password change. |
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Tech stack
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Backend:** Laravel 10, PHP ≥ 8.1, Sanctum, Breeze (auth scaffolding)
+- **Database:** MySQL (developed under XAMPP)
+- **Frontend:** Blade templates, Tailwind CSS 3, Alpine.js, Vite 4
+- **Testing:** PHPUnit 10
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Project structure (key parts)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+app/
+  Helpers/helper.php          Global helpers (getUserName, getCustomerName, statusList,
+                              statusColor, years, GUIDv4, type, numberOfDays, ...)
+  Http/Controllers/
+    DashboardController.php   Dashboard figures
+    OrderController.php       Orders + print view
+    CustomerController.php    Customers, customer orders & payments
+    SaleController.php        Walk-in sales (OrderItem type = SALE)
+    ExpenseController.php     Expenses
+    SupplierController.php    Suppliers, supplier items & payments
+    ExportController.php      Supplier items CSV export
+    ReportController.php      Financial & online-payment reports
+    UserController.php        Staff users
+    ProfileController.php     Profile & change password
+    Auth/                     Breeze authentication controllers
+  Models/                     Order, OrderItem, Customer, Expense, Supplier,
+                              SupplierItem, SupplierItemDetail, User
+database/migrations/          Schema (see below)
+resources/views/              Blade views per module; layouts/ is the active
+                              sidebar layout
+routes/web.php                All app routes (behind `auth` middleware)
+routes/auth.php               Login / register / password reset routes
+```
 
-### Premium Partners
+### Database tables
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+| Table | Purpose |
+| --- | --- |
+| `users` | Staff accounts (`role`, `status`, `phone`, `image`) |
+| `customers` | Customer master |
+| `orders` | Print orders: amounts, discount, advance/balance, `status`, `delivery_at`, `is_pending_amount`, `payment_status` |
+| `order_items` | Payments received against orders **and** walk-in sales (`type`), with `payment_method`, `in_account`, `discount` |
+| `expenses` | Expenses with `payment_method`, `from_account`, `type` |
+| `suppliers` | Supplier master (with `guid`) |
+| `supplier_items` | Work/items ordered from a supplier (with `guid`) |
+| `supplier_item_details` | Payments made to suppliers (cash/online, discount) |
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Local setup (XAMPP / Windows)
 
-## Code of Conduct
+Requirements: PHP 8.1+, Composer, Node.js 18+, MySQL.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+# 1. Install dependencies
+composer install
+npm install
 
-## Security Vulnerabilities
+# 2. Environment
+cp .env.example .env
+php artisan key:generate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Edit `.env` with your database details:
+
+```env
+APP_NAME="Prabhat Press"
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=prabhatpress
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+```bash
+# 3. Create the database (e.g. via phpMyAdmin), then migrate
+php artisan migrate
+
+# 4. Build assets (or `npm run dev` while developing)
+npm run build
+
+# 5. Run
+php artisan serve
+```
+
+Open http://127.0.0.1:8000. The root URL redirects to the login page. Register the first user at `/register`. Registration closes once any user exists, and further staff accounts are added from the **Users** module.
+
+---
+
+## Useful commands
+
+```bash
+php artisan migrate            # run new migrations
+php artisan route:list         # list all routes
+php artisan test               # run tests
+./vendor/bin/pint              # format code (Laravel Pint)
+npm run dev                    # Vite dev server with hot reload
+```
+
+---
+
+## Notes
+
+- **Global helpers** in `app/Helpers/helper.php` are autoloaded through `autoload.files` in `composer.json`. After changing that file list, run `composer dump-autoload`.
+- **`/clear-cache`** clears the application and route caches. It requires login.
+- **Deletes** of users, customers and suppliers use `DELETE` routes, called via AJAX with the CSRF token.
+- **Registration** at `/register` only works while the `users` table is empty. After that it returns 404.
+- `resources/views/layouts1/` holds the original Breeze layout. The app uses `resources/views/layouts/` (sidebar layout).
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Private project for Prabhat Press. Built on the Laravel framework, which is MIT-licensed.
