@@ -21,8 +21,12 @@
     <link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/datetimepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/datepicker.css') }}">
-    <link rel="stylesheet"
-        href="{{ asset('admin-assets/css/premium.css') }}?v={{ filemtime(public_path('admin-assets/css/premium.css')) }}">
+    @php
+        // Cache-buster; tolerate hosts where public_path() isn't the web root.
+        $ppCss = public_path('admin-assets/css/premium.css');
+        $ppCssVer = is_file($ppCss) ? filemtime($ppCss) : '2';
+    @endphp
+    <link rel="stylesheet" href="{{ asset('admin-assets/css/premium.css') }}?v={{ $ppCssVer }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
