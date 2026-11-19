@@ -4,248 +4,193 @@
 @section('dashboard', 'active')
 @section('content')
 
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Dashboard</h1>
-                </div>
-                <div class="col-sm-6">
+    @php
+        $hour = (int) now()->format('G');
+        $greeting = $hour < 12 ? 'Good morning' : ($hour < 17 ? 'Good afternoon' : 'Good evening');
+        $todayNet = $todayReceivedAmount - $todayExpenses;
+    @endphp
 
-                </div>
+    <div class="container-fluid">
+        <!-- Page heading -->
+        <div class="pp-page-head">
+            <div>
+                <span class="pp-eyebrow">{{ now()->format('l, d F Y') }}</span>
+                <h1>{{ $greeting }}, {{ explode(' ', trim(Auth::user()->name))[0] }}</h1>
+                <p>Here's how the press is doing today.</p>
+            </div>
+            <div class="pp-page-actions">
+                <a href="{{ route('sale.create') }}" class="btn btn-default">
+                    <i class="fas fa-cash-register mr-1"></i> New Sale
+                </a>
+                <a href="{{ route('orders.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus mr-1"></i> New Order
+                </a>
             </div>
         </div>
-        <!-- /.container-fluid -->
-    </section>
-    <!-- Main content -->
-    <section class="content">
-        <!-- Default box -->
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="background: blue;color:#fff;text-align:center">
-                            <h3>{{ $totalOrder }}</h3>
-                            <h4>Total Orders</h4>
+
+        <!-- Today -->
+        <div class="pp-section-title">Today</div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="pp-hero">
+                    <div>
+                        <span class="pp-eyebrow">Net collection</span>
+                        <h3>Received minus expenses</h3>
+                        <div class="pp-hero-value {{ $todayNet < 0 ? 'is-negative' : '' }}">{{ money($todayNet) }}
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="{{ route('orders.index') }}" class="small-box-footer text-dark">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                    <div class="pp-hero-meta">
+                        <div>Received<strong>{{ money($todayReceivedAmount) }}</strong></div>
+                        <div>Expenses<strong>{{ money($todayExpenses) }}</strong></div>
+                        <div>Orders<strong>{{ $todayOrder }}</strong></div>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="background: red;color:#fff;text-align:center">
-                            <h3>{{ $totalOrderPending }}</h3>
-                            <h4>Pending Orders</h4>
+            <div class="col-lg-4 col-md-6">
+                <div class="pp-panel">
+                    <div class="pp-panel-head">
+                        <span class="pp-stat-icon pp-tone-success"
+                            style="background:var(--pp-success-50);color:var(--pp-success)"><i
+                                class="fas fa-arrow-down"></i></span>
+                        <div>
+                            <h3>Received today</h3>
+                            <small>Cash and online, by account</small>
                         </div>
-                        <a href="{{ route('orders.index', ['status' => 'Pending']) }}"
-                            class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                </div>
-
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="background: orange;color:#fff;text-align:center">
-                            <h3>{{ $totalOrderComplete }}</h3>
-                            <h4>Complete Orders</h4>
+                    <div class="pp-panel-body">
+                        <div class="pp-row">
+                            <span><i class="pp-dot" style="background:var(--pp-success)"></i> Cash</span>
+                            <strong>{{ money($todayCashAmount) }}</strong>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="{{ route('orders.index', ['status' => 'Completed']) }}"
-                            class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="background: green;color:#fff;text-align:center">
-                            <h3>{{ $totalOrderDelivered }}</h3>
-                            <h4>Delivered Orders</h4>
-                        </div>
-                        <a href="{{ route('orders.index', ['status' => 'Delivered']) }}"
-                            class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="background:red;color:#ffffff;text-align:center">
-                            <h3>₹{{ $borrowAmount }}</h3>
-                            <h4>Pending Amount</h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="{{ route('orders.index', ['pending-amount' => '2']) }}"
-                            class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="text-align:center">
-                            <h3>{{ $todayOrder }}</h3>
-                            <h4>Today Orders</h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="{{ route('orders.index') }}" class="small-box-footer text-dark">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="text-align:center">
-                            <h3>₹{{ $todayOrderAmount }}</h3>
-                            <h4>Today Order Amount</h4>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
-                    </div>
-                </div>
-
-                {{-- today amount --}}
-
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="background:green;color:#ffffff">
-                            <h4><strong>Today Received</strong></h4>
-                            <h5>Cash : - ₹{{ $todayCashAmount }}</h5>
-                            @if (!empty($todayOnlineAmount))
-                                @foreach ($todayOnlineAmount as $item)
-                                    <h5>Online ({{ getUserName($item['in_account']) }}):- ₹{{ $item['amount'] }}</h5>
-                                @endforeach
-                            @endif
-                            <h4>Total : - ₹{{ $todayReceivedAmount }}</h3>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="background:red;color:#ffffff">
-                            <h4><strong>Today Expenses</strong></h4>
-                            <h5>Cash : - ₹{{ $todayCashExpenses }}</h5>
-                            @if (!empty($todayOnlineExpenses))
-                                @foreach ($todayOnlineExpenses as $item)
-                                    <h5>Online ({{ getUserName($item['from_account']) }}):- ₹{{ $item['amount'] }}</h5>
-                                @endforeach
-                            @endif
-                            <h4>Total : - ₹{{ $todayExpenses }}</h3>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner blink-text-success" style="text-align:center">
-                            <h3>₹{{ $todayReceivedAmount - $todayExpenses }}</h3>
-                            <h4><strong>Today Collection</strong></h4>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
-                    </div>
-                </div>
-
-
-                {{-- <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="background:green;text-align:center;color:#ffffff">
-                            <h3>₹{{ $todayReceivedAmount }}</h3>
-                            <h4><strong>Today Received</strong></h4>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
-                    </div>
-                </div> --}}
-
-                {{-- <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="background:red;text-align:center;color:#ffffff">
-                            <h3>₹{{ $todayExpenses }}</h3>
-                            <h4><strong>Today Expense</strong></h4>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
-                    </div>
-                </div> --}}
-
-                {{-- @if (!empty($todayOnlineAmount))
-                    @foreach ($todayOnlineAmount as $item)
-                        <div class="col-lg-4 col-6">
-                            <div class="small-box card">
-                                <div class="inner" style="text-align:center">
-                                    <h3>₹{{ $item['amount'] }}</h3>
-                                    <h4>Today Online Amount ({{ getUserName($item['in_account']) }})</h4>
-                                </div>
-                                <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                        @forelse ($todayOnlineAmount as $item)
+                            <div class="pp-row">
+                                <span><i class="pp-dot" style="background:var(--pp-info)"></i> Online &middot;
+                                    {{ getUserName($item['in_account']) }}</span>
+                                <strong>{{ money($item['amount']) }}</strong>
                             </div>
-                        </div>
-                    @endforeach
-                @endif --}}
-
-                {{-- <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>₹{{ $totalOrderAmount }}</h3>
-                            <p>Total Order Amount</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="#" class="small-box-footer text-dark">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
+                        @empty
+                            <div class="pp-empty">No online payments yet today.</div>
+                        @endforelse
+                    </div>
+                    <div class="pp-panel-foot">
+                        <span>Total</span>
+                        <strong style="color:var(--pp-success)">{{ money($todayReceivedAmount) }}</strong>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>₹{{ $totalOrderAmountCurrentMonth }}</h3>
-                            <p>Total Order Amount This Month</p>
+            <div class="col-lg-4 col-md-12">
+                <div class="pp-panel">
+                    <div class="pp-panel-head">
+                        <span class="pp-stat-icon" style="background:var(--pp-danger-50);color:var(--pp-danger)"><i
+                                class="fas fa-arrow-up"></i></span>
+                        <div>
+                            <h3>Expenses today</h3>
+                            <small>Cash and online, by account</small>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
+                    </div>
+                    <div class="pp-panel-body">
+                        <div class="pp-row">
+                            <span><i class="pp-dot" style="background:var(--pp-danger)"></i> Cash</span>
+                            <strong>{{ money($todayCashExpenses) }}</strong>
                         </div>
-                        <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
+                        @forelse ($todayOnlineExpenses as $item)
+                            <div class="pp-row">
+                                <span><i class="pp-dot" style="background:#d97706"></i> Online &middot;
+                                    {{ getUserName($item['from_account']) }}</span>
+                                <strong>{{ money($item['amount']) }}</strong>
+                            </div>
+                        @empty
+                            <div class="pp-empty">No online expenses yet today.</div>
+                        @endforelse
+                    </div>
+                    <div class="pp-panel-foot">
+                        <span>Total</span>
+                        <strong style="color:var(--pp-danger)">{{ money($todayExpenses) }}</strong>
                     </div>
                 </div>
-
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>₹{{ $totalOrderAmountLastMonth }}</h3>
-                            <p>Total Order Amount Last Month ({{ $lastMonth }})</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>₹{{ $totalOrderAmountLastThirtyDays }}</h3>
-                            <p>Total Order Amount Last 30 Days</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
-                    </div>
-                </div> --}}
-
             </div>
         </div>
-        <!-- /.card -->
-    </section>
-    <!-- /.content -->
+
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <a href="{{ route('orders.index') }}" class="pp-stat pp-tone-info">
+                    <div class="pp-stat-top">
+                        <span class="pp-stat-label">Orders booked today</span>
+                        <span class="pp-stat-icon"><i class="fas fa-calendar-day"></i></span>
+                    </div>
+                    <div class="pp-stat-value">{{ $todayOrder }}</div>
+                    <span class="pp-stat-link">View orders <i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="pp-stat pp-tone-gold">
+                    <div class="pp-stat-top">
+                        <span class="pp-stat-label">Order value today</span>
+                        <span class="pp-stat-icon"><i class="fas fa-rupee-sign"></i></span>
+                    </div>
+                    <div class="pp-stat-value">{{ money($todayOrderAmount) }}</div>
+                    <span class="pp-stat-link">After discounts</span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <a href="{{ route('orders.index', ['pending-amount' => '2']) }}" class="pp-stat pp-tone-danger">
+                    <div class="pp-stat-top">
+                        <span class="pp-stat-label">Pending amount</span>
+                        <span class="pp-stat-icon"><i class="fas fa-hourglass-half"></i></span>
+                    </div>
+                    <div class="pp-stat-value">{{ money($borrowAmount) }}</div>
+                    <span class="pp-stat-link">Delivered but unpaid <i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Orders pipeline -->
+        <div class="pp-section-title">All orders</div>
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <a href="{{ route('orders.index') }}" class="pp-stat pp-tone-primary">
+                    <div class="pp-stat-top">
+                        <span class="pp-stat-label">Total orders</span>
+                        <span class="pp-stat-icon"><i class="fas fa-layer-group"></i></span>
+                    </div>
+                    <div class="pp-stat-value">{{ number_format($totalOrder) }}</div>
+                    <span class="pp-stat-link">View all <i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+            <div class="col-lg-3 col-6">
+                <a href="{{ route('orders.index', ['status' => 'Pending']) }}" class="pp-stat pp-tone-danger">
+                    <div class="pp-stat-top">
+                        <span class="pp-stat-label">Pending</span>
+                        <span class="pp-stat-icon"><i class="fas fa-clock"></i></span>
+                    </div>
+                    <div class="pp-stat-value">{{ number_format($totalOrderPending) }}</div>
+                    <span class="pp-stat-link">View pending <i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+            <div class="col-lg-3 col-6">
+                <a href="{{ route('orders.index', ['status' => 'Completed']) }}" class="pp-stat pp-tone-warning">
+                    <div class="pp-stat-top">
+                        <span class="pp-stat-label">Completed</span>
+                        <span class="pp-stat-icon"><i class="fas fa-check-double"></i></span>
+                    </div>
+                    <div class="pp-stat-value">{{ number_format($totalOrderComplete) }}</div>
+                    <span class="pp-stat-link">Ready to deliver <i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+            <div class="col-lg-3 col-6">
+                <a href="{{ route('orders.index', ['status' => 'Delivered']) }}" class="pp-stat pp-tone-success">
+                    <div class="pp-stat-top">
+                        <span class="pp-stat-label">Delivered</span>
+                        <span class="pp-stat-icon"><i class="fas fa-truck-loading"></i></span>
+                    </div>
+                    <div class="pp-stat-value">{{ number_format($totalOrderDelivered) }}</div>
+                    <span class="pp-stat-link">View delivered <i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </div>
+    </div>
 
 @endsection
 

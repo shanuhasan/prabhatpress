@@ -5,9 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Prabhat Printing Press | @yield('title')</title>
-    <!-- Google Font: Source Sans Pro -->
+    <!-- Google Font: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/fontawesome-free/css/all.min.css') }}">
 
@@ -19,6 +21,8 @@
     <link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/datetimepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/datepicker.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('admin-assets/css/premium.css') }}?v={{ filemtime(public_path('admin-assets/css/premium.css')) }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -26,56 +30,61 @@
     <!-- Site wrapper -->
     <div class="wrapper">
         <!-- Navbar -->
+        @php
+            $ppUser = Auth::user();
+            $ppInitials = collect(preg_split('/\s+/', trim($ppUser->name)))
+                ->filter()->take(2)->map(fn($w) => mb_strtoupper(mb_substr($w, 0, 1)))->implode('');
+        @endphp
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- Right navbar links -->
-            <ul class="navbar-nav">
+            <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
-                            class="fas fa-bars"></i></a>
+                    <a class="nav-link pp-icon-btn" data-widget="pushmenu" href="#" role="button"
+                        aria-label="Toggle sidebar"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-block">
+                    <div class="pp-topbar-title">
+                        <strong>@yield('title')</strong>
+                        <span>{{ now()->format('l, d F Y') }}</span>
+                    </div>
                 </li>
             </ul>
-            <div class="navbar-nav pl-2">
-                <!-- <ol class="breadcrumb p-0 m-0 bg-white">
-      <li class="breadcrumb-item active">Dashboard</li>
-     </ol> -->
-            </div>
 
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+            <ul class="navbar-nav ml-auto align-items-center">
+                <li class="nav-item mr-2 d-none d-md-block">
+                    <a class="nav-link pp-icon-btn" data-widget="fullscreen" href="#" role="button"
+                        aria-label="Fullscreen">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link p-0 pr-3" data-toggle="dropdown" href="#">
-                        <img src="{{ asset('admin-assets/img/avatar5.png') }}" class='img-circle elevation-2'
-                            width="40" height="40" alt="">
+                    <a class="nav-link pp-user-chip" data-toggle="dropdown" href="#" aria-label="Account menu">
+                        <span class="pp-avatar">{{ $ppInitials }}</span>
+                        <span class="pp-user-name d-none d-md-inline">{{ $ppUser->name }}</span>
+                        <i class="fas fa-chevron-down text-muted d-none d-md-inline" style="font-size:.65rem"></i>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-3">
-                        <h4 class="h4 mb-0"><strong>{{ Auth::user()->name }}</strong></h4>
-                        <div class="mb-3">{{ Auth::user()->email }}</div>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <div class="pp-dropdown-head">
+                            <span class="pp-avatar pp-avatar-lg">{{ $ppInitials }}</span>
+                            <div>
+                                <strong>{{ $ppUser->name }}</strong>
+                                <small>{{ $ppUser->email }}</small>
+                            </div>
+                        </div>
                         <div class="dropdown-divider"></div>
                         <a href="{{ route('profile.edit') }}" class="dropdown-item">
                             <i class="fas fa-user mr-2"></i> Profile
                         </a>
-                        <div class="dropdown-divider"></div>
                         <a href="{{ route('profile.changePassword') }}" class="dropdown-item">
                             <i class="fas fa-lock mr-2"></i> Change Password
                         </a>
                         <div class="dropdown-divider"></div>
-
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
-                            <x-responsive-nav-link :href="route('logout')" class="dropdown-item"
-                                onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                <i class="fas fa-sign-out-alt mr-2"></i>{{ __('Log Out') }}
-                            </x-responsive-nav-link>
+                            <a href="{{ route('logout') }}" class="dropdown-item text-danger"
+                                onclick="event.preventDefault(); this.closest('form').submit();">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Log Out
+                            </a>
                         </form>
-                        {{-- <a href="{{ route('logout') }}" class="dropdown-item text-danger">
-                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                        </a> --}}
                     </div>
                 </li>
             </ul>
@@ -89,8 +98,9 @@
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-
-            <strong>Copyright &copy; 2023-2024 All rights reserved.
+            <span><strong>Prabhat Printing Press</strong> &middot; &copy; 2023&ndash;{{ date('Y') }} All rights
+                reserved.</span>
+            <span>Order &amp; Accounts Management</span>
         </footer>
 
     </div>

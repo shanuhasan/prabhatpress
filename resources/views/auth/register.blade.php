@@ -1,4 +1,9 @@
 <x-guest-layout>
+    <div class="mb-8">
+        <h1 class="text-2xl font-extrabold tracking-tight text-ink">Create the admin account</h1>
+        <p class="mt-1.5 text-sm text-slate-500">This first account manages the press. Add staff later from Users.</p>
+    </div>
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 

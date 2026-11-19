@@ -76,14 +76,18 @@ function numberOfDays($date1, $date2)
 
 function statusColor($status)
 {
+    // Soft "pill" tones used for the order status column.
+    $base = 'font-weight:600;font-size:.8rem;';
     if ($status == 'Pending') {
-        $style = 'background:red;color:#fff;';
+        $style = 'color:#c0262d;background-color:#fef2f2;';
     } else if ($status == 'Delivered') {
-        $style = 'background:green;color:#fff;';
+        $style = 'color:#047857;background-color:#ecfdf5;';
+    } else if ($status == 'Completed') {
+        $style = 'color:#4338ca;background-color:#eef0ff;';
     } else {
-        $style = 'background:orange;color:#fff;';
+        $style = 'color:#b45309;background-color:#fff7ed;';
     }
-    return $style;
+    return $base . $style;
 }
 
 function getCustomerNameFromOrder($id)
@@ -159,6 +163,32 @@ function type($key = null)
     ];
 
     return !empty($key) ? $list[$key] : $list;
+}
+
+/**
+ * Format an amount in Indian style: 123456.5 => "₹1,23,456.50".
+ * Whole numbers drop the decimals: 2500 => "₹2,500".
+ */
+function money($amount, $symbol = '₹')
+{
+    $amount = (float) $amount;
+    $negative = $amount < 0;
+    $amount = abs($amount);
+
+    $decimals = fmod($amount, 1) != 0 ? 2 : 0;
+    $parts = explode('.', number_format($amount, $decimals, '.', ''));
+    $int = $parts[0];
+
+    if (strlen($int) > 3) {
+        $last3 = substr($int, -3);
+        $rest = substr($int, 0, -3);
+        $rest = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $rest);
+        $int = $rest . ',' . $last3;
+    }
+
+    $formatted = $symbol . $int . (isset($parts[1]) ? '.' . $parts[1] : '');
+
+    return $negative ? '-' . $formatted : $formatted;
 }
 
 function pre($data)
