@@ -33,7 +33,7 @@ use App\Models\Order;
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="order_no">Order No.*</label>
-                                    <input type="text" name="order_no"
+                                    <input type="text" name="order_no" value="{{ old('order_no') }}"
                                         class="form-control text-to-upper @error('order_no') is-invalid	@enderror"
                                         placeholder="Order No.">
                                     @error('order_no')
@@ -44,7 +44,7 @@ use App\Models\Order;
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="customer_name">Name*</label>
-                                    <input type="text" name="customer_name"
+                                    <input type="text" name="customer_name" value="{{ old('customer_name') }}"
                                         class="form-control text-to-upper @error('customer_name') is-invalid	@enderror"
                                         placeholder="Customer Name">
                                     @error('customer_name')
@@ -56,7 +56,7 @@ use App\Models\Order;
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="phone">Phone</label>
-                                    <input type="text" name="phone"
+                                    <input type="text" name="phone" value="{{ old('phone') }}"
                                         class="form-control only-number @error('phone') is-invalid	@enderror"
                                         placeholder="Phone">
                                     @error('phone')
@@ -68,49 +68,16 @@ use App\Models\Order;
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="phone">Address</label>
-                                    <textarea name="address" id="address" class="form-control text-to-upper" cols="30" rows="5"></textarea>
+                                    <textarea name="address" id="address" class="form-control text-to-upper" cols="30" rows="5">{{ old('address') }}</textarea>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="particular">Particular*</label>
-                                    <input type="text" name="particular"
-                                        class="form-control text-to-upper @error('particular') is-invalid	@enderror"
-                                        placeholder="Particular">
-                                    @error('particular')
-                                        <p class="invalid-feedback">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="qty">Qty</label>
-                                    <input type="number" name="qty"
-                                        class="form-control qty @error('qty') is-invalid	@enderror" placeholder="Qty">
-                                    @error('qty')
-                                        <p class="invalid-feedback">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="total_amount">Total Amount*</label>
-                                    <input type="number" name="total_amount"
-                                        class="form-control total_amount @error('total_amount') is-invalid	@enderror"
-                                        placeholder="Total Amount">
-                                    @error('total_amount')
-                                        <p class="invalid-feedback">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
+                            @include('orders.partials.items', ['items' => []])
 
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="total_amount">Advance Amount</label>
-                                    <input type="number" name="advance_amount"
+                                    <input type="number" name="advance_amount" value="{{ old('advance_amount') }}"
                                         class="form-control advance_amount @error('advance_amount') is-invalid	@enderror"
                                         placeholder="Advance Amount">
                                     @error('advance_amount')
@@ -122,7 +89,7 @@ use App\Models\Order;
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="discount">Discount</label>
-                                    <input type="number" name="discount"
+                                    <input type="number" name="discount" value="{{ old('discount') }}"
                                         class="form-control discount @error('discount') is-invalid	@enderror"
                                         placeholder="Discount">
                                     @error('discount')
@@ -134,7 +101,7 @@ use App\Models\Order;
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="delivery_at">Delivery At</label>
-                                    <input type="text" name="delivery_at" id="delivery_at"
+                                    <input type="text" name="delivery_at" id="delivery_at" value="{{ old('delivery_at') }}"
                                         class="form-control js-datepicker" placeholder="Delivery At">
                                     @error('delivery_at')
                                         <p class="invalid-feedback">{{ $message }}</p>
@@ -149,7 +116,7 @@ use App\Models\Order;
                                         class="form-control @error('payment_method') is-invalid	@enderror"
                                         id="payment_method">
                                         <option value="Cash">Cash</option>
-                                        <option value="Online">Online</option>
+                                        <option value="Online" {{ old('payment_method') == 'Online' ? 'selected' : '' }}>Online</option>
                                     </select>
                                     @error('payment_method')
                                         <p class="invalid-feedback">{{ $message }}</p>
@@ -177,7 +144,7 @@ use App\Models\Order;
                                     <label for="status">Status*</label>
                                     <select name="status" class="form-control @error('status') is-invalid	@enderror">
                                         @foreach (statusList() as $key => $item)
-                                            <option value={{ $key }}>{{ $item }}</option>
+                                            <option value="{{ $key }}" {{ old('status') == $key ? 'selected' : '' }}>{{ $item }}</option>
                                         @endforeach
                                     </select>
                                     @error('status')

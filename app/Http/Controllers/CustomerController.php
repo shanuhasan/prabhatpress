@@ -152,30 +152,29 @@ class CustomerController extends Controller
 
     public function orderStore(Request $request)
     {
+        $request->merge(['items' => Order::cleanItems($request->input('items'))]);
+
         $validator = Validator::make($request->all(), [
             'order_no' => 'required|unique:orders',
             'customer_id' => 'required',
-            'particular' => 'required',
-            'total_amount' => 'required',
             'status' => 'required',
-        ]);
+        ] + Order::itemRules(), Order::itemMessages());
 
         if ($validator->passes()) {
             $model = new Order();
             $model->order_no = $request->order_no;
             $model->customer_id = $request->customer_id;
-            $model->particular = $request->particular;
-            $model->qty = $request->qty;
-            $model->total_amount = $request->total_amount;
+            $model->fillFromItems($request->items);
             // $model->discount = $request->discount;
             $model->status = $request->status;
             $model->delivery_at = $request->delivery_at;
             $model->created_by = Auth::user()->id;
             $model->save();
+            $model->syncProducts($request->items);
 
             return redirect()->route('customer.order', $request->customer_id)->with('success', 'Order has been created successfully.');
         } else {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withErrors($validator)->withInput();
         }
     }
 
@@ -194,6 +193,7 @@ class CustomerController extends Controller
         $data['order'] = $order;
         $data['orderDetail'] = $orderDetail;
         $data['customerId'] = $customerId;
+        $data['items'] = $order->formItems();
 
         return view('customer.order-edit', $data);
     }
@@ -206,24 +206,25 @@ class CustomerController extends Controller
             return redirect()->route('orders.index')->with('error', 'Order not found.');
         }
 
+        $request->merge(['items' => Order::cleanItems($request->input('items'))]);
+
         $validator = Validator::make($request->all(), [
-            'particular' => 'required',
             'status' => 'required',
-        ]);
+        ] + Order::itemRules(), Order::itemMessages());
 
         if ($validator->passes()) {
 
-            $model->particular = $request->particular;
-            $model->qty = $request->qty;
+            $model->fillFromItems($request->items);
             // $model->discount = $request->discount;
             $model->status = $request->status;
             $model->delivery_at = $request->delivery_at;
             $model->updated_by = Auth::user()->id;
             $model->save();
+            $model->syncProducts($request->items);
 
             return redirect()->route('customer.order', $model->customer_id)->with('success', 'Order updated successfully.');
         } else {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withErrors($validator)->withInput();
         }
     }
 
@@ -265,6 +266,7 @@ class CustomerController extends Controller
             ]);
         }
 
+        $model->products()->delete();
         $model->delete();
 
         $request->session()->flash('success', 'Order deleted successfully.');

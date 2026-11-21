@@ -66,25 +66,44 @@
                     <table style="border:1px solid #000" cellpadding="3" cellspacing='3' border="0" width="700">
                         <thead style="background: #000;color:#ffffff">
                             <tr>
-                                <th style="border:1px solid #000;text-align:center">#</th>
+                                <th style="border:1px solid #000;text-align:center;width:40px">#</th>
                                 <th style="border:1px solid #000;text-align:center">Item</th>
-                                <th style="border:1px solid #000;text-align:center">Qty</th>
-                                <th style="border:1px solid #000;text-align:center">Total</th>
-                                <th style="border:1px solid #000;text-align:center">Bal. Amount</th>
+                                <th style="border:1px solid #000;text-align:center;width:80px">Qty</th>
+                                <th style="border:1px solid #000;text-align:center;width:130px">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style="border:1px solid #000">
-                                <td></td>
-                                <td style="border:1px solid #000;text-align:center">{{ $order->particular }}
-                                </td>
-                                <td style="border:1px solid #000;text-align:center">{{ $order->qty }}</td>
-                                <td style="border:1px solid #000;text-align:center">₹{{ $order->total_amount }}
-                                </td>
-                                <td style="border:1px solid #000;text-align:center">
-                                    ₹{{ $order->total_amount - $order->discount - $advAmt }}</td>
-                            </tr>
+                            @foreach ($items as $i => $item)
+                                <tr style="border:1px solid #000">
+                                    <td style="border:1px solid #000;text-align:center">{{ $i + 1 }}</td>
+                                    <td style="border:1px solid #000">{{ $item['particular'] }}</td>
+                                    <td style="border:1px solid #000;text-align:center">{{ $item['qty'] }}</td>
+                                    <td style="border:1px solid #000;text-align:right">{{ money($item['amount']) }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
+                        <tfoot>
+                            @php $discount = (float) $order->discount; @endphp
+                            <tr>
+                                <th colspan="3" style="border:1px solid #000;text-align:right">Total</th>
+                                <th style="border:1px solid #000;text-align:right">{{ money($order->total_amount) }}</th>
+                            </tr>
+                            @if ($discount > 0)
+                                <tr>
+                                    <th colspan="3" style="border:1px solid #000;text-align:right">Discount</th>
+                                    <th style="border:1px solid #000;text-align:right">- {{ money($discount) }}</th>
+                                </tr>
+                            @endif
+                            <tr>
+                                <th colspan="3" style="border:1px solid #000;text-align:right">Advance / Paid</th>
+                                <th style="border:1px solid #000;text-align:right">{{ money($advAmt) }}</th>
+                            </tr>
+                            <tr>
+                                <th colspan="3" style="border:1px solid #000;text-align:right">Balance</th>
+                                <th style="border:1px solid #000;text-align:right">
+                                    {{ money($order->total_amount - $discount - $advAmt) }}</th>
+                            </tr>
+                        </tfoot>
                     </table>
                     <div class="mb-3" style="justify-content: center;margin-top:5px">
                         <p>1. आर्डर देने पर 75% अडवांस देना होगा अन्य अपना

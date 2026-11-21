@@ -70,42 +70,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="particular">Particular*</label>
-                                    <input type="text" name="particular"
-                                        class="form-control text-to-upper @error('particular') is-invalid	@enderror"
-                                        placeholder="Particular" value="{{ $order->particular }}">
-                                    @error('particular')
-                                        <p class="invalid-feedback">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="qty">Qty</label>
-                                    <input type="number" name="qty"
-                                        class="form-control qty @error('qty') is-invalid	@enderror" placeholder="Qty"
-                                        value="{{ $order->qty }}">
-                                    @error('qty')
-                                        <p class="invalid-feedback">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-
-
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="total_amount">Total Amount*</label>
-                                    <input type="number" readonly name="total_amount"
-                                        class="form-control total_amount @error('total_amount') is-invalid	@enderror"
-                                        placeholder="Total Amount" value="{{ $order->total_amount }}">
-                                    @error('total_amount')
-                                        <p class="invalid-feedback">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
+                            @include('orders.partials.items', ['items' => $items, 'paid' => $paid])
 
                             <div class="col-md-4">
                                 <div class="mb-3">

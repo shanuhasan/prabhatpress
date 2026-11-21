@@ -17,10 +17,15 @@ class OrderController extends Controller
 
 
         if (!empty($request->get('search'))) {
-            $orders = $orders->where('particular', 'like', '%' . $request->get('search') . '%');
-            $orders = $orders->orWhere('customer_name', 'like', '%' . $request->get('search') . '%');
-            $orders = $orders->orWhere('phone', 'like', '%' . $request->get('search') . '%');
-            $orders = $orders->orWhere('order_no', 'like', '%' . $request->get('search') . '%');
+            $search = '%' . $request->get('search') . '%';
+            // Grouped so the status / pending-amount filters below still apply.
+            $orders = $orders->where(function ($q) use ($search) {
+                $q->where('particular', 'like', $search)
+                    ->orWhere('customer_name', 'like', $search)
+                    ->orWhere('phone', 'like', $search)
+                    ->orWhere('order_no', 'like', $search)
+                    ->orWhereHas('products', fn($p) => $p->where('particular', 'like', $search));
+            });
         }
 
         if (!empty($request->get('status'))) {
@@ -116,16 +121,15 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge(['items' => Order::cleanItems($request->input('items'))]);
 
         $validator = Validator::make($request->all(), [
             'order_no' => 'required|unique:orders',
             'customer_name' => 'required',
             // 'phone'=>'required|min:10',
-            'particular' => 'required',
-            'total_amount' => 'required',
             'payment_method' => 'required',
             'status' => 'required',
-        ]);
+        ] + Order::itemRules(), Order::itemMessages());
 
         if ($validator->passes()) {
             $model = new Order();
@@ -133,14 +137,14 @@ class OrderController extends Controller
             $model->customer_name = $request->customer_name;
             $model->phone = $request->phone;
             $model->address = $request->address;
-            $model->particular = $request->particular;
-            $model->qty = $request->qty;
-            $model->total_amount = $request->total_amount;
+            $model->fillFromItems($request->items);
             $model->status = $request->status;
             $model->discount = $request->discount;
             $model->delivery_at = $request->delivery_at;
             $model->created_by = Auth::user()->id;
             if ($model->save()) {
+                $model->syncProducts($request->items);
+
                 if (!empty($request->advance_amount) && $request->advance_amount > 0) {
                     $orderDetail = new OrderItem();
                     $orderDetail->order_id = $model->id;
@@ -153,9 +157,8 @@ class OrderController extends Controller
                     $orderDetail->save();
                 }
 
-                $orderItemSum = 0;
-                $orderItemSum += OrderItem::where('order_id', $model->id)->sum('amount');
-                if ($model->status == 'Delivered' && ($model->total_amount - $model->discount) > $orderDetail->amount) {
+                $orderItemSum = OrderItem::where('order_id', $model->id)->sum('amount');
+                if ($model->status == 'Delivered' && ($model->total_amount - $model->discount) > $orderItemSum) {
                     $model->is_pending_amount = 2;
                     $model->save();
                 } else {
@@ -166,7 +169,7 @@ class OrderController extends Controller
 
             return redirect()->route('orders.index')->with('success', 'Order has been created successfully.');
         } else {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withErrors($validator)->withInput();
         }
     }
 
@@ -184,6 +187,8 @@ class OrderController extends Controller
 
         $data['order'] = $order;
         $data['orderDetail'] = $orderDetail;
+        $data['items'] = $order->formItems();
+        $data['paid'] = (float) $orderDetail->sum('amount');
 
         return view('orders.edit', $data);
     }
@@ -196,28 +201,27 @@ class OrderController extends Controller
             return redirect()->route('orders.index')->with('error', 'Order not found.');
         }
 
+        $request->merge(['items' => Order::cleanItems($request->input('items'))]);
+
         $validator = Validator::make($request->all(), [
             'customer_name' => 'required',
             // 'phone'=>'required|min:10',
-            'particular' => 'required',
-            // 'total_amount'=>'required',
             'payment_method' => 'required',
             'status' => 'required',
-        ]);
+        ] + Order::itemRules(), Order::itemMessages());
 
         if ($validator->passes()) {
 
             $model->customer_name = $request->customer_name;
             $model->phone = $request->phone;
             $model->address = $request->address;
-            $model->particular = $request->particular;
-            $model->qty = $request->qty;
-            $model->total_amount = $request->total_amount;
+            $model->fillFromItems($request->items);
             $model->discount = $request->discount;
             $model->status = $request->status;
             $model->delivery_at = $request->delivery_at;
             $model->updated_by = Auth::user()->id;
             if ($model->save()) {
+                $model->syncProducts($request->items);
                 $orderItemSum = 0;
 
                 if (!empty($request->advance_amount) && $request->advance_amount > 0) {
@@ -244,7 +248,7 @@ class OrderController extends Controller
 
             return redirect()->route('orders.edit', $id)->with('success', 'Order updated successfully.');
         } else {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withErrors($validator)->withInput();
         }
     }
 
@@ -269,6 +273,7 @@ class OrderController extends Controller
             }
         }
 
+        $model->products()->delete();
         $model->delete();
 
         $request->session()->flash('success', 'Order deleted successfully.');
@@ -320,6 +325,7 @@ class OrderController extends Controller
         $data['order'] = $order;
         $data['orderDetail'] = $orderDetail;
         $data['advAmt'] = $advAmt;
+        $data['items'] = $order->formItems();
 
         return view('orders.print', $data);
     }
