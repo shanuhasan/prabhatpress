@@ -109,11 +109,11 @@
 
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="discount">Discount</label>
-                                    <input type="number" name="discount"
-                                        class="form-control discount @error('discount') is-invalid	@enderror"
-                                        placeholder="Discount" value="{{ $order->discount }}">
-                                    @error('discount')
+                                    <label for="total_amount">Advance Amount</label>
+                                    <input type="number" name="advance_amount"
+                                        class="form-control advance_amount @error('advance_amount') is-invalid	@enderror"
+                                        placeholder="Advance Amount">
+                                    @error('advance_amount')
                                         <p class="invalid-feedback">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -121,11 +121,11 @@
 
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="total_amount">Advance Amount</label>
-                                    <input type="number" name="advance_amount"
-                                        class="form-control advance_amount @error('advance_amount') is-invalid	@enderror"
-                                        placeholder="Advance Amount">
-                                    @error('advance_amount')
+                                    <label for="discount">Discount</label>
+                                    <input type="number" name="discount"
+                                        class="form-control discount @error('discount') is-invalid	@enderror"
+                                        placeholder="Discount" value="{{ $order->discount }}">
+                                    @error('discount')
                                         <p class="invalid-feedback">{{ $message }}</p>
                                     @enderror
                                 </div>
